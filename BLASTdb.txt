@@ -1,0 +1,28 @@
+Accession	Division
+Zhonghuang 13	Improved_cultivar
+PI 562565	G.Soja
+PI 549046	G.Soja
+PI 578357	G.Soja
+Zhutwinning2	Landrace
+Zi Hua No.4	Landrace
+Tong Shan Tian E Dan	Landrace
+58-161	Landrace
+PI 398296	Landrace
+Zhang Chun Man Cang Jin	Landrace
+Feng Di Huang	Landrace
+Tie Jia Si Li Huang	Landrace
+Shi Sheng Chang Ye	Landrace
+Xu Dou No.1	Improved_cultivar
+Tie Feng No.18	Improved_cultivar
+Ju Xuan No.23	Improved_cultivar
+Wan Dou No.28	Improved_cultivar
+Amsoy	Improved_cultivar
+Yu Dou No.22	Improved_cultivar
+Jin Dou No.23	Improved_cultivar
+Qi Huang No.34	Improved_cultivar
+Han Dou No.5	Improved_cultivar
+PI 548362	Improved_cultivar
+Ji Dou No.17	Improved_cultivar
+Dong Nong No.50	Improved_cultivar
+Hei He No.43	Improved_cultivar
+Ke Shan No.1	Improved_cultivar
