@@ -1,0 +1,2899 @@
+Cultivar	Wild
+s1		G. Soja
+s2		G. Soja
+s3		G. Soja
+s4		G. Soja
+s5		G. Soja
+s6		G. Soja
+s7		G. Soja
+s8		G. Soja
+s9		G. Soja
+s10		G. Soja
+s11		G. Soja
+s12		G. Soja
+s13		G. Soja
+s14		G. Soja
+s15		G. Soja
+s16		G. Soja
+s17		G. Soja
+s18		G. Soja
+s19		G. Soja
+s20		G. Soja
+s21		G. Soja
+s22		G. Soja
+s23		G. Soja
+s24		G. Soja
+s25		G. Soja
+s26		G. Soja
+s27		G. Soja
+s28		G. Soja
+s29		G. Soja
+s30		G. Soja
+s31		G. Soja
+s32		G. Soja
+s33		G. Soja
+s34		G. Soja
+s35		G. Soja
+s36		G. Soja
+s37		G. Soja
+s38		G. Soja
+s39		G. Soja
+s40		G. Soja
+s41		G. Soja
+s42		G. Soja
+s43		G. Soja
+s44		G. Soja
+s45		G. Soja
+s46		G. Soja
+s47		G. Soja
+s48		G. Soja
+s49		G. Soja
+s50		G. Soja
+s51		G. Soja
+s52		G. Soja
+s53		G. Soja
+s54		G. Soja
+s55		G. Soja
+s56		G. Soja
+s57		G. Soja
+s58		G. Soja
+s59		G. Soja
+s60		G. Soja
+s61		G. Soja
+s62		G. Soja
+s63	Landrace	
+s64	Landrace	
+s65	Landrace	
+s66	Landrace	
+s67	Landrace	
+s68	Landrace	
+s69	Landrace	
+s70	Landrace	
+s71	Landrace	
+s72	Landrace	
+s73	Landrace	
+s74	Landrace	
+s75	Landrace	
+s76	Landrace	
+s77	Landrace	
+s78	Landrace	
+s79	Landrace	
+s80	Landrace	
+s81	Landrace	
+s82	Landrace	
+s83	Landrace	
+s84	Landrace	
+s85	Landrace	
+s86	Landrace	
+s87	Landrace	
+s88	Landrace	
+s89	Landrace	
+s90	Landrace	
+s91	Landrace	
+s92	Landrace	
+s93	Landrace	
+s94	Landrace	
+s95	Landrace	
+s96	Landrace	
+s97	Landrace	
+s98	Landrace	
+s99	Landrace	
+s100	Landrace	
+s101	Landrace	
+s102	Landrace	
+s103	Landrace	
+s104	Landrace	
+s105	Landrace	
+s106	Landrace	
+s107	Landrace	
+s108	Landrace	
+s109	Landrace	
+s110	Landrace	
+s111	Landrace	
+s112	Landrace	
+s113	Landrace	
+s114	Landrace	
+s115	Landrace	
+s116	Landrace	
+s117	Landrace	
+s118	Landrace	
+s119	Landrace	
+s120	Landrace	
+s121	Landrace	
+s122	Landrace	
+s123	Landrace	
+s124	Landrace	
+s125	Landrace	
+s126	Landrace	
+s127	Landrace	
+s128	Landrace	
+s129	Landrace	
+s130	Landrace	
+s131	Landrace	
+s132	Landrace	
+s133	Landrace	
+s134	Landrace	
+s135	Landrace	
+s136	Landrace	
+s137	Landrace	
+s138	Landrace	
+s139	Landrace	
+s140	Landrace	
+s141	Landrace	
+s142	Landrace	
+s143	Landrace	
+s144	Landrace	
+s145	Landrace	
+s146	Landrace	
+s147	Landrace	
+s148	Landrace	
+s149	Landrace	
+s150	Landrace	
+s151	Landrace	
+s152	Landrace	
+s153	Landrace	
+s154	Landrace	
+s155	Landrace	
+s156	Landrace	
+s157	Landrace	
+s158	Landrace	
+s159	Landrace	
+s160	Landrace	
+s161	Landrace	
+s162	Landrace	
+s163	Landrace	
+s164	Landrace	
+s165	Landrace	
+s166	Landrace	
+s167	Landrace	
+s168	Landrace	
+s169	Landrace	
+s170	Landrace	
+s171	Landrace	
+s172	Landrace	
+s173	Landrace	
+s174	Landrace	
+s175	Landrace	
+s176	Landrace	
+s177	Landrace	
+s178	Landrace	
+s179	Landrace	
+s180	Landrace	
+s181	Landrace	
+s182	Landrace	
+s183	Landrace	
+s184	Landrace	
+s185	Landrace	
+s186	Landrace	
+s187	Landrace	
+s188	Landrace	
+s189	Landrace	
+s190	Landrace	
+s191	Landrace	
+s192	Landrace	
+s193	Improved cultivar	
+s194	Improved cultivar	
+s195	Improved cultivar	
+s196	Improved cultivar	
+s197	Improved cultivar	
+s198	Improved cultivar	
+s199	Improved cultivar	
+s200	Improved cultivar	
+s201	Improved cultivar	
+s202	Improved cultivar	
+s203	Improved cultivar	
+s204	Improved cultivar	
+s205	Improved cultivar	
+s206	Improved cultivar	
+s207	Improved cultivar	
+s208	Improved cultivar	
+s209	Improved cultivar	
+s210	Improved cultivar	
+s211	Improved cultivar	
+s212	Improved cultivar	
+s213	Improved cultivar	
+s214	Improved cultivar	
+s215	Improved cultivar	
+s216	Improved cultivar	
+s217	Improved cultivar	
+s218	Improved cultivar	
+s219	Improved cultivar	
+s220	Improved cultivar	
+s221	Improved cultivar	
+s222	Improved cultivar	
+s223	Improved cultivar	
+s224	Improved cultivar	
+s225	Improved cultivar	
+s226	Improved cultivar	
+s227	Improved cultivar	
+s228	Improved cultivar	
+s229	Improved cultivar	
+s230	Improved cultivar	
+s231	Improved cultivar	
+s232	Improved cultivar	
+s233	Improved cultivar	
+s234	Improved cultivar	
+s235	Improved cultivar	
+s236	Improved cultivar	
+s237	Improved cultivar	
+s238	Improved cultivar	
+s239	Improved cultivar	
+s240	Improved cultivar	
+s241	Improved cultivar	
+s242	Improved cultivar	
+s243	Improved cultivar	
+s244	Improved cultivar	
+s245	Improved cultivar	
+s246	Improved cultivar	
+s247	Improved cultivar	
+s248	Improved cultivar	
+s249	Improved cultivar	
+s250	Improved cultivar	
+s251	Improved cultivar	
+s252	Improved cultivar	
+s253	Improved cultivar	
+s254	Improved cultivar	
+s255	Improved cultivar	
+s256	Improved cultivar	
+s257	Improved cultivar	
+s258	Improved cultivar	
+s259	Improved cultivar	
+s260	Improved cultivar	
+s261	Improved cultivar	
+s262	Improved cultivar	
+s263	Improved cultivar	
+s264	Improved cultivar	
+s265	Improved cultivar	
+s266	Improved cultivar	
+s267	Improved cultivar	
+s268	Improved cultivar	
+s269	Improved cultivar	
+s270	Improved cultivar	
+s271	Improved cultivar	
+s272	Improved cultivar	
+s273	Improved cultivar	
+s274	Improved cultivar	
+s275	Improved cultivar	
+s276	Improved cultivar	
+s277	Improved cultivar	
+s278	Improved cultivar	
+s279	Improved cultivar	
+s280	Improved cultivar	
+s281	Improved cultivar	
+s282	Improved cultivar	
+s283	Improved cultivar	
+s284	Improved cultivar	
+s285	Improved cultivar	
+s286	Improved cultivar	
+s287	Improved cultivar	
+s288	Improved cultivar	
+s289	Improved cultivar	
+s290	Improved cultivar	
+s291	Improved cultivar	
+s292	Improved cultivar	
+s293	Improved cultivar	
+s294	Improved cultivar	
+s295	Improved cultivar	
+s296	Improved cultivar	
+s297	Improved cultivar	
+s298	Improved cultivar	
+s299	Improved cultivar	
+s300	Improved cultivar	
+s301	Improved cultivar	
+s302	Improved cultivar	
+s303	Landrace	
+s304	Landrace	
+s305	Landrace	
+s306	Landrace	
+s307	Landrace	
+s308	Landrace	
+s309	Landrace	
+s310	Landrace	
+s311	Landrace	
+s312	Landrace	
+s313	Landrace	
+s314	Landrace	
+s315	Landrace	
+s316	Landrace	
+s317	Landrace	
+s318	Landrace	
+s319	Landrace	
+s320	Landrace	
+s321	Landrace	
+s322	Landrace	
+s323	Landrace	
+s324	Landrace	
+s325	Landrace	
+s326	Landrace	
+s327	Landrace	
+s328	Landrace	
+s329	Landrace	
+s330	Landrace	
+s331	Landrace	
+s332	Landrace	
+s333	Landrace	
+s334	Landrace	
+s335	Landrace	
+s336	Landrace	
+s337	Landrace	
+s338	Landrace	
+s339	Landrace	
+s340	Landrace	
+s341	Landrace	
+s342	Landrace	
+s343	Landrace	
+s344	Landrace	
+s345	Landrace	
+s346	Landrace	
+s347	Landrace	
+s348	Landrace	
+s349	Landrace	
+s350	Landrace	
+s351	Landrace	
+s352	Landrace	
+s353	Landrace	
+s354	Landrace	
+s355	Landrace	
+s356	Landrace	
+s357	Landrace	
+s358	Landrace	
+s359	Landrace	
+s360	Landrace	
+s361	Landrace	
+s362	Landrace	
+s363	Landrace	
+s364	Landrace	
+s365	Landrace	
+s366	Landrace	
+s367	Landrace	
+s368	Landrace	
+s369	Landrace	
+s370	Landrace	
+s371	Landrace	
+s372	Landrace	
+s373	Landrace	
+s374	Landrace	
+s375	Landrace	
+s376	Landrace	
+s377	Landrace	
+s378	Landrace	
+s379	Landrace	
+s380	Landrace	
+s381	Landrace	
+s382	Landrace	
+s383	Landrace	
+s384	Landrace	
+s385	Landrace	
+s386	Landrace	
+s387	Landrace	
+s388	Landrace	
+s389	Landrace	
+s390	Landrace	
+s391	Landrace	
+s392	Landrace	
+s393	Landrace	
+s394	Landrace	
+s395	Landrace	
+s396	Landrace	
+s397	Landrace	
+s398	Landrace	
+s399	Landrace	
+s400	Landrace	
+s401	Landrace	
+s402	Landrace	
+s403	Landrace	
+s404	Landrace	
+s405	Landrace	
+s406	Landrace	
+s407	Landrace	
+s408	Landrace	
+s409	Landrace	
+s410	Landrace	
+s411	Landrace	
+s412	Landrace	
+s413	Landrace	
+s414	Landrace	
+s415	Landrace	
+s416	Landrace	
+s417	Landrace	
+s418	Landrace	
+s419	Landrace	
+s420	Landrace	
+s421	Landrace	
+s422	Landrace	
+s423	Landrace	
+s424	Landrace	
+s425	Landrace	
+s426	Landrace	
+s427	Landrace	
+s428	Landrace	
+s429	Landrace	
+s430	Landrace	
+s431	Landrace	
+s432	Landrace	
+s433	Landrace	
+s434	Landrace	
+s435	Landrace	
+s436	Landrace	
+s437	Landrace	
+s438	Landrace	
+s439	Landrace	
+s440	Landrace	
+s441	Landrace	
+s442	Landrace	
+s443	Landrace	
+s444	Landrace	
+s445	Landrace	
+s446	Landrace	
+s447	Landrace	
+s448	Landrace	
+s449	Landrace	
+s450	Landrace	
+s451	Landrace	
+s452	Landrace	
+s453	Landrace	
+s454	Landrace	
+s455	Landrace	
+s456	Landrace	
+s457	Landrace	
+s458	Landrace	
+s459	Landrace	
+s460	Landrace	
+s461	Landrace	
+s462	Landrace	
+s463	Landrace	
+s464	Landrace	
+s465	Landrace	
+s466	Landrace	
+s467	Landrace	
+s468	Landrace	
+s469	Landrace	
+s470	Landrace	
+s471	Landrace	
+s472	Landrace	
+s473	Landrace	
+s474	Landrace	
+s475	Landrace	
+s476	Landrace	
+s477	Landrace	
+s478	Landrace	
+s479	Landrace	
+s480	Landrace	
+s481	Landrace	
+s482	Landrace	
+s483	Landrace	
+s484	Landrace	
+s485	Landrace	
+s486	Landrace	
+s487	Landrace	
+s488	Landrace	
+s489	Landrace	
+s490	Landrace	
+s491	Landrace	
+s492	Landrace	
+s493	Landrace	
+s494	Landrace	
+s495	Landrace	
+s496	Landrace	
+s497	Landrace	
+s498	Landrace	
+s499	Landrace	
+s500	Landrace	
+s501	Landrace	
+s502	Landrace	
+s503	Landrace	
+s504	Landrace	
+s505	Landrace	
+s506	Landrace	
+s507	Landrace	
+s508	Landrace	
+s509	Landrace	
+s510	Landrace	
+s511	Landrace	
+s512	Landrace	
+s513	Landrace	
+s514	Landrace	
+s515	Landrace	
+s516	Landrace	
+s517	Landrace	
+s518	Landrace	
+s519	Landrace	
+s520	Landrace	
+s521	Landrace	
+s522	Landrace	
+s523	Landrace	
+s524	Landrace	
+s525	Landrace	
+s526	Landrace	
+s527	Landrace	
+s528	Landrace	
+s529	Landrace	
+s530	Landrace	
+s531	Landrace	
+s532	Landrace	
+s533	Landrace	
+s534	Landrace	
+s535	Landrace	
+s536	Landrace	
+s537	Landrace	
+s538	Landrace	
+s539	Landrace	
+s540	Landrace	
+s541	Landrace	
+s542	Landrace	
+s543	Landrace	
+s544	Landrace	
+s545	Landrace	
+s546	Landrace	
+s547	Landrace	
+s548	Landrace	
+s549	Landrace	
+s550	Landrace	
+s551	Landrace	
+s552	Landrace	
+s553	Landrace	
+s554	Landrace	
+s555	Landrace	
+s556	Landrace	
+s557	Landrace	
+s558	Landrace	
+s559	Landrace	
+s560	Landrace	
+s561	Landrace	
+s562	Landrace	
+s563	Landrace	
+s564	Landrace	
+s565	Landrace	
+s566	Landrace	
+s567	Landrace	
+s568	Landrace	
+s569	Landrace	
+s570	Landrace	
+s571	Landrace	
+s572	Landrace	
+s573	Landrace	
+s574	Landrace	
+s575	Landrace	
+s576	Landrace	
+s577	Landrace	
+s578	Landrace	
+s579	Landrace	
+s580	Landrace	
+s581	Landrace	
+s582	Landrace	
+s583	Landrace	
+s584	Landrace	
+s585	Landrace	
+s586	Landrace	
+s587	Landrace	
+s588	Landrace	
+s589	Improved cultivar	
+s590	Improved cultivar	
+s591	Improved cultivar	
+s592	Improved cultivar	
+s593	Improved cultivar	
+s594	Improved cultivar	
+s595	Improved cultivar	
+s596	Improved cultivar	
+s597	Improved cultivar	
+s598	Improved cultivar	
+s599	Improved cultivar	
+s600	Improved cultivar	
+s601	Improved cultivar	
+s602	Improved cultivar	
+s603	Improved cultivar	
+s604	Improved cultivar	
+s605	Improved cultivar	
+s606	Improved cultivar	
+s607	Improved cultivar	
+s608	Improved cultivar	
+s609	Improved cultivar	
+s610	Improved cultivar	
+s611	Improved cultivar	
+s612	Improved cultivar	
+s613	Improved cultivar	
+s614	Improved cultivar	
+s615	Improved cultivar	
+s616	Improved cultivar	
+s617	Improved cultivar	
+s618	Improved cultivar	
+s619	Improved cultivar	
+s620	Improved cultivar	
+s621	Improved cultivar	
+s622	Improved cultivar	
+s623	Improved cultivar	
+s624	Improved cultivar	
+s625	Improved cultivar	
+s626	Improved cultivar	
+s627	Improved cultivar	
+s628	Improved cultivar	
+s629	Improved cultivar	
+s630	Improved cultivar	
+s631	Improved cultivar	
+s632	Improved cultivar	
+s633	Improved cultivar	
+s634	Improved cultivar	
+s635	Improved cultivar	
+s636	Improved cultivar	
+s637	Improved cultivar	
+s638	Improved cultivar	
+s639	Improved cultivar	
+s640	Improved cultivar	
+s641	Improved cultivar	
+s642	Improved cultivar	
+s643	Improved cultivar	
+s644	Improved cultivar	
+s645	Improved cultivar	
+s646	Improved cultivar	
+s647	Improved cultivar	
+s648	Improved cultivar	
+s649	Improved cultivar	
+s650	Improved cultivar	
+s651	Improved cultivar	
+s652	Improved cultivar	
+s653	Improved cultivar	
+s654	Improved cultivar	
+s655	Improved cultivar	
+s656	Improved cultivar	
+s657	Improved cultivar	
+s658	Improved cultivar	
+s659	Improved cultivar	
+s660	Improved cultivar	
+s661	Improved cultivar	
+s662	Improved cultivar	
+s663	Improved cultivar	
+s664	Improved cultivar	
+s665	Improved cultivar	
+s666	Improved cultivar	
+s667	Improved cultivar	
+s668	Improved cultivar	
+s669	Improved cultivar	
+s670	Improved cultivar	
+s671	Improved cultivar	
+s672	Improved cultivar	
+s673	Improved cultivar	
+s674	Improved cultivar	
+s675	Improved cultivar	
+s676	Improved cultivar	
+s677	Improved cultivar	
+s678	Improved cultivar	
+s679	Improved cultivar	
+s680	Improved cultivar	
+s681	Improved cultivar	
+s682	Improved cultivar	
+s683	Improved cultivar	
+s684	Improved cultivar	
+s685	Improved cultivar	
+s686	Improved cultivar	
+s687	Improved cultivar	
+s688	Improved cultivar	
+s689	Improved cultivar	
+s690	Improved cultivar	
+s691	Improved cultivar	
+s692	Improved cultivar	
+s693	Improved cultivar	
+s694	Improved cultivar	
+s695	Improved cultivar	
+s696	Improved cultivar	
+s697	Improved cultivar	
+s698	Improved cultivar	
+s699	Improved cultivar	
+s700	Improved cultivar	
+s701	Improved cultivar	
+s702	Improved cultivar	
+s703	Improved cultivar	
+s704	Improved cultivar	
+s705	Improved cultivar	
+s706	Improved cultivar	
+s707	Improved cultivar	
+s708	Improved cultivar	
+s709	Improved cultivar	
+s710	Improved cultivar	
+s711	Improved cultivar	
+s712	Improved cultivar	
+s713	Improved cultivar	
+s714	Improved cultivar	
+s715	Improved cultivar	
+s716	Improved cultivar	
+s717	Improved cultivar	
+s718	Improved cultivar	
+s719	Improved cultivar	
+s720	Improved cultivar	
+s721	Improved cultivar	
+s722	Improved cultivar	
+s723	Improved cultivar	
+s724	Improved cultivar	
+s725	Improved cultivar	
+s726	Improved cultivar	
+s727	Improved cultivar	
+s728	Improved cultivar	
+s729	Improved cultivar	
+s730	Improved cultivar	
+s731	Improved cultivar	
+s732	Improved cultivar	
+s733	Improved cultivar	
+s734	Improved cultivar	
+s735	Improved cultivar	
+s736	Improved cultivar	
+s737	Improved cultivar	
+s738	Improved cultivar	
+s739	Improved cultivar	
+s740	Improved cultivar	
+s741	Improved cultivar	
+s742	Improved cultivar	
+s743	Improved cultivar	
+s744	Improved cultivar	
+s745	Improved cultivar	
+s746	Improved cultivar	
+s747	Improved cultivar	
+s748	Improved cultivar	
+s749	Improved cultivar	
+s750	Improved cultivar	
+s751	Improved cultivar	
+s752	Improved cultivar	
+s753	Improved cultivar	
+s754	Improved cultivar	
+s755	Improved cultivar	
+s756	Improved cultivar	
+s757	Improved cultivar	
+s758	Improved cultivar	
+s759	Improved cultivar	
+s760	Improved cultivar	
+s761	Improved cultivar	
+s762	Improved cultivar	
+s763	Improved cultivar	
+s764	Improved cultivar	
+s765	Improved cultivar	
+s766	Improved cultivar	
+s767	Improved cultivar	
+s768	Improved cultivar	
+s769	Improved cultivar	
+s770	Improved cultivar	
+s771	Improved cultivar	
+s772	Improved cultivar	
+s773	Improved cultivar	
+s774	Improved cultivar	
+s775	Improved cultivar	
+s776	Improved cultivar	
+s777	Improved cultivar	
+s778	Improved cultivar	
+s779	Improved cultivar	
+s780	Improved cultivar	
+s781	Improved cultivar	
+s782	Improved cultivar	
+s783	Improved cultivar	
+s784	Improved cultivar	
+s785	Improved cultivar	
+s786	Improved cultivar	
+s787	Improved cultivar	
+s788	Improved cultivar	
+s789	Improved cultivar	
+s790	Improved cultivar	
+s791	Improved cultivar	
+s792	Improved cultivar	
+s793	Improved cultivar	
+s794	Improved cultivar	
+s795	Improved cultivar	
+s796	Improved cultivar	
+s797	Improved cultivar	
+s798	Improved cultivar	
+s799	Improved cultivar	
+s800	Improved cultivar	
+s801	Improved cultivar	
+s802	Improved cultivar	
+s803	Improved cultivar	
+s804	Improved cultivar	
+s805	Improved cultivar	
+s806	Improved cultivar	
+s807	Improved cultivar	
+s808	Improved cultivar	
+s809	Improved cultivar	
+s810	Improved cultivar	
+s811	Improved cultivar	
+s812	Improved cultivar	
+s813	Improved cultivar	
+s814	Improved cultivar	
+s815	Improved cultivar	
+s816	Improved cultivar	
+s817	Improved cultivar	
+s818	Improved cultivar	
+s819	Improved cultivar	
+s820	Improved cultivar	
+s821	Improved cultivar	
+s822	Improved cultivar	
+s823	Improved cultivar	
+s824	Improved cultivar	
+s825	Improved cultivar	
+s826	Improved cultivar	
+s827	Improved cultivar	
+s828	Improved cultivar	
+s829	Improved cultivar	
+s830	Improved cultivar	
+s831	Improved cultivar	
+s832	Improved cultivar	
+s833	Improved cultivar	
+s834	Improved cultivar	
+s835	Improved cultivar	
+s836	Improved cultivar	
+s837	Improved cultivar	
+s838	Improved cultivar	
+s839	Improved cultivar	
+s840	Improved cultivar	
+s841	Improved cultivar	
+s842	Improved cultivar	
+s843	Improved cultivar	
+s844	Improved cultivar	
+s845	Improved cultivar	
+s846	Improved cultivar	
+s847	Improved cultivar	
+s848	Improved cultivar	
+s849	Improved cultivar	
+s850	Improved cultivar	
+s851	Improved cultivar	
+s852	Improved cultivar	
+s853	Improved cultivar	
+s854	Improved cultivar	
+s855	Improved cultivar	
+s856	Improved cultivar	
+s857	Improved cultivar	
+s858	Improved cultivar	
+s859	Improved cultivar	
+s860	Improved cultivar	
+s861	Improved cultivar	
+s862	Improved cultivar	
+s863	Improved cultivar	
+s864	Improved cultivar	
+s865	Improved cultivar	
+s866	Improved cultivar	
+s867	Improved cultivar	
+s868	Improved cultivar	
+s869	Improved cultivar	
+s870	Improved cultivar	
+s871	Improved cultivar	
+s872		G. Soja
+s873		G. Soja
+s874		G. Soja
+s875		G. Soja
+s876		G. Soja
+s877		G. Soja
+s878		G. Soja
+s879		G. Soja
+s880		G. Soja
+s881		G. Soja
+s882		G. Soja
+s883		G. Soja
+s884		G. Soja
+s885		G. Soja
+s886		G. Soja
+s887		G. Soja
+s888		G. Soja
+s889		G. Soja
+s890		G. Soja
+s891		G. Soja
+s892		G. Soja
+s893		G. Soja
+s894		G. Soja
+s895		G. Soja
+s896		G. Soja
+s897		G. Soja
+s898		G. Soja
+s899		G. Soja
+s900		G. Soja
+s901		G. Soja
+s902		G. Soja
+s903		G. Soja
+s904		G. Soja
+s905		G. Soja
+s906		G. Soja
+s907		G. Soja
+s908		G. Soja
+s909		G. Soja
+s910		G. Soja
+s911		G. Soja
+s912		G. Soja
+s913	Landrace	
+s914	Landrace	
+s915	Landrace	
+s916	Landrace	
+s917	Landrace	
+s918	Landrace	
+s919	Landrace	
+s920	Landrace	
+s921	Landrace	
+s922	Landrace	
+s923	Landrace	
+s924	Landrace	
+s925	Landrace	
+s926	Landrace	
+s927	Landrace	
+s928	Landrace	
+s929	Landrace	
+s930	Landrace	
+s931	Landrace	
+s932	Landrace	
+s933	Landrace	
+s934	Landrace	
+s935	Landrace	
+s936	Landrace	
+s937	Landrace	
+s938	Landrace	
+s939	Landrace	
+s940	Landrace	
+s941	Landrace	
+s942	Landrace	
+s943	Landrace	
+s944	Landrace	
+s945	Landrace	
+s946	Landrace	
+s947	Landrace	
+s948	Landrace	
+s949	Landrace	
+s950	Landrace	
+s951	Landrace	
+s952	Landrace	
+s953	Landrace	
+s954	Landrace	
+s955	Landrace	
+s956	Landrace	
+s957	Landrace	
+s958	Landrace	
+s959	Landrace	
+s960	Landrace	
+s961	Landrace	
+s962	Landrace	
+s963	Landrace	
+s964	Landrace	
+s965	Landrace	
+s966	Landrace	
+s967	Landrace	
+s968	Landrace	
+s969	Landrace	
+s970	Landrace	
+s971	Landrace	
+s972	Landrace	
+s973	Landrace	
+s974	Landrace	
+s975	Landrace	
+s976	Landrace	
+s977	Landrace	
+s978	Landrace	
+s979	Landrace	
+s980	Landrace	
+s981	Landrace	
+s982	Landrace	
+s983	Landrace	
+s984	Landrace	
+s985	Landrace	
+s986	Landrace	
+s987	Landrace	
+s988	Landrace	
+s989	Landrace	
+s990	Landrace	
+s991	Landrace	
+s992	Landrace	
+s993	Landrace	
+s994	Landrace	
+s995	Landrace	
+s996	Landrace	
+s997	Landrace	
+s998	Landrace	
+s999	Landrace	
+s1000	Landrace	
+s1001	Landrace	
+s1002	Landrace	
+s1003	Landrace	
+s1004	Landrace	
+s1005	Landrace	
+s1006	Landrace	
+s1007	Landrace	
+s1008	Landrace	
+s1009	Landrace	
+s1010	Landrace	
+s1011	Landrace	
+s1012	Landrace	
+s1013	Landrace	
+s1014	Landrace	
+s1015	Landrace	
+s1016	Landrace	
+s1017	Landrace	
+s1018	Landrace	
+s1019	Landrace	
+s1020	Landrace	
+s1021	Landrace	
+s1022	Landrace	
+s1023	Landrace	
+s1024	Landrace	
+s1025	Landrace	
+s1026	Landrace	
+s1027	Landrace	
+s1028	Landrace	
+s1029	Landrace	
+s1030	Landrace	
+s1031	Landrace	
+s1032	Landrace	
+s1033	Landrace	
+s1034	Landrace	
+s1035	Landrace	
+s1036	Landrace	
+s1037	Landrace	
+s1038	Landrace	
+s1039	Landrace	
+s1040	Landrace	
+s1041	Landrace	
+s1042	Landrace	
+s1043	Landrace	
+s1044	Landrace	
+s1045	Landrace	
+s1046	Landrace	
+s1047	Landrace	
+s1048	Landrace	
+s1049	Landrace	
+s1050	Landrace	
+s1051	Landrace	
+s1052	Landrace	
+s1053	Landrace	
+s1054	Landrace	
+s1055	Landrace	
+s1056	Landrace	
+s1057	Landrace	
+s1058	Landrace	
+s1059	Landrace	
+s1060	Landrace	
+s1061	Landrace	
+s1062	Landrace	
+s1063	Landrace	
+s1064	Landrace	
+s1065	Landrace	
+s1066	Landrace	
+s1067	Landrace	
+s1068	Landrace	
+s1069	Landrace	
+s1070	Landrace	
+s1071	Landrace	
+s1072	Landrace	
+s1073	Landrace	
+s1074	Landrace	
+s1075	Landrace	
+s1076	Landrace	
+s1077	Landrace	
+s1078	Landrace	
+s1079	Landrace	
+s1080	Landrace	
+s1081	Landrace	
+s1082	Landrace	
+s1083	Landrace	
+s1084	Landrace	
+s1085	Landrace	
+s1086	Landrace	
+s1087	Landrace	
+s1088	Landrace	
+s1089	Landrace	
+s1090	Landrace	
+s1091	Landrace	
+s1092	Landrace	
+s1093	Landrace	
+s1094	Landrace	
+s1095	Landrace	
+s1096	Landrace	
+s1097	Landrace	
+s1098	Landrace	
+s1099	Landrace	
+s1100	Landrace	
+s1101	Landrace	
+s1102	Landrace	
+s1103	Landrace	
+s1104	Landrace	
+s1105	Landrace	
+s1106	Landrace	
+s1107	Landrace	
+s1108	Landrace	
+s1109	Landrace	
+s1110	Landrace	
+s1111	Landrace	
+s1112	Landrace	
+s1113	Landrace	
+s1114	Landrace	
+s1115	Landrace	
+s1116	Landrace	
+s1117	Landrace	
+s1118	Landrace	
+s1119	Landrace	
+s1120	Landrace	
+s1121	Landrace	
+s1122	Landrace	
+s1123	Landrace	
+s1124	Landrace	
+s1125	Landrace	
+s1126	Landrace	
+s1127	Landrace	
+s1128	Landrace	
+s1129	Landrace	
+s1130	Landrace	
+s1131	Landrace	
+s1132	Landrace	
+s1133	Landrace	
+s1134	Landrace	
+s1135	Landrace	
+s1136	Landrace	
+s1137	Landrace	
+s1138	Landrace	
+s1139	Landrace	
+s1140	Landrace	
+s1141	Landrace	
+s1142	Landrace	
+s1143	Landrace	
+s1144	Landrace	
+s1145	Landrace	
+s1146	Landrace	
+s1147	Landrace	
+s1148	Landrace	
+s1149	Landrace	
+s1150	Landrace	
+s1151	Landrace	
+s1152	Landrace	
+s1153	Landrace	
+s1154	Landrace	
+s1155	Landrace	
+s1156	Landrace	
+s1157	Landrace	
+s1158	Landrace	
+s1159	Landrace	
+s1160	Landrace	
+s1161	Landrace	
+s1162	Landrace	
+s1163	Landrace	
+s1164	Landrace	
+s1165	Landrace	
+s1166	Landrace	
+s1167	Landrace	
+s1168	Landrace	
+s1169	Landrace	
+s1170	Landrace	
+s1171	Landrace	
+s1172	Landrace	
+s1173	Landrace	
+s1174	Landrace	
+s1175	Landrace	
+s1176	Landrace	
+s1177	Landrace	
+s1178	Landrace	
+s1179	Landrace	
+s1180	Landrace	
+s1181	Landrace	
+s1182	Landrace	
+s1183	Landrace	
+s1184	Landrace	
+s1185	Landrace	
+s1186	Landrace	
+s1187	Landrace	
+s1188	Landrace	
+s1189	Landrace	
+s1190	Landrace	
+s1191	Landrace	
+s1192	Landrace	
+s1193	Landrace	
+s1194	Landrace	
+s1195	Landrace	
+s1196	Landrace	
+s1197	Landrace	
+s1198	Landrace	
+s1199	Landrace	
+s1200	Landrace	
+s1201	Landrace	
+s1202	Landrace	
+s1203	Landrace	
+s1204	Landrace	
+s1205	Landrace	
+s1206	Landrace	
+s1207	Landrace	
+s1208	Landrace	
+s1209	Landrace	
+s1210	Landrace	
+s1211	Landrace	
+s1212	Landrace	
+s1213	Landrace	
+s1214	Landrace	
+s1215	Landrace	
+s1216	Landrace	
+s1217	Landrace	
+s1218	Landrace	
+s1219	Landrace	
+s1220	Landrace	
+s1221	Landrace	
+s1222	Landrace	
+s1223	Landrace	
+s1224	Landrace	
+s1225	Landrace	
+s1226	Landrace	
+s1227	Landrace	
+s1228	Landrace	
+s1229	Landrace	
+s1230	Landrace	
+s1231	Landrace	
+s1232	Landrace	
+s1233	Landrace	
+s1234	Landrace	
+s1235	Landrace	
+s1236	Landrace	
+s1237	Landrace	
+s1238	Landrace	
+s1239	Landrace	
+s1240	Landrace	
+s1241	Landrace	
+s1242	Landrace	
+s1243	Landrace	
+s1244	Landrace	
+s1245	Landrace	
+s1246	Landrace	
+s1247	Landrace	
+s1248	Landrace	
+s1249	Landrace	
+s1250	Landrace	
+s1251	Landrace	
+s1252	Landrace	
+s1253	Landrace	
+s1254	Landrace	
+s1255	Landrace	
+s1256	Landrace	
+s1257	Landrace	
+s1258	Landrace	
+s1259	Landrace	
+s1260	Landrace	
+s1261	Landrace	
+s1262	Landrace	
+s1263	Landrace	
+s1264	Landrace	
+s1265	Landrace	
+s1266	Landrace	
+s1267	Landrace	
+s1268	Landrace	
+s1269	Landrace	
+s1270	Landrace	
+s1271	Landrace	
+s1272	Landrace	
+s1273	Landrace	
+s1274	Landrace	
+s1275	Landrace	
+s1276	Landrace	
+s1277	Landrace	
+s1278	Landrace	
+s1279	Landrace	
+s1280	Landrace	
+s1281	Landrace	
+s1282	Landrace	
+s1283	Landrace	
+s1284	Landrace	
+s1285	Landrace	
+s1286	Landrace	
+s1287	Landrace	
+s1288	Landrace	
+s1289	Landrace	
+s1290	Landrace	
+s1291	Landrace	
+s1292	Landrace	
+s1293	Landrace	
+s1294	Landrace	
+s1295	Landrace	
+s1296	Landrace	
+s1297	Landrace	
+s1298	Landrace	
+s1299	Landrace	
+s1300	Landrace	
+s1301	Landrace	
+s1302	Landrace	
+s1303	Landrace	
+s1304	Landrace	
+s1305	Landrace	
+s1306	Landrace	
+s1307	Landrace	
+s1308	Landrace	
+s1309	Landrace	
+s1310	Landrace	
+s1311	Landrace	
+s1312	Landrace	
+s1313	Landrace	
+s1314	Landrace	
+s1315	Landrace	
+s1316	Landrace	
+s1317	Landrace	
+s1318	Landrace	
+s1319	Landrace	
+s1320	Landrace	
+s1321	Landrace	
+s1322	Landrace	
+s1323	Landrace	
+s1324	Landrace	
+s1325	Landrace	
+s1326	Landrace	
+s1327	Landrace	
+s1328	Landrace	
+s1329	Landrace	
+s1330	Landrace	
+s1331	Landrace	
+s1332	Landrace	
+s1333	Landrace	
+s1334	Landrace	
+s1335	Landrace	
+s1336	Landrace	
+s1337	Landrace	
+s1338	Landrace	
+s1339	Landrace	
+s1340	Landrace	
+s1341	Landrace	
+s1342	Landrace	
+s1343	Landrace	
+s1344	Landrace	
+s1345	Landrace	
+s1346	Landrace	
+s1347	Landrace	
+s1348	Landrace	
+s1349	Landrace	
+s1350	Landrace	
+s1351	Landrace	
+s1352	Landrace	
+s1353	Landrace	
+s1354	Landrace	
+s1355	Landrace	
+s1356	Landrace	
+s1357	Landrace	
+s1358	Landrace	
+s1359	Landrace	
+s1360	Landrace	
+s1361	Landrace	
+s1362	Landrace	
+s1363	Landrace	
+s1364	Landrace	
+s1365	Landrace	
+s1366	Landrace	
+s1367	Landrace	
+s1368	Landrace	
+s1369	Landrace	
+s1370	Landrace	
+s1371	Landrace	
+s1372	Landrace	
+s1373	Landrace	
+s1374	Landrace	
+s1375	Landrace	
+s1376	Landrace	
+s1377	Landrace	
+s1378	Landrace	
+s1379	Landrace	
+s1380	Landrace	
+s1381	Landrace	
+s1382	Landrace	
+s1383	Landrace	
+s1384	Landrace	
+s1385	Landrace	
+s1386	Landrace	
+s1387	Landrace	
+s1388	Landrace	
+s1389	Landrace	
+s1390	Landrace	
+s1391	Landrace	
+s1392	Landrace	
+s1393	Landrace	
+s1394	Landrace	
+s1395	Landrace	
+s1396	Landrace	
+s1397	Landrace	
+s1398	Landrace	
+s1399	Landrace	
+s1400	Landrace	
+s1401	Landrace	
+s1402	Landrace	
+s1403	Landrace	
+s1404	Landrace	
+s1405	Landrace	
+s1406	Landrace	
+s1407	Landrace	
+s1408	Landrace	
+s1409	Landrace	
+s1410	Landrace	
+s1411	Landrace	
+s1412	Landrace	
+s1413	Landrace	
+s1414	Landrace	
+s1415	Landrace	
+s1416	Landrace	
+s1417	Landrace	
+s1418	Landrace	
+s1419	Landrace	
+s1420	Landrace	
+s1421	Landrace	
+s1422	Landrace	
+s1423	Landrace	
+s1424	Landrace	
+s1425	Landrace	
+s1426	Landrace	
+s1427	Landrace	
+s1428	Landrace	
+s1429	Landrace	
+s1430	Landrace	
+s1431	Landrace	
+s1432	Landrace	
+s1433	Landrace	
+s1434	Landrace	
+s1435	Landrace	
+s1436	Landrace	
+s1437	Landrace	
+s1438	Landrace	
+s1439	Landrace	
+s1440	Landrace	
+s1441	Landrace	
+s1442	Landrace	
+s1443	Landrace	
+s1444	Landrace	
+s1445	Landrace	
+s1446	Landrace	
+s1447	Landrace	
+s1448	Landrace	
+s1449	Landrace	
+s1450	Landrace	
+s1451	Landrace	
+s1452	Landrace	
+s1453	Landrace	
+s1454	Landrace	
+s1455	Landrace	
+s1456	Landrace	
+s1457	Landrace	
+s1458	Landrace	
+s1459	Landrace	
+s1460	Landrace	
+s1461	Landrace	
+s1462	Landrace	
+s1463	Landrace	
+s1464	Landrace	
+s1465	Landrace	
+s1466	Landrace	
+s1467	Landrace	
+s1468	Landrace	
+s1469	Landrace	
+s1470	Landrace	
+s1471	Landrace	
+s1472	Landrace	
+s1473	Landrace	
+s1474	Landrace	
+s1475	Landrace	
+s1476	Landrace	
+s1477	Landrace	
+s1478	Landrace	
+s1479	Landrace	
+s1480	Landrace	
+s1481	Landrace	
+s1482	Landrace	
+s1483	Landrace	
+s1484	Landrace	
+s1485	Landrace	
+s1486	Landrace	
+s1487	Landrace	
+s1488	Landrace	
+s1489	Landrace	
+s1490	Landrace	
+s1491	Landrace	
+s1492	Landrace	
+s1493	Landrace	
+s1494	Landrace	
+s1495	Landrace	
+s1496	Landrace	
+s1497	Landrace	
+s1498	Landrace	
+s1499	Landrace	
+s1500	Landrace	
+s1501	Landrace	
+s1502	Landrace	
+s1503	Landrace	
+s1504	Landrace	
+s1505	Landrace	
+s1506	Landrace	
+s1507	Landrace	
+s1508	Landrace	
+s1509	Landrace	
+s1510	Landrace	
+s1511	Landrace	
+s1512	Landrace	
+s1513	Landrace	
+s1514	Landrace	
+s1515	Landrace	
+s1516	Landrace	
+s1517	Landrace	
+s1518	Landrace	
+s1519	Landrace	
+s1520	Landrace	
+s1521	Landrace	
+s1522	Landrace	
+s1523	Landrace	
+s1524	Landrace	
+s1525	Landrace	
+s1526	Landrace	
+s1527	Landrace	
+s1528	Landrace	
+s1529	Landrace	
+s1530	Landrace	
+s1531	Landrace	
+s1532	Landrace	
+s1533	Landrace	
+s1534	Landrace	
+s1535	Landrace	
+s1536	Landrace	
+s1537	Landrace	
+s1538	Landrace	
+s1539	Landrace	
+s1540	Landrace	
+s1541	Landrace	
+s1542	Landrace	
+s1543	Landrace	
+s1544	Landrace	
+s1545	Improved cultivar	
+s1546	Improved cultivar	
+s1547	Improved cultivar	
+s1548	Improved cultivar	
+s1549	Improved cultivar	
+s1550	Improved cultivar	
+s1551	Improved cultivar	
+s1552	Improved cultivar	
+s1553	Improved cultivar	
+s1554	Improved cultivar	
+s1555	Improved cultivar	
+s1556	Improved cultivar	
+s1557	Improved cultivar	
+s1558	Improved cultivar	
+s1559	Improved cultivar	
+s1560	Improved cultivar	
+s1561	Improved cultivar	
+s1562	Improved cultivar	
+s1563	Improved cultivar	
+s1564	Improved cultivar	
+s1565	Improved cultivar	
+s1566	Improved cultivar	
+s1567	Improved cultivar	
+s1568	Improved cultivar	
+s1569	Improved cultivar	
+s1570	Improved cultivar	
+s1571	Improved cultivar	
+s1572	Improved cultivar	
+s1573	Improved cultivar	
+s1574	Improved cultivar	
+s1575	Improved cultivar	
+s1576	Improved cultivar	
+s1577	Improved cultivar	
+s1578	Improved cultivar	
+s1579	Improved cultivar	
+s1580	Improved cultivar	
+s1581	Improved cultivar	
+s1582	Improved cultivar	
+s1583	Improved cultivar	
+s1584	Improved cultivar	
+s1585	Improved cultivar	
+s1586	Improved cultivar	
+s1587	Improved cultivar	
+s1588	Improved cultivar	
+s1589	Improved cultivar	
+s1590	Improved cultivar	
+s1591	Improved cultivar	
+s1592	Improved cultivar	
+s1593	Improved cultivar	
+s1594	Improved cultivar	
+s1595	Improved cultivar	
+s1596	Improved cultivar	
+s1597	Improved cultivar	
+s1598	Improved cultivar	
+s1599	Improved cultivar	
+s1600	Improved cultivar	
+s1601	Improved cultivar	
+s1602	Improved cultivar	
+s1603	Improved cultivar	
+s1604	Improved cultivar	
+s1605	Improved cultivar	
+s1606	Improved cultivar	
+s1607	Improved cultivar	
+s1608	Improved cultivar	
+s1609	Improved cultivar	
+s1610	Improved cultivar	
+s1611	Improved cultivar	
+s1612	Improved cultivar	
+s1613	Improved cultivar	
+s1614	Improved cultivar	
+s1615	Improved cultivar	
+s1616	Improved cultivar	
+s1617	Improved cultivar	
+s1618	Improved cultivar	
+s1619	Improved cultivar	
+s1620	Improved cultivar	
+s1621	Improved cultivar	
+s1622	Improved cultivar	
+s1623	Improved cultivar	
+s1624	Improved cultivar	
+s1625	Improved cultivar	
+s1626	Improved cultivar	
+s1627	Improved cultivar	
+s1628	Improved cultivar	
+s1629	Improved cultivar	
+s1630	Improved cultivar	
+s1631	Improved cultivar	
+s1632	Improved cultivar	
+s1633	Improved cultivar	
+s1634	Improved cultivar	
+s1635	Improved cultivar	
+s1636	Improved cultivar	
+s1637	Improved cultivar	
+s1638	Improved cultivar	
+s1639	Improved cultivar	
+s1640	Improved cultivar	
+s1641	Improved cultivar	
+s1642	Improved cultivar	
+s1643	Improved cultivar	
+s1644	Improved cultivar	
+s1645	Improved cultivar	
+s1646	Improved cultivar	
+s1647	Improved cultivar	
+s1648	Improved cultivar	
+s1649	Improved cultivar	
+s1650	Improved cultivar	
+s1651	Improved cultivar	
+s1652	Improved cultivar	
+s1653	Improved cultivar	
+s1654	Improved cultivar	
+s1655	Improved cultivar	
+s1656	Improved cultivar	
+s1657	Improved cultivar	
+s1658	Improved cultivar	
+s1659	Improved cultivar	
+s1660	Improved cultivar	
+s1661	Improved cultivar	
+s1662	Improved cultivar	
+s1663	Improved cultivar	
+s1664	Improved cultivar	
+s1665	Improved cultivar	
+s1666	Improved cultivar	
+s1667	Improved cultivar	
+s1668	Improved cultivar	
+s1669	Improved cultivar	
+s1670	Improved cultivar	
+s1671	Improved cultivar	
+s1672	Improved cultivar	
+s1673	Improved cultivar	
+s1674	Improved cultivar	
+s1675	Improved cultivar	
+s1676	Improved cultivar	
+s1677	Improved cultivar	
+s1678	Improved cultivar	
+s1679	Improved cultivar	
+s1680	Improved cultivar	
+s1681	Improved cultivar	
+s1682	Improved cultivar	
+s1683	Improved cultivar	
+s1684	Improved cultivar	
+s1685	Improved cultivar	
+s1686	Improved cultivar	
+s1687	Improved cultivar	
+s1688	Improved cultivar	
+s1689	Improved cultivar	
+s1690	Improved cultivar	
+s1691	Improved cultivar	
+s1692	Improved cultivar	
+s1693	Improved cultivar	
+s1694	Improved cultivar	
+s1695	Improved cultivar	
+s1696	Improved cultivar	
+s1697	Improved cultivar	
+s1698	Improved cultivar	
+s1699	Improved cultivar	
+s1700	Improved cultivar	
+s1701	Improved cultivar	
+s1702	Improved cultivar	
+s1703	Improved cultivar	
+s1704	Improved cultivar	
+s1705	Improved cultivar	
+s1706	Improved cultivar	
+s1707	Improved cultivar	
+s1708	Improved cultivar	
+s1709	Improved cultivar	
+s1710	Improved cultivar	
+s1711	Improved cultivar	
+s1712	Improved cultivar	
+s1713	Improved cultivar	
+s1714	Improved cultivar	
+s1715	Improved cultivar	
+s1716	Improved cultivar	
+s1717	Improved cultivar	
+s1718	Improved cultivar	
+s1719	Improved cultivar	
+s1720	Improved cultivar	
+s1721	Improved cultivar	
+s1722	Improved cultivar	
+s1723	Improved cultivar	
+s1724	Improved cultivar	
+s1725	Improved cultivar	
+s1726	Improved cultivar	
+s1727	Improved cultivar	
+s1728	Improved cultivar	
+s1729	Improved cultivar	
+s1730	Improved cultivar	
+s1731	Improved cultivar	
+s1732	Improved cultivar	
+s1733	Improved cultivar	
+s1734	Improved cultivar	
+s1735	Improved cultivar	
+s1736	Improved cultivar	
+s1737	Improved cultivar	
+s1738	Improved cultivar	
+s1739	Improved cultivar	
+s1740	Improved cultivar	
+s1741	Improved cultivar	
+s1742	Improved cultivar	
+s1743	Improved cultivar	
+s1744	Improved cultivar	
+s1745	Improved cultivar	
+s1746	Improved cultivar	
+s1747	Improved cultivar	
+s1748	Improved cultivar	
+s1749	Improved cultivar	
+s1750	Improved cultivar	
+s1751	Improved cultivar	
+s1752	Improved cultivar	
+s1753	Improved cultivar	
+s1754	Improved cultivar	
+s1755	Improved cultivar	
+s1756	Improved cultivar	
+s1757	Improved cultivar	
+s1758	Improved cultivar	
+s1759	Improved cultivar	
+s1760	Improved cultivar	
+s1761	Improved cultivar	
+s1762	Improved cultivar	
+s1763	Improved cultivar	
+s1764	Improved cultivar	
+s1765	Improved cultivar	
+s1766	Improved cultivar	
+s1767	Improved cultivar	
+s1768	Improved cultivar	
+s1769	Improved cultivar	
+s1770	Improved cultivar	
+s1771	Improved cultivar	
+s1772	Improved cultivar	
+s1773	Improved cultivar	
+s1774	Improved cultivar	
+s1775	Improved cultivar	
+s1776	Improved cultivar	
+s1777	Improved cultivar	
+s1778	Improved cultivar	
+s1779	Improved cultivar	
+s1780	Improved cultivar	
+s1781	Improved cultivar	
+s1782	Improved cultivar	
+s1783	Improved cultivar	
+s1784	Improved cultivar	
+s1785	Improved cultivar	
+s1786	Improved cultivar	
+s1787	Improved cultivar	
+s1788	Improved cultivar	
+s1789	Improved cultivar	
+s1790	Improved cultivar	
+s1791	Improved cultivar	
+s1792	Improved cultivar	
+s1793	Improved cultivar	
+s1794	Improved cultivar	
+s1795	Improved cultivar	
+s1796	Improved cultivar	
+s1797	Improved cultivar	
+s1798	Improved cultivar	
+s1799	Improved cultivar	
+s1800	Improved cultivar	
+s1801	Improved cultivar	
+s1802	Improved cultivar	
+s1803	Improved cultivar	
+s1804	Improved cultivar	
+s1805	Improved cultivar	
+s1806	Improved cultivar	
+s1807	Improved cultivar	
+s1808	Improved cultivar	
+s1809	Improved cultivar	
+s1810	Improved cultivar	
+s1811	Improved cultivar	
+s1812	Improved cultivar	
+s1813	Improved cultivar	
+s1814	Improved cultivar	
+s1815	Improved cultivar	
+s1816	Improved cultivar	
+s1817	Improved cultivar	
+s1818	Improved cultivar	
+s1819	Improved cultivar	
+s1820	Improved cultivar	
+s1821	Improved cultivar	
+s1822	Improved cultivar	
+s1823	Improved cultivar	
+s1824	Improved cultivar	
+s1825	Improved cultivar	
+s1826	Improved cultivar	
+s1827	Improved cultivar	
+s1828	Improved cultivar	
+s1829	Improved cultivar	
+s1830	Improved cultivar	
+s1831	Improved cultivar	
+s1832	Improved cultivar	
+s1833	Improved cultivar	
+s1834	Improved cultivar	
+s1835	Improved cultivar	
+s1836	Improved cultivar	
+s1837	Improved cultivar	
+s1838	Improved cultivar	
+s1839	Improved cultivar	
+s1840	Improved cultivar	
+s1841	Improved cultivar	
+s1842	Improved cultivar	
+s1843	Improved cultivar	
+s1844	Improved cultivar	
+s1845	Improved cultivar	
+s1846	Improved cultivar	
+s1847	Improved cultivar	
+s1848	Improved cultivar	
+s1849	Improved cultivar	
+s1850	Improved cultivar	
+s1851	Improved cultivar	
+s1852	Improved cultivar	
+s1853	Improved cultivar	
+s1854	Improved cultivar	
+s1855	Improved cultivar	
+s1856	Improved cultivar	
+s1857	Improved cultivar	
+s1858	Improved cultivar	
+s1859	Improved cultivar	
+s1860	Improved cultivar	
+s1861	Improved cultivar	
+s1862	Improved cultivar	
+s1863	Improved cultivar	
+s1864	Improved cultivar	
+s1865	Improved cultivar	
+s1866	Improved cultivar	
+s1867	Improved cultivar	
+s1868	Improved cultivar	
+s1869	Improved cultivar	
+s1870	Improved cultivar	
+s1871	Improved cultivar	
+s1872	Improved cultivar	
+s1873	Improved cultivar	
+s1874	Improved cultivar	
+s1875	Improved cultivar	
+s1876	Improved cultivar	
+s1877	Improved cultivar	
+s1878	Improved cultivar	
+s1879	Improved cultivar	
+s1880	Improved cultivar	
+s1881	Improved cultivar	
+s1882	Improved cultivar	
+s1883	Improved cultivar	
+s1884	Improved cultivar	
+s1885	Improved cultivar	
+s1886	Improved cultivar	
+s1887	Improved cultivar	
+s1888	Improved cultivar	
+s1889	Improved cultivar	
+s1890	Improved cultivar	
+s1891	Improved cultivar	
+s1892	Improved cultivar	
+s1893	Improved cultivar	
+s1894	Improved cultivar	
+s1895	Improved cultivar	
+s1896	Improved cultivar	
+s1897	Improved cultivar	
+s1898	Improved cultivar	
+s1899	Improved cultivar	
+s1900	Improved cultivar	
+s1901	Improved cultivar	
+s1902	Improved cultivar	
+s1903	Improved cultivar	
+s1904	Improved cultivar	
+s1905	Improved cultivar	
+s1906	Improved cultivar	
+s1907	Improved cultivar	
+s1908	Improved cultivar	
+s1909	Improved cultivar	
+s1910	Improved cultivar	
+s1911	Improved cultivar	
+s1912	Improved cultivar	
+s1913	Improved cultivar	
+s1914	Improved cultivar	
+s1915	Improved cultivar	
+s1916	Improved cultivar	
+s1917	Improved cultivar	
+s1918	Improved cultivar	
+s1919	Improved cultivar	
+s1920	Improved cultivar	
+s1921	Improved cultivar	
+s1922	Improved cultivar	
+s1923	Improved cultivar	
+s1924	Improved cultivar	
+s1925	Improved cultivar	
+s1926	Improved cultivar	
+s1927	Improved cultivar	
+s1928	Improved cultivar	
+s1929	Improved cultivar	
+s1930	Improved cultivar	
+s1931	Improved cultivar	
+s1932	Improved cultivar	
+s1933	Improved cultivar	
+s1934	Improved cultivar	
+s1935	Improved cultivar	
+s1936	Improved cultivar	
+s1937	Improved cultivar	
+s1938	Improved cultivar	
+s1939	Improved cultivar	
+s1940	Improved cultivar	
+s1941	Improved cultivar	
+s1942	Improved cultivar	
+s1943	Improved cultivar	
+s1944	Improved cultivar	
+s1945	Improved cultivar	
+s1946	Improved cultivar	
+s1947	Improved cultivar	
+s1948	Improved cultivar	
+s1949	Improved cultivar	
+s1950	Improved cultivar	
+s1951	Improved cultivar	
+s1952	Improved cultivar	
+s1953	Improved cultivar	
+s1954	Improved cultivar	
+s1955	Improved cultivar	
+s1956	Improved cultivar	
+s1957	Improved cultivar	
+s1958	Improved cultivar	
+s1959	Improved cultivar	
+s1960	Improved cultivar	
+s1961	Improved cultivar	
+s1962	Improved cultivar	
+s1963	Improved cultivar	
+s1964	Improved cultivar	
+s1965	Improved cultivar	
+s1966	Improved cultivar	
+s1967	Improved cultivar	
+s1968	Improved cultivar	
+s1969	Improved cultivar	
+s1970	Improved cultivar	
+s1971	Improved cultivar	
+s1972	Improved cultivar	
+s1973	Improved cultivar	
+s1974	Improved cultivar	
+s1975	Improved cultivar	
+s1976	Improved cultivar	
+s1977	Improved cultivar	
+s1978	Improved cultivar	
+s1979	Improved cultivar	
+s1980	Improved cultivar	
+s1981	Improved cultivar	
+s1982	Improved cultivar	
+s1983	Improved cultivar	
+s1984	Improved cultivar	
+s1985	Improved cultivar	
+s1986	Improved cultivar	
+s1987	Improved cultivar	
+s1988	Improved cultivar	
+s1989	Improved cultivar	
+s1990	Improved cultivar	
+s1991	Improved cultivar	
+s1992	Improved cultivar	
+s1993	Improved cultivar	
+s1994	Improved cultivar	
+s1995	Improved cultivar	
+s1996	Improved cultivar	
+s1997	Improved cultivar	
+s1998	Improved cultivar	
+s1999	Improved cultivar	
+s2000	Improved cultivar	
+s2001	Improved cultivar	
+s2002	Improved cultivar	
+s2003	Improved cultivar	
+s2004	Improved cultivar	
+s2005	Improved cultivar	
+s2006	Improved cultivar	
+s2007	Improved cultivar	
+s2008	Improved cultivar	
+s2009	Improved cultivar	
+s2010	Improved cultivar	
+s2011	Improved cultivar	
+s2012	Improved cultivar	
+s2013	Improved cultivar	
+s2014	Improved cultivar	
+s2015	Improved cultivar	
+s2016	Improved cultivar	
+s2017	Improved cultivar	
+s2018	Improved cultivar	
+s2019	Improved cultivar	
+s2020	Improved cultivar	
+s2021	Improved cultivar	
+s2022	Improved cultivar	
+s2023	Improved cultivar	
+s2024	Improved cultivar	
+s2025	Improved cultivar	
+s2026	Improved cultivar	
+s2027	Improved cultivar	
+s2028	Improved cultivar	
+s2029	Improved cultivar	
+s2030	Improved cultivar	
+s2031	Improved cultivar	
+s2032	Improved cultivar	
+s2033	Improved cultivar	
+s2034	Improved cultivar	
+s2035	Improved cultivar	
+s2036	Improved cultivar	
+s2037	Improved cultivar	
+s2038	Improved cultivar	
+s2039	Improved cultivar	
+s2040	Improved cultivar	
+s2041	Improved cultivar	
+s2042	Improved cultivar	
+s2043	Improved cultivar	
+s2044	Improved cultivar	
+s2045	Improved cultivar	
+s2046	Improved cultivar	
+s2047	Improved cultivar	
+s2048	Improved cultivar	
+s2049	Improved cultivar	
+s2050	Improved cultivar	
+s2051	Improved cultivar	
+s2052	Improved cultivar	
+s2053	Improved cultivar	
+s2054	Improved cultivar	
+s2055	Improved cultivar	
+s2056	Improved cultivar	
+s2057	Improved cultivar	
+s2058	Improved cultivar	
+s2059	Improved cultivar	
+s2060	Improved cultivar	
+s2061	Improved cultivar	
+s2062	Improved cultivar	
+s2063	Improved cultivar	
+s2064	Improved cultivar	
+s2065	Improved cultivar	
+s2066	Improved cultivar	
+s2067	Improved cultivar	
+s2068	Improved cultivar	
+s2069	Improved cultivar	
+s2070	Improved cultivar	
+s2071	Improved cultivar	
+s2072	Improved cultivar	
+s2073	Improved cultivar	
+s2074	Improved cultivar	
+s2075	Improved cultivar	
+s2076	Improved cultivar	
+s2077	Improved cultivar	
+s2078	Improved cultivar	
+s2079	Improved cultivar	
+s2080	Improved cultivar	
+s2081	Improved cultivar	
+s2082	Improved cultivar	
+s2083	Improved cultivar	
+s2084	Improved cultivar	
+s2085	Improved cultivar	
+s2086	Improved cultivar	
+s2087	Improved cultivar	
+s2088	Improved cultivar	
+s2089	Improved cultivar	
+s2090	Improved cultivar	
+s2091	Improved cultivar	
+s2092	Improved cultivar	
+s2093	Improved cultivar	
+s2094	Improved cultivar	
+s2095	Improved cultivar	
+s2096	Improved cultivar	
+s2097	Improved cultivar	
+s2098	Improved cultivar	
+s2099	Improved cultivar	
+s2100	Improved cultivar	
+s2101	Improved cultivar	
+s2102	Improved cultivar	
+s2103	Improved cultivar	
+s2104	Improved cultivar	
+s2105	Improved cultivar	
+s2106	Improved cultivar	
+s2107	Improved cultivar	
+s2108	Improved cultivar	
+s2109	Improved cultivar	
+s2110	Improved cultivar	
+s2111	Improved cultivar	
+s2112	Improved cultivar	
+s2113	Improved cultivar	
+s2114	Improved cultivar	
+s2115	Improved cultivar	
+s2116	Improved cultivar	
+s2117	Improved cultivar	
+s2118	Improved cultivar	
+s2119	Improved cultivar	
+s2120	Improved cultivar	
+s2121	Improved cultivar	
+s2122	Improved cultivar	
+s2123	Improved cultivar	
+s2124	Improved cultivar	
+s2125	Improved cultivar	
+s2126	Improved cultivar	
+s2127	Improved cultivar	
+s2128	Improved cultivar	
+s2129	Improved cultivar	
+s2130	Improved cultivar	
+s2131	Improved cultivar	
+s2132	Improved cultivar	
+s2133	Improved cultivar	
+s2134	Improved cultivar	
+s2135	Improved cultivar	
+s2136	Improved cultivar	
+s2137	Improved cultivar	
+s2138	Improved cultivar	
+s2139	Improved cultivar	
+s2140	Improved cultivar	
+s2141	Improved cultivar	
+s2142	Improved cultivar	
+s2143	Improved cultivar	
+s2144	Improved cultivar	
+s2145	Improved cultivar	
+s2146	Improved cultivar	
+s2147	Improved cultivar	
+s2148	Improved cultivar	
+s2149	Improved cultivar	
+s2150	Improved cultivar	
+s2151	Improved cultivar	
+s2152	Improved cultivar	
+s2153	Improved cultivar	
+s2154	Improved cultivar	
+s2155	Improved cultivar	
+s2156	Improved cultivar	
+s2157	Improved cultivar	
+s2158	Improved cultivar	
+s2159	Improved cultivar	
+s2160	Improved cultivar	
+s2161	Improved cultivar	
+s2162	Improved cultivar	
+s2163	Improved cultivar	
+s2164	Improved cultivar	
+s2165	Improved cultivar	
+s2166	Improved cultivar	
+s2167	Improved cultivar	
+s2168	Improved cultivar	
+s2169	Improved cultivar	
+s2170	Improved cultivar	
+s2171	Improved cultivar	
+s2172	Improved cultivar	
+s2173	Improved cultivar	
+s2174	Improved cultivar	
+s2175	Improved cultivar	
+s2176	Improved cultivar	
+s2177	Improved cultivar	
+s2178	Improved cultivar	
+s2179	Improved cultivar	
+s2180	Improved cultivar	
+s2181	Improved cultivar	
+s2182	Improved cultivar	
+s2183	Improved cultivar	
+s2184	Improved cultivar	
+s2185	Improved cultivar	
+s2186	Improved cultivar	
+s2187	Improved cultivar	
+s2188	Improved cultivar	
+s2189	Improved cultivar	
+s2190	Improved cultivar	
+s2191	Improved cultivar	
+s2192	Improved cultivar	
+s2193	Improved cultivar	
+s2194	Improved cultivar	
+s2195	Improved cultivar	
+s2196	Improved cultivar	
+s2197	Improved cultivar	
+s2198	Improved cultivar	
+s2199	Improved cultivar	
+s2200	Improved cultivar	
+s2201	Improved cultivar	
+s2202	Improved cultivar	
+s2203	Improved cultivar	
+s2204	Improved cultivar	
+s2205	Improved cultivar	
+s2206	Improved cultivar	
+s2207	Improved cultivar	
+s2208	Improved cultivar	
+s2209	Improved cultivar	
+s2210	Improved cultivar	
+s2211	Improved cultivar	
+s2212	Improved cultivar	
+s2213	Improved cultivar	
+s2214	Improved cultivar	
+s2215	Improved cultivar	
+s2216	Improved cultivar	
+s2217	Improved cultivar	
+s2218	Improved cultivar	
+s2219	Improved cultivar	
+s2220	Improved cultivar	
+s2221	Improved cultivar	
+s2222	Improved cultivar	
+s2223	Improved cultivar	
+s2224	Improved cultivar	
+s2225	Improved cultivar	
+s2226	Improved cultivar	
+s2227	Improved cultivar	
+s2228	Improved cultivar	
+s2229	Improved cultivar	
+s2230	Improved cultivar	
+s2231	Improved cultivar	
+s2232	Improved cultivar	
+s2233	Improved cultivar	
+s2234	Improved cultivar	
+s2235	Improved cultivar	
+s2236	Improved cultivar	
+s2237	Improved cultivar	
+s2238	Improved cultivar	
+s2239	Improved cultivar	
+s2240	Improved cultivar	
+s2241	Improved cultivar	
+s2242	Improved cultivar	
+s2243	Improved cultivar	
+s2244	Improved cultivar	
+s2245	Improved cultivar	
+s2246	Improved cultivar	
+s2247	Improved cultivar	
+s2248	Improved cultivar	
+s2249	Improved cultivar	
+s2250	Improved cultivar	
+s2251	Improved cultivar	
+s2252	Improved cultivar	
+s2253	Improved cultivar	
+s2254	Improved cultivar	
+s2255	Improved cultivar	
+s2256	Improved cultivar	
+s2257	Improved cultivar	
+s2258	Improved cultivar	
+s2259	Improved cultivar	
+s2260	Improved cultivar	
+s2261	Improved cultivar	
+s2262	Improved cultivar	
+s2263	Improved cultivar	
+s2264	Improved cultivar	
+s2265	Improved cultivar	
+s2266	Improved cultivar	
+s2267	Improved cultivar	
+s2268	Improved cultivar	
+s2269	Improved cultivar	
+s2270	Improved cultivar	
+s2271	Improved cultivar	
+s2272	Improved cultivar	
+s2273	Improved cultivar	
+s2274	Improved cultivar	
+s2275	Improved cultivar	
+s2276	Improved cultivar	
+s2277	Improved cultivar	
+s2278	Improved cultivar	
+s2279	Improved cultivar	
+s2280	Improved cultivar	
+s2281	Improved cultivar	
+s2282	Improved cultivar	
+s2283	Improved cultivar	
+s2284	Improved cultivar	
+s2285	Improved cultivar	
+s2286	Improved cultivar	
+s2287	Improved cultivar	
+s2288	Improved cultivar	
+s2289	Improved cultivar	
+s2290	Improved cultivar	
+s2291	Improved cultivar	
+s2292	Improved cultivar	
+s2293	Improved cultivar	
+s2294	Improved cultivar	
+s2295	Improved cultivar	
+s2296	Improved cultivar	
+s2297	Improved cultivar	
+s2298	Improved cultivar	
+s2299	Improved cultivar	
+s2300	Improved cultivar	
+s2301	Improved cultivar	
+s2302	Improved cultivar	
+s2303	Improved cultivar	
+s2304	Improved cultivar	
+s2305	Improved cultivar	
+s2306	Improved cultivar	
+s2307	Improved cultivar	
+s2308	Improved cultivar	
+s2309	Improved cultivar	
+s2310	Improved cultivar	
+s2311	Improved cultivar	
+s2312	Improved cultivar	
+s2313	Improved cultivar	
+s2314	Improved cultivar	
+s2315	Improved cultivar	
+s2316	Improved cultivar	
+s2317	Improved cultivar	
+s2318	Improved cultivar	
+s2319	Improved cultivar	
+s2320	Improved cultivar	
+s2321	Improved cultivar	
+s2322	Improved cultivar	
+s2323	Improved cultivar	
+s2324	Improved cultivar	
+s2325	Improved cultivar	
+s2326	Improved cultivar	
+s2327	Improved cultivar	
+s2328	Improved cultivar	
+s2329	Improved cultivar	
+s2330	Improved cultivar	
+s2331	Improved cultivar	
+s2332	Improved cultivar	
+s2333	Improved cultivar	
+s2334	Improved cultivar	
+s2335	Improved cultivar	
+s2336	Improved cultivar	
+s2337	Improved cultivar	
+s2338	Improved cultivar	
+s2339	Improved cultivar	
+s2340	Improved cultivar	
+s2341	Improved cultivar	
+s2342	Improved cultivar	
+s2343	Improved cultivar	
+s2344	Improved cultivar	
+s2345	Improved cultivar	
+s2346	Improved cultivar	
+s2347	Improved cultivar	
+s2348	Improved cultivar	
+s2349	Improved cultivar	
+s2350	Improved cultivar	
+s2351	Improved cultivar	
+s2352	Improved cultivar	
+s2353	Improved cultivar	
+s2354	Improved cultivar	
+s2355	Improved cultivar	
+s2356	Improved cultivar	
+s2357	Improved cultivar	
+s2358	Improved cultivar	
+s2359	Improved cultivar	
+s2360	Improved cultivar	
+s2361	Improved cultivar	
+s2362	Improved cultivar	
+s2363	Improved cultivar	
+s2364	Improved cultivar	
+s2365	Improved cultivar	
+s2366	Improved cultivar	
+s2367	Improved cultivar	
+s2368	Improved cultivar	
+s2369	Improved cultivar	
+s2370	Improved cultivar	
+s2371	Improved cultivar	
+s2372	Improved cultivar	
+s2373	Improved cultivar	
+s2374	Improved cultivar	
+s2375	Improved cultivar	
+s2376	Improved cultivar	
+s2377	Improved cultivar	
+s2378	Improved cultivar	
+s2379	Improved cultivar	
+s2380	Improved cultivar	
+s2381	Improved cultivar	
+s2382	Improved cultivar	
+s2383	Improved cultivar	
+s2384	Improved cultivar	
+s2385	Improved cultivar	
+s2386	Improved cultivar	
+s2387	Improved cultivar	
+s2388	Improved cultivar	
+s2389	Improved cultivar	
+s2390	Improved cultivar	
+s2391	Improved cultivar	
+s2392	Improved cultivar	
+s2393	Improved cultivar	
+s2394	Improved cultivar	
+s2395	Improved cultivar	
+s2396	Improved cultivar	
+s2397	Improved cultivar	
+s2398	Improved cultivar	
+s2399	Improved cultivar	
+s2400	Improved cultivar	
+s2401	Improved cultivar	
+s2402	Improved cultivar	
+s2403	Improved cultivar	
+s2404	Improved cultivar	
+s2405	Improved cultivar	
+s2406	Improved cultivar	
+s2407	Improved cultivar	
+s2408	Improved cultivar	
+s2409	Improved cultivar	
+s2410	Improved cultivar	
+s2411	Improved cultivar	
+s2412	Improved cultivar	
+s2413	Improved cultivar	
+s2414	Improved cultivar	
+s2415	Improved cultivar	
+s2416	Improved cultivar	
+s2417	Improved cultivar	
+s2418	Improved cultivar	
+s2419	Improved cultivar	
+s2420	Improved cultivar	
+s2421	Improved cultivar	
+s2422	Improved cultivar	
+s2423	Improved cultivar	
+s2424	Improved cultivar	
+s2425	Improved cultivar	
+s2426	Improved cultivar	
+s2427	Improved cultivar	
+s2428	Improved cultivar	
+s2429	Improved cultivar	
+s2430	Improved cultivar	
+s2431	Improved cultivar	
+s2432	Improved cultivar	
+s2433	Improved cultivar	
+s2434	Improved cultivar	
+s2435	Improved cultivar	
+s2436	Improved cultivar	
+s2437	Improved cultivar	
+s2438	Improved cultivar	
+s2439	Improved cultivar	
+s2440	Improved cultivar	
+s2441	Improved cultivar	
+s2442	Improved cultivar	
+s2443	Improved cultivar	
+s2444	Improved cultivar	
+s2445	Improved cultivar	
+s2446	Improved cultivar	
+s2447	Improved cultivar	
+s2448	Improved cultivar	
+s2449	Improved cultivar	
+s2450	Improved cultivar	
+s2451	Improved cultivar	
+s2452	Improved cultivar	
+s2453	Improved cultivar	
+s2454	Improved cultivar	
+s2455	Improved cultivar	
+s2456	Improved cultivar	
+s2457	Improved cultivar	
+s2458	Improved cultivar	
+s2459	Improved cultivar	
+s2460	Improved cultivar	
+s2461	Improved cultivar	
+s2462	Improved cultivar	
+s2463	Improved cultivar	
+s2464	Improved cultivar	
+s2465	Improved cultivar	
+s2466	Improved cultivar	
+s2467	Improved cultivar	
+s2468	Improved cultivar	
+s2469	Improved cultivar	
+s2470	Improved cultivar	
+s2471	Improved cultivar	
+s2472	Improved cultivar	
+s2473	Improved cultivar	
+s2474	Improved cultivar	
+s2475	Improved cultivar	
+s2476	Improved cultivar	
+s2477	Improved cultivar	
+s2478	Improved cultivar	
+s2479	Improved cultivar	
+s2480	Improved cultivar	
+s2481	Improved cultivar	
+s2482	Improved cultivar	
+s2483	Improved cultivar	
+s2484	Improved cultivar	
+s2485	Improved cultivar	
+s2486	Improved cultivar	
+s2487	Improved cultivar	
+s2488	Improved cultivar	
+s2489	Improved cultivar	
+s2490	Improved cultivar	
+s2491	Improved cultivar	
+s2492	Improved cultivar	
+s2493	Improved cultivar	
+s2494	Improved cultivar	
+s2495	Improved cultivar	
+s2496	Improved cultivar	
+s2497	Improved cultivar	
+s2498	Improved cultivar	
+s2499	Improved cultivar	
+s2500	Improved cultivar	
+s2501	Improved cultivar	
+s2502	Improved cultivar	
+s2503	Improved cultivar	
+s2504	Improved cultivar	
+s2505	Improved cultivar	
+s2506	Improved cultivar	
+s2507	Improved cultivar	
+s2508	Improved cultivar	
+s2509	Improved cultivar	
+s2510	Improved cultivar	
+s2511	Improved cultivar	
+s2512	Improved cultivar	
+s2513	Improved cultivar	
+s2514	Improved cultivar	
+s2515	Improved cultivar	
+s2516	Improved cultivar	
+s2517	Improved cultivar	
+s2518	Improved cultivar	
+s2519	Improved cultivar	
+s2520	Improved cultivar	
+s2521	Improved cultivar	
+s2522	Improved cultivar	
+s2523	Improved cultivar	
+s2524	Improved cultivar	
+s2525	Improved cultivar	
+s2526	Improved cultivar	
+s2527	Improved cultivar	
+s2528	Improved cultivar	
+s2529	Improved cultivar	
+s2530	Improved cultivar	
+s2531	Improved cultivar	
+s2532	Improved cultivar	
+s2533	Improved cultivar	
+s2534	Improved cultivar	
+s2535	Improved cultivar	
+s2536	Improved cultivar	
+s2537	Improved cultivar	
+s2538	Improved cultivar	
+s2539	Improved cultivar	
+s2540	Improved cultivar	
+s2541	Improved cultivar	
+s2542	Improved cultivar	
+s2543	Improved cultivar	
+s2544	Improved cultivar	
+s2545	Improved cultivar	
+s2546	Improved cultivar	
+s2547	Improved cultivar	
+s2548	Improved cultivar	
+s2549	Improved cultivar	
+s2550	Improved cultivar	
+s2551	Improved cultivar	
+s2552	Improved cultivar	
+s2553	Improved cultivar	
+s2554	Improved cultivar	
+s2555	Improved cultivar	
+s2556	Improved cultivar	
+s2557	Improved cultivar	
+s2558	Improved cultivar	
+s2559	Improved cultivar	
+s2560	Improved cultivar	
+s2561	Improved cultivar	
+s2562	Improved cultivar	
+s2563	Improved cultivar	
+s2564	Improved cultivar	
+s2565	Improved cultivar	
+s2566	Improved cultivar	
+s2567	Improved cultivar	
+s2568	Improved cultivar	
+s2569	Improved cultivar	
+s2570	Improved cultivar	
+s2571	Improved cultivar	
+s2572	Improved cultivar	
+s2573	Improved cultivar	
+s2574	Improved cultivar	
+s2575	Improved cultivar	
+s2576	Improved cultivar	
+s2577	Improved cultivar	
+s2578	Improved cultivar	
+s2579	Improved cultivar	
+s2580	Improved cultivar	
+s2581	Improved cultivar	
+s2582	Improved cultivar	
+s2583	Improved cultivar	
+s2584	Improved cultivar	
+s2585	Improved cultivar	
+s2586	Improved cultivar	
+s2587	Improved cultivar	
+s2588	Improved cultivar	
+s2589	Improved cultivar	
+s2590	Improved cultivar	
+s2591	Improved cultivar	
+s2592	Improved cultivar	
+s2593	Improved cultivar	
+s2594	Improved cultivar	
+s2595	Improved cultivar	
+s2596	Improved cultivar	
+s2597	Improved cultivar	
+s2598	Improved cultivar	
+s2599	Improved cultivar	
+s2600	Improved cultivar	
+s2601	Improved cultivar	
+s2602	Improved cultivar	
+s2603	Improved cultivar	
+s2604	Improved cultivar	
+s2605	Improved cultivar	
+s2606	Improved cultivar	
+s2607	Improved cultivar	
+s2608	Improved cultivar	
+s2609	Improved cultivar	
+s2610	Improved cultivar	
+s2611	Improved cultivar	
+s2612	Improved cultivar	
+s2613	Improved cultivar	
+s2614	Improved cultivar	
+s2615	Improved cultivar	
+s2616	Improved cultivar	
+s2617	Improved cultivar	
+s2618	Improved cultivar	
+s2619	Improved cultivar	
+s2620	Improved cultivar	
+s2621	Improved cultivar	
+s2622	Improved cultivar	
+s2623	Improved cultivar	
+s2624	Improved cultivar	
+s2625	Improved cultivar	
+s2626	Improved cultivar	
+s2627	Improved cultivar	
+s2628	Improved cultivar	
+s2629	Improved cultivar	
+s2630	Improved cultivar	
+s2631	Improved cultivar	
+s2632	Improved cultivar	
+s2633	Improved cultivar	
+s2634	Improved cultivar	
+s2635	Improved cultivar	
+s2636	Improved cultivar	
+s2637	Improved cultivar	
+s2638	Improved cultivar	
+s2639	Improved cultivar	
+s2640	Improved cultivar	
+s2641	Improved cultivar	
+s2642	Improved cultivar	
+s2643	Improved cultivar	
+s2644	Improved cultivar	
+s2645	Improved cultivar	
+s2646	Improved cultivar	
+s2647	Improved cultivar	
+s2648	Improved cultivar	
+s2649	Improved cultivar	
+s2650	Improved cultivar	
+s2651	Improved cultivar	
+s2652	Improved cultivar	
+s2653	Improved cultivar	
+s2654	Improved cultivar	
+s2655	Improved cultivar	
+s2656	Improved cultivar	
+s2657	Improved cultivar	
+s2658	Improved cultivar	
+s2659	Improved cultivar	
+s2660	Improved cultivar	
+s2661	Improved cultivar	
+s2662	Improved cultivar	
+s2663	Improved cultivar	
+s2664	Improved cultivar	
+s2665	Improved cultivar	
+s2666	Improved cultivar	
+s2667	Improved cultivar	
+s2668	Improved cultivar	
+s2669	Improved cultivar	
+s2670	Improved cultivar	
+s2671	Improved cultivar	
+s2672	Improved cultivar	
+s2673	Improved cultivar	
+s2674	Improved cultivar	
+s2675	Improved cultivar	
+s2676	Improved cultivar	
+s2677	Improved cultivar	
+s2678	Improved cultivar	
+s2679	Improved cultivar	
+s2680	Improved cultivar	
+s2681	Improved cultivar	
+s2682	Improved cultivar	
+s2683	Improved cultivar	
+s2684	Improved cultivar	
+s2685	Improved cultivar	
+s2686	Improved cultivar	
+s2687	Improved cultivar	
+s2688	Improved cultivar	
+s2689	Improved cultivar	
+s2690	Improved cultivar	
+s2691	Improved cultivar	
+s2692	Improved cultivar	
+s2693	Improved cultivar	
+s2694	Improved cultivar	
+s2695	Improved cultivar	
+s2696	Improved cultivar	
+s2697	Improved cultivar	
+s2698	Improved cultivar	
+s2699	Improved cultivar	
+s2700	Improved cultivar	
+s2701	Improved cultivar	
+s2702	Improved cultivar	
+s2703	Improved cultivar	
+s2704	Improved cultivar	
+s2705	Improved cultivar	
+s2706	Improved cultivar	
+s2707	Improved cultivar	
+s2708	Improved cultivar	
+s2709	Improved cultivar	
+s2710	Improved cultivar	
+s2711	Improved cultivar	
+s2712	Improved cultivar	
+s2713	Improved cultivar	
+s2714	Improved cultivar	
+s2715	Improved cultivar	
+s2716	Improved cultivar	
+s2717	Improved cultivar	
+s2718	Improved cultivar	
+s2719	Improved cultivar	
+s2720	Improved cultivar	
+s2721	Improved cultivar	
+s2722	Improved cultivar	
+s2723	Improved cultivar	
+s2724	Improved cultivar	
+s2725	Improved cultivar	
+s2726	Improved cultivar	
+s2727	Improved cultivar	
+s2728	Improved cultivar	
+s2729	Improved cultivar	
+s2730	Improved cultivar	
+s2731	Improved cultivar	
+s2732	Improved cultivar	
+s2733	Improved cultivar	
+s2734	Improved cultivar	
+s2735	Improved cultivar	
+s2736	Improved cultivar	
+s2737	Improved cultivar	
+s2738	Improved cultivar	
+s2739	Improved cultivar	
+s2740	Improved cultivar	
+s2741	Improved cultivar	
+s2742	Improved cultivar	
+s2743	Improved cultivar	
+s2744	Improved cultivar	
+s2745	Improved cultivar	
+s2746	Improved cultivar	
+s2747	Improved cultivar	
+s2748	Improved cultivar	
+s2749	Improved cultivar	
+s2750	Improved cultivar	
+s2751	Improved cultivar	
+s2752	Improved cultivar	
+s2753	Improved cultivar	
+s2754	Improved cultivar	
+s2755	Improved cultivar	
+s2756	Improved cultivar	
+s2757	Improved cultivar	
+s2758	Improved cultivar	
+s2759	Improved cultivar	
+s2760	Improved cultivar	
+s2761	Improved cultivar	
+s2762	Improved cultivar	
+s2763	Improved cultivar	
+s2764	Improved cultivar	
+s2765	Improved cultivar	
+s2766	Improved cultivar	
+s2767	Improved cultivar	
+s2768	Improved cultivar	
+s2769	Improved cultivar	
+s2770	Improved cultivar	
+s2771	Improved cultivar	
+s2772	Improved cultivar	
+s2773	Improved cultivar	
+s2774	Improved cultivar	
+s2775	Improved cultivar	
+s2776	Improved cultivar	
+s2777	Improved cultivar	
+s2778	Improved cultivar	
+s2779	Improved cultivar	
+s2780	Improved cultivar	
+s2781	Improved cultivar	
+s2782	Improved cultivar	
+s2783	Improved cultivar	
+s2784	Improved cultivar	
+s2785	Improved cultivar	
+s2786	Improved cultivar	
+s2787	Improved cultivar	
+s2788	Improved cultivar	
+s2789	Improved cultivar	
+s2790	Improved cultivar	
+s2791	Improved cultivar	
+s2792	Improved cultivar	
+s2793	Improved cultivar	
+s2794	Improved cultivar	
+s2795	Improved cultivar	
+s2796	Improved cultivar	
+s2797	Improved cultivar	
+s2798	Improved cultivar	
+s2799	Improved cultivar	
+s2800	Improved cultivar	
+s2801	Improved cultivar	
+s2802	Improved cultivar	
+s2803	Improved cultivar	
+s2804	Improved cultivar	
+s2805	Improved cultivar	
+s2806	Improved cultivar	
+s2807	Improved cultivar	
+s2808	Improved cultivar	
+s2809	Improved cultivar	
+s2810	Improved cultivar	
+s2811	Improved cultivar	
+s2812	Improved cultivar	
+s2813	Improved cultivar	
+s2814	Improved cultivar	
+s2815	Improved cultivar	
+s2816	Improved cultivar	
+s2817	Improved cultivar	
+s2818	Improved cultivar	
+s2819	Improved cultivar	
+s2820	Improved cultivar	
+s2821	Improved cultivar	
+s2822	Improved cultivar	
+s2823	Improved cultivar	
+s2824	Improved cultivar	
+s2825	Improved cultivar	
+s2826	Improved cultivar	
+s2827	Improved cultivar	
+s2828	Improved cultivar	
+s2829	Improved cultivar	
+s2830	Improved cultivar	
+s2831	Improved cultivar	
+s2832	Improved cultivar	
+s2833	Improved cultivar	
+s2834	Improved cultivar	
+s2835	Improved cultivar	
+s2836	Improved cultivar	
+s2837	Improved cultivar	
+s2838	Improved cultivar	
+s2839	Improved cultivar	
+s2840	Improved cultivar	
+s2841	Improved cultivar	
+s2842	Improved cultivar	
+s2843	Improved cultivar	
+s2844	Improved cultivar	
+s2845	Improved cultivar	
+s2846	Improved cultivar	
+s2847	Improved cultivar	
+s2848	Improved cultivar	
+s2849	Improved cultivar	
+s2850	Improved cultivar	
+s2851	Improved cultivar	
+s2852	Improved cultivar	
+s2853	Improved cultivar	
+s2854	Improved cultivar	
+s2855	Improved cultivar	
+s2856	Improved cultivar	
+s2857	Improved cultivar	
+s2858	Improved cultivar	
+s2859	Improved cultivar	
+s2860	Improved cultivar	
+s2861	Improved cultivar	
+s2862	Improved cultivar	
+s2863	Improved cultivar	
+s2864	Improved cultivar	
+s2865	Improved cultivar	
+s2866	Improved cultivar	
+s2867	Improved cultivar	
+s2868	Improved cultivar	
+s2869	Improved cultivar	
+s2870	Improved cultivar	
+s2871	Improved cultivar	
+s2872	Improved cultivar	
+s2873	Improved cultivar	
+s2874	Improved cultivar	
+s2875	Improved cultivar	
+s2876	Improved cultivar	
+s2877	Improved cultivar	
+s2878	Improved cultivar	
+s2879	Improved cultivar	
+s2880	Improved cultivar	
+s2881	Improved cultivar	
+s2882	Improved cultivar	
+s2883	Improved cultivar	
+s2884	Improved cultivar	
+s2885	Improved cultivar	
+s2886	Improved cultivar	
+s2887	Improved cultivar	
+s2888	Improved cultivar	
+s2889	Improved cultivar	
+s2890	Improved cultivar	
+s2891	Improved cultivar	
+s2892	Improved cultivar	
+s2893	Improved cultivar	
+s2894	Improved cultivar	
+s2895	Improved cultivar	
+s2896	Improved cultivar	
+s2897	Improved cultivar	
+s2898	Improved cultivar	
