@@ -26,6 +26,7 @@ library(GenomicRanges)
 library(XML)
 library(data.table)
 library(shinydashboard)
+library(stringr)
 
 source("fetchSnp.R")
 source("fetchSnpAllele.R")

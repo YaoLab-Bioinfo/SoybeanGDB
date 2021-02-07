@@ -16,8 +16,6 @@ shinyUI(
       refreshColour = "brown"
     ),
     navbarPage(
-      
-      
       title = HTML("<strong style='color:#000000'>SoyaSNPDB</strong>"),
       windowTitle = "SNP database of 2898 soya lines",
       
@@ -807,6 +805,116 @@ shinyUI(
           dataTableOutput("mytable2")
         )),
       
+      
+      #Indel
+
+      tabPanel(
+        title = HTML("<strong style='font-size:18px'>Indel</strong>"),icon = icon("fire-alt"),
+        
+        sidebarPanel(
+          textInput("regi", label = h5(HTML('<i class="fa fa fa-circle" aria-hidden="true"></i> <font size="4" color="red"><b>Genomic region:</b></font>'),
+                                       bsButton("qi1", label="", icon=icon("question"), style="info", size="small")),
+                    value = "SoyZH13_01G186100"),
+          
+          bsPopover("qi1", "A genomic region can be determined by chromosome positions or gene locus. For example, chr1:29506705-29659223 or SoyZH13_01G186100.",
+                    trigger = "focus"),
+          
+          actionButton("submiti", strong("Submit!",
+                                         bsButton("qi2", label="", icon=icon("question"), style="info", size="small")
+          ), width = "90%", styleclass = "success"),
+          
+          actionButton("clearINDEL", strong("Reset"), styleclass = "warning"),
+          actionButton("INDELExam", strong("Load example"), styleclass = "info"),
+          conditionalPanel(condition="input.submiti != '0'", busyIndicator(HTML("<div style='color:red;font-size:30px'>Calculation In progress...</div>"), wait = 0)),
+          bsPopover("qi2", "Whenever the genomic region or any option is updated, please click Submit!",
+                    trigger = "focus"),
+          
+          p(h4(HTML('<i class="fa fa fa-circle" aria-hidden="true"></i> <font size="4" color="red"><b>Select soya lines:</b></font>'),
+               bsButton("qdl2", label="", icon=icon("question"), style="info", size="small"))),
+          bsPopover("qdl2", "Only the chosen soya lines will be used.",
+                    trigger = "focus"),
+          
+          chooserInput("mychooseri", "Available frobs", "Selected frobs",
+                       all.soya.cho, c(), size = 12, multiple = TRUE
+          )
+        ),
+        br(),
+        
+        downloadButton("bulkdownloadindelInfo.txt", "Download indels information"),
+        h4(HTML('<i class="fa fa-table" aria-hidden="true"></i> <font size="4" color="red"><b>INDELs information in specified genomic region:</b></font>')),
+        mainPanel(
+          textOutput("indeltabletitle"),
+          DT::dataTableOutput("indeltable"),
+          tags$head(tags$style("#indeltabletitle{color: red;
+                                       font-size: 22px;
+                                       font-style: bold;
+                                      }"
+          ),
+          tags$style("#indeltable{
+                     width = 100%;
+                     max-height: 300px;
+          }")
+          )
+        )
+      ),
+      
+      ##primer3
+      tabPanel(
+        title = HTML("<strong style='font-size:18px'>Primer3</strong>"),icon = icon("fire-alt"),
+        
+        sidebarPanel(
+          HTML('<i class="fa fa-cog" aria-hidden="true"></i> <font size="4" color="black"><b>Parameter Selection:</b></font>'),
+          fluidRow(
+            column(4,selectInput("Chrprimer", label = HTML('<i class="fa fa fa-circle" aria-hidden="true"></i> <font size="3" color="red"><b>Chr:</b></font>'),choices = paste0("Chr", 1:20), selected = "Chr1")),
+            column(4,textInput("upprimer", label = HTML('<i class="fa fa fa-circle" aria-hidden="true"></i> <font size="3" color="red"><b>Start:</b></font>'),value = "48000")),
+            column(4,textInput("downprimer", label = HTML('<i class="fa fa fa-circle" aria-hidden="true"></i> <font size="3" color="red"><b>End:</b></font>'),value = "49000"))
+          ),
+          textInput("PRIMER_OPT_SIZE", label = HTML('<i class="fa fa fa-circle" aria-hidden="true"></i> <font size="3" color="red"><b>Optimal primer size(bp):</b></font>'),value = "20"),
+          sliderInput("PRIMER_SIZE", label = HTML('<i class="fa fa fa-circle" aria-hidden="true"></i> <font size="3" color="red"><b>Primer size range(bp):</b></font>'), min = 1, max = 35, 
+                      value = c(18, 25)),
+          
+          textInput("PRIMER_OPT_TM", label = HTML('<i class="fa fa fa-circle" aria-hidden="true"></i> <font size="3" color="red"><b>Optimal primer TM(℃):</b></font>'),value = "59.0"),
+          
+          fluidRow(
+            column(6,textInput("PRIMER_MIN_TM", label = HTML('<i class="fa fa fa-circle" aria-hidden="true"></i> <font size="3" color="red"><b>Min primer TM(℃):</b></font>'),value = "57.0")),
+            column(6,textInput("PRIMER_MAX_TM", label = HTML('<i class="fa fa fa-circle" aria-hidden="true"></i> <font size="3" color="red"><b>Max primer TM(℃):</b></font>'),value = "62.0"))
+          ),
+          
+          textInput("PRIMER_OPT_GC_PERCENT", label = HTML('<i class="fa fa fa-circle" aria-hidden="true"></i> <font size="3" color="red"><b>Optimal GC percent:</b></font>'),value = "50.0"),
+          
+          sliderInput("PRIMER_GC", label = HTML('<i class="fa fa fa-circle" aria-hidden="true"></i> <font size="3" color="red"><b>GC percent range(bp):</b></font>'), min = 0, max = 100, 
+                      value = c(20, 80), step=0.1),
+          
+          textInput("PRIMER_MAX_NS_ACCEPTED", label = HTML("<i class='fa fa fa-circle' aria-hidden='true'></i> <font size='4' color='red'><b>Max #N's accepted:</b></font>"),value = "0"),
+          
+          fluidRow(
+            column(6,textInput("PRIMER_MAX_POLY_X", label = HTML('<i class="fa fa fa-circle" aria-hidden="true"></i> <font size="3" color="red"><b>Max Poly-X:</b></font>'),value = "10")),
+            column(6,textInput("PRIMER_INTERNAL_MAX_POLY_X", label = HTML('<i class="fa fa fa-circle" aria-hidden="true"></i> <font size="3" color="red"><b>Max Internal Poly-X:</b></font>'),value = "15"))
+          ),
+          fluidRow(
+            column(6,textInput("PRIMER_MAX_SELF_ANY", label = HTML('<i class="fa fa fa-circle" aria-hidden="true"></i> <font size="3" color="red"><b>Max Self Complementarity:</b></font>'),value = "45.0")),
+            column(6,textInput("PRIMER_MAX_SELF_ANY_TH", label = HTML('<i class="fa fa fa-circle" aria-hidden="true"></i> <font size="3" color="red"><b>Max Pair Complementarity:</b></font>'),value = "45.0"))
+          ),
+          fluidRow(
+            column(6,textInput("PRIMER_MAX_SELF_END", label = HTML("<i class='fa fa fa-circle' aria-hidden='true'></i> <font size='3' color='red'><b>Max 3' Self Complementarity:</b></font>"),value = "35.0")),
+            column(6,textInput("PRIMER_MAX_SELF_END_TH", label = HTML("<i class='fa fa fa-circle' aria-hidden='true'></i> <font size='3' color='red'><b>Max 3' Pair Complementarity:</b></font>"),value = "35.0"))
+          ),
+          textInput("PRIMER_PRODUCT_SIZE_RANGE", label = HTML('<i class="fa fa fa-circle" aria-hidden="true"></i> <font size="3" color="red"><b>Product Size Ranges:</b></font>'),value = "100-300,300-600,600-1000"),
+          
+          actionButton("submitprimer", strong("submit!",
+                                              bsButton("qpr1", label="", icon=icon("question"), style="info", size="small")
+          ), styleclass = "success"),
+          conditionalPanel(condition="submitprimer != '0'", busyIndicator(HTML("<div style='color:red;font-size:30px'>Calculation In progress...</div>"), wait = 0)),
+          bsPopover("qpr1", "Whenever the genomic region or any option is updated, please click Go!",
+                    trigger = "focus")
+          
+        ),
+        downloadButton("bulkdownloadprimerInfo.txt", "Download indels information"),
+        mainPanel(
+          dataTableOutput("primertable"),
+          verbatimTextOutput("primerseq")
+        )
+      ),
       ## About
       tabPanel(
         HTML("<strong style='font-size:18px'>About</strong>"), icon = icon("leanpub"), includeMarkdown("About.md"))

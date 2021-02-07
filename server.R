@@ -1079,7 +1079,185 @@ shinyServer(function(input, output, session) {
     } else {NULL}
   })
   
-
+  #INDEL
   
+  
+  observeEvent(input$submiti,{
+    myPos <- anaReg(input$regi)
+    if(validReg(myPos)){
+      if (!is.null(myPos)) {
+        chr <- as.character(myPos$chr)
+        start <- as.numeric(myPos$start)
+        end <- as.numeric(myPos$end)
+        tmp.fg <- file.path(tempdir(), "tg.txt")
+        tabix <- paste0("tabix ./indel/", chr, ".delete.gz ", gsub("c", "C", chr), ":", start, "-", end, " > ", tmp.fg)
+        system(tabix)
+        gffindel <- read.table(tmp.fg, sep = "\t", as.is = T, header = F)
+        names(gffindel) <- c("chr", "pos", "ref", "alt" , paste0("s", 1:2898))
+        accession = input$mychooseri$selected
+        accession <- sapply(accession, function(x){
+          if (x %in% c("Improved cultivar", "Landrace", "G. Soja")) {
+            x.dat <- readLines(paste0("./data/", x, ".soya.txt"))
+            return(x.dat)
+          } else {
+            return(x)
+          }
+        })
+        
+        choosei <- unique(gsub(",.+", "", unlist(accession)))
+        output$indeltable <- DT::renderDataTable({
+          indel <- gffindel[, c(1:4, as.numeric(gsub("s", "", choosei))+4)]
+          indel[,c(1:4, order(as.numeric(gsub("s", "", choosei)), decreasing = F)+4)]
+        }, 
+        extensions = "FixedColumns", rownames = F, 
+        options = list(leftColumns = 8, scrollX = TRUE, dom = 'Bfrtip')
+        )
+        
+        output$gffinfotitle <- renderText({
+          if(is.null(gffindel)){
+            NULL
+          }else{
+            "The indel's information"
+          }
+        })
+        output$bulkdownloadindelInfo.txt <- downloadHandler(
+          filename <- function() { paste('The_indelinfo.txt') },
+          content <- function(file) {
+            indel <- gffindel[, c(1:4, as.numeric(gsub("s", "", choosei))+4)]
+            write.table(indel[,c(1:4, order(as.numeric(gsub("s", "", choosei)), decreasing = F)+4)], file, col.names = T, row.names = F, quote = F, sep = "\t")
+          }, contentType = 'text/plain'
+        )
+        
+        
+      }else{ NULL }
+    }
+    else{
+      sendSweetAlert(
+        session = session,
+        title = "Error input!", type = "error",
+        text = "Please input genomic region or gene model in appropriate format!"
+      )
+    }
+    
+  })
+  
+  observe({
+    if (input$clearINDEL>0) {
+      isolate({
+        updateTextInput(session, "regi", value="")
+      })
+    } else {NULL}
+  })
+  
+  observe({
+    if (input$INDELExam >0) {
+      isolate({
+        updateTextInput(session, "regi", value="SoyZH13_01G186100")
+        
+      })
+    } else {NULL}
+  })
+  
+  
+  #primer3
+  
+  observeEvent(input$submitprimer,{
+    choicesequence <- paste0(gsub("C", "c", input$Chrprimer), ":", input$upprimer, "-", input$downprimer)
+    myPos <- anaReg(choicesequence)
+    
+    if(validReg(myPos)){
+      if (!is.null(myPos)) {
+        chr <- myPos$chr
+        start <- myPos$start
+        end <- myPos$end
+        load(paste0("./info/Zhonghuang_13." ,chr, ".fasta.RData"))
+        seqprimer <- subseq(fasta, start, end)
+        SEQUENCE_ID <- "example"
+        SEQUENCE_TEMPLATE <- paste0("SEQUENCE_TEMPLATE=", seqprimer)
+        PRIMER_OPT_SIZE <- paste0("PRIMER_OPT_SIZE=", input$PRIMER_OPT_SIZE)
+        PRIMER_MAX_SIZE <- paste0("PRIMER_MAX_SIZE=", input$PRIMER_SIZE[2])
+        PRIMER_MIN_SIZE <- paste0("PRIMER_MIN_SIZE=", input$PRIMER_SIZE[1])
+        
+        PRIMER_OPT_TM <- paste0("PRIMER_OPT_TM=", input$PRIMER_OPT_TM)
+        PRIMER_MAX_TM <- paste0("PRIMER_MAX_TM=", input$PRIMER_MAX_TM)
+        PRIMER_MIN_TM <- paste0("PRIMER_MIN_TM=", input$PRIMER_MIN_TM)
+        
+        PRIMER_OPT_GC_PERCENT <- paste0("PRIMER_OPT_GC_PERCENT=", input$PRIMER_OPT_GC_PERCENT)
+        PRIMER_MAX_GC <- paste0("PRIMER_MAX_GC=", input$PRIMER_GC[2])
+        PRIMER_MIN_GC <- paste0("PRIMER_MIN_GC=", input$PRIMER_GC[1])
+        
+        PRIMER_MAX_NS_ACCEPTED <- paste0("PRIMER_MAX_NS_ACCEPTED=", input$PRIMER_MAX_NS_ACCEPTED)
+        PRIMER_MAX_POLY_X <- paste0("PRIMER_MAX_POLY_X=", input$PRIMER_MAX_POLY_X)
+        PRIMER_INTERNAL_MAX_POLY_X <- paste0("PRIMER_INTERNAL_MAX_POLY_X=", input$PRIMER_INTERNAL_MAX_POLY_X)
+        PRIMER_MAX_SELF_ANY <-  paste0("PRIMER_MAX_SELF_ANY=", input$PRIMER_MAX_SELF_ANY)
+        PRIMER_MAX_SELF_ANY_TH <- paste0("PRIMER_MAX_SELF_ANY_TH=", input$PRIMER_MAX_SELF_ANY_TH)
+        
+        PRIMER_MAX_SELF_END<- paste0("PRIMER_MAX_SELF_END=", input$PRIMER_MAX_SELF_END)
+        PRIMER_MAX_SELF_END_TH <- paste0("PRIMER_MAX_SELF_END_TH=", input$PRIMER_MAX_SELF_END_TH)
+        
+        PRIMER_PRODUCT_SIZE_RANGE <- paste0("PRIMER_PRODUCT_SIZE_RANGE", input$PRIMER_PRODUCT_SIZE_RANGE)
+        
+        indelpos <- read.table(paste0("./info/Position/", input$Chrprimer, ".indel.position"), sep = "\t", header = T)
+        snppos <- read.table(paste0("./info/Position/", input$Chrprimer, ".snp.position"), sep = "\t", header = T)
+        snpnu <- snppos[snppos$POS <= end & snppos$POS >= start, ]
+        indelnu <- indelpos[indelpos$POS <= end & indelpos$POS >= start, ]
+        allnu <- rbind(snpnu, indelnu)
+        allnu$POS <- allnu$POS - start
+        SEQUENCE_TARGET <- paste0("SEQUENCE_TARGET=", str_c(allnu$POS, ",", allnu$length, collapse = " "))
+        if (length(allnu$POS) > 0){
+          primerorder <- paste(SEQUENCE_TEMPLATE, PRIMER_OPT_SIZE, PRIMER_MAX_SIZE, PRIMER_MIN_SIZE,
+                               PRIMER_OPT_TM, PRIMER_MAX_TM, PRIMER_MIN_TM,
+                               PRIMER_OPT_GC_PERCENT, PRIMER_MAX_GC, PRIMER_MIN_GC,
+                               PRIMER_MAX_NS_ACCEPTED, PRIMER_MAX_POLY_X, PRIMER_INTERNAL_MAX_POLY_X,
+                               PRIMER_MAX_SELF_ANY, PRIMER_MAX_SELF_ANY_TH, PRIMER_MAX_SELF_END, PRIMER_MAX_SELF_END_TH, 
+                               SEQUENCE_TARGET, "=", sep = "\n")
+        }else{
+          primerorder <- paste(SEQUENCE_TEMPLATE, PRIMER_OPT_SIZE, PRIMER_MAX_SIZE, PRIMER_MIN_SIZE,
+                               PRIMER_OPT_TM, PRIMER_MAX_TM, PRIMER_MIN_TM,
+                               PRIMER_OPT_GC_PERCENT, PRIMER_MAX_GC, PRIMER_MIN_GC,
+                               PRIMER_MAX_NS_ACCEPTED, PRIMER_MAX_POLY_X, PRIMER_INTERNAL_MAX_POLY_X,
+                               PRIMER_MAX_SELF_ANY,  PRIMER_MAX_SELF_ANY_TH, PRIMER_MAX_SELF_END, PRIMER_MAX_SELF_END_TH,
+                               "=", sep = "\n")
+        }
+        tmp.order <- file.path(tempdir(), "primer3.order")
+        writeLines(primerorder, tmp.order)
+        tmp.output <- file.path(tempdir(), "primer3.output")
+        writeLines(primerorder, tmp.order, sep = "\n")
+        system(paste0("primer3_core -format_output ", tmp.order, " > ", tmp.output))
+        
+        primer3output <- readLines(tmp.output)
+        
+        primertable <- primer3output[sort(c(grep("LEFT PRIMER", primer3output), grep("RIGHT PRIMER", primer3output)))]
+        primertable[-c(1:2)] <- sub("^...", "", primertable[-c(1:2)])
+        
+        output$primertable <- renderDataTable({
+          primertable <- read.table(text = primertable)
+          primertable$Oligos <- paste(primertable$V1 , primertable$V2)
+          primertable <- primertable[, c(11,3:10)]
+          colnames(primertable) <- c("Oligos", "Start position", "Length", "Tm", "GC percent", "Self any", "Self end", "Hairpin", "Sequence")
+          primertable
+        }, escape = FALSE, options = list(pageLength = 6, autoWidth = TRUE, bSort=FALSE))
+        
+        
+        output$primerseq <- renderText({
+          startcut <- grep("INCLUDED REGION SIZE:", primer3output) + 1
+          endcut <- grep("ADDITIONAL OLIGOS", primer3output) - 1
+          primer3output[startcut:endcut][!primer3output[startcut:endcut] == ""]
+        }, sep = "\n")
+        
+        
+      }else{ NULL }
+    }
+    else{
+      sendSweetAlert(
+        session = session,
+        title = "Error input!", type = "error",
+        text = "Please input genomic region or gene model in appropriate format!"
+      )
+    }
+    
+  })
+  
+ 
 })
 
