@@ -5,50 +5,83 @@ ui <- fluidPage(
     HTML('<i class="fa fa-cog" aria-hidden="true"></i> <font size="4" color="black"><b>Parameter Selection:</b></font>'),
     fluidRow(
       column(4,selectInput("Chrprimer", label = HTML('<i class="fa fa fa-circle" aria-hidden="true"></i> <font size="3" color="red"><b>Chr:</b></font>'),choices = paste0("Chr", 1:20), selected = "Chr1")),
-      column(4,textInput("upprimer", label = HTML('<i class="fa fa fa-circle" aria-hidden="true"></i> <font size="3" color="red"><b>Start:</b></font>'),value = "110000")),
-      column(4,textInput("downprimer", label = HTML('<i class="fa fa fa-circle" aria-hidden="true"></i> <font size="3" color="red"><b>End:</b></font>'),value = "111000"))
+      column(4,textInput("upprimer", label = HTML('<i class="fa fa fa-circle" aria-hidden="true"></i> <font size="3" color="red"><b>Start:</b></font>'),value = "48000")),
+      column(4,textInput("downprimer", label = HTML('<i class="fa fa fa-circle" aria-hidden="true"></i> <font size="3" color="red"><b>End:</b></font>'),value = "49000"))
     ),
-    textInput("PRIMER_OPT_SIZE", label = HTML('<i class="fa fa fa-circle" aria-hidden="true"></i> <font size="3" color="red"><b>Optimal primer size(bp):</b></font>'),value = "20"),
-    sliderInput("PRIMER_SIZE", label = HTML('<i class="fa fa fa-circle" aria-hidden="true"></i> <font size="3" color="red"><b>Primer size range(bp):</b></font>'), min = 1, max = 35, 
+    
+    textInput("PRIMER_OPT_SIZE", label = h5(HTML('<i class="fa fa fa-circle" aria-hidden="true"></i> <font size="3" color="red"><b>Optimal primer size(bp):</b></font>'),
+                                            bsButton("qpr1", label="", icon=icon("question"), style="info", size="small")),value = "20"),
+    bsPopover("qpr1", "Optimum length (in bases) of a primer. Primer3 will attempt to pick primers close to this length.",
+              trigger = "focus"),
+    
+    sliderInput("PRIMER_SIZE", label = h5(HTML('<i class="fa fa fa-circle" aria-hidden="true"></i> <font size="3" color="red"><b>Primer size range(bp):</b></font>')
+                                          , bsButton("qpr2", label="", icon=icon("question"), style="info", size="small")), min = 1, max = 35, 
                 value = c(18, 25)),
+    bsPopover("qpr2", "Minimum acceptable length  and Maximum acceptable length (in bases) of a primer", trigger = "focus"),    
     
-    textInput("PRIMER_OPT_TM", label = HTML('<i class="fa fa fa-circle" aria-hidden="true"></i> <font size="3" color="red"><b>Optimal primer TM(℃):</b></font>'),value = "59.0"),
+    textInput("PRIMER_OPT_TM", label = h5(HTML('<i class="fa fa fa-circle" aria-hidden="true"></i> <font size="3" color="red"><b>Optimal primer TM(℃):</b></font>')
+                                          , bsButton("qpr3", label = "", icon = icon("question"), style = "info", size = "small")),value = "59.0"),
+    bsPopover("qpr3", "Optimum melting temperature (Celsius) for a primer.", trigger = "focus"),    
     
     fluidRow(
-      column(6,textInput("PRIMER_MIN_TM", label = HTML('<i class="fa fa fa-circle" aria-hidden="true"></i> <font size="3" color="red"><b>Min primer TM(℃):</b></font>'),value = "57.0")),
-      column(6,textInput("PRIMER_MAX_TM", label = HTML('<i class="fa fa fa-circle" aria-hidden="true"></i> <font size="3" color="red"><b>Max primer TM(℃):</b></font>'),value = "62.0"))
+      column(6,textInput("PRIMER_MIN_TM", label = h5(HTML('<i class="fa fa fa-circle" aria-hidden="true"></i> <font size="3" color="red"><b>Min primer TM(℃):</b></font>')
+                                                     , bsButton("qpr4", label = "", icon = icon("question"), style = "info", size = "small")),value = "57.0"),
+             bsPopover("qpr4", "Minimum acceptable melting temperature (Celsius) for a primer oligo.", trigger = "focus")),
+      column(6,textInput("PRIMER_MAX_TM", label = h5(HTML('<i class="fa fa fa-circle" aria-hidden="true"></i> <font size="3" color="red"><b>Max primer TM(℃):</b></font>')
+                                                     , bsButton("qpr5", label = "", icon = icon("question"), style = "info", size = "small")),value = "62.0"),
+             bsPopover("qpr5", "Maximum acceptable melting temperature (Celsius) for a primer oligo.", trigger = "focus"))
     ),
+  
+  
+    textInput("PRIMER_OPT_GC_PERCENT", label = h5(HTML('<i class="fa fa fa-circle" aria-hidden="true"></i> <font size="3" color="red"><b>Optimal GC percent:</b></font>')
+                                                  , bsButton("qpr6", label = "", icon = icon("question"), style = "info", size = "small")),value = "50.0"),
+    bsPopover("qpr6", "Optimum GC percent.", trigger = "focus"),
     
-    textInput("PRIMER_OPT_GC_PERCENT", label = HTML('<i class="fa fa fa-circle" aria-hidden="true"></i> <font size="3" color="red"><b>Optimal GC percent:</b></font>'),value = "50.0"),
-    
-    sliderInput("PRIMER_GC", label = HTML('<i class="fa fa fa-circle" aria-hidden="true"></i> <font size="3" color="red"><b>GC percent range(bp):</b></font>'), min = 0, max = 100, 
+    sliderInput("PRIMER_GC", label = h5(HTML('<i class="fa fa fa-circle" aria-hidden="true"></i> <font size="3" color="red"><b>GC percent range(bp):</b></font>')
+                                        , bsButton("qpr7", label = "", icon = icon("question"), style = "info", size = "small")), min = 0, max = 100, 
                 value = c(20, 80), step=0.1),
+    bsPopover("qpr7", "Minimum allowable percentage of Gs and Cs in any primer and Maximum allowable percentage of Gs and Cs in any primer generated by Primer.", trigger = "focus"),
     
-    textInput("PRIMER_MAX_NS_ACCEPTED", label = HTML("<i class='fa fa fa-circle' aria-hidden='true'></i> <font size='4' color='red'><b>Max #N's accepted:</b></font>"),value = "0"),
+    textInput("PRIMER_MAX_NS_ACCEPTED", label = h5(HTML("<i class='fa fa fa-circle' aria-hidden='true'></i> <font size='4' color='red'><b>Max #N's accepted:</b></font>")
+                                                   , bsButton("qpr8", label = "", icon = icon("question"), style = "info", size = "small")),value = "0"),
+    bsPopover("qpr8", "Maximum number of unknown bases (N) allowable in any primer.", trigger = "focus"),
+    
     
     fluidRow(
-      column(6,textInput("PRIMER_MAX_POLY_X", label = HTML('<i class="fa fa fa-circle" aria-hidden="true"></i> <font size="3" color="red"><b>Max Poly-X:</b></font>'),value = "10")),
-      column(6,textInput("PRIMER_INTERNAL_MAX_POLY_X", label = HTML('<i class="fa fa fa-circle" aria-hidden="true"></i> <font size="3" color="red"><b>Max Internal Poly-X:</b></font>'),value = "15"))
+      column(6,textInput("PRIMER_MAX_POLY_X", label = h5(HTML('<i class="fa fa fa-circle" aria-hidden="true"></i> <font size="3" color="red"><b>Max Poly-X:</b></font>')
+                                                         , bsButton("qpr9", label = "", icon = icon("question"), style = "info", size = "small")),value = "10"),
+              bsPopover("qpr9", "The maximum allowable length of a mononucleotide repeat, for example AAAAAA.", trigger = "focus")),
+      column(6,textInput("PRIMER_INTERNAL_MAX_POLY_X", label = h5(HTML('<i class="fa fa fa-circle" aria-hidden="true"></i> <font size="3" color="red"><b>Max Internal Poly-X:</b></font>')
+                                                         , bsButton("qpr10", label = "", icon = icon("question"), style = "info", size = "small")),value = "15"),
+              bsPopover("qpr10", "Equivalent parameter of PRIMER_MAX_POLY_X for the internal oligo.", trigger = "focus"))
     ),
     fluidRow(
-      column(6,textInput("PRIMER_MAX_SELF_ANY", label = HTML('<i class="fa fa fa-circle" aria-hidden="true"></i> <font size="3" color="red"><b>Max Self Complementarity:</b></font>'),value = "45.0")),
-      column(6,textInput("PRIMER_MAX_SELF_ANY_TH", label = HTML('<i class="fa fa fa-circle" aria-hidden="true"></i> <font size="3" color="red"><b>Max Pair Complementarity:</b></font>'),value = "45.0"))
+      column(6,textInput("PRIMER_MAX_SELF_ANY", label = h5(HTML('<i class="fa fa fa-circle" aria-hidden="true"></i> <font size="3" color="red"><b>Max Self Complementarity:</b></font>')
+                                                         , bsButton("qpr11", label = "", icon = icon("question"), style = "info", size = "small")), value = "45.0"),
+              bsPopover("qpr11", "It is the maximum allowable local alignment score when testing a single primer for (local) self-complementarity.", trigger = "focus")),
+             
+      column(6,textInput("PRIMER_MAX_SELF_ANY_TH", label = h5(HTML('<i class="fa fa fa-circle" aria-hidden="true"></i> <font size="3" color="red"><b>Max Pair Complementarity:</b></font>')
+                                                         , bsButton("qpr12", label = "", icon = icon("question"), style = "info", size = "small")), value = "45.0"),
+             bsPopover("qpr12", "The maximum primer pair complementarity.", trigger = "focus"))
     ),
     fluidRow(
-      column(6,textInput("PRIMER_MAX_SELF_END", label = HTML("<i class='fa fa fa-circle' aria-hidden='true'></i> <font size='3' color='red'><b>Max 3' Self Complementarity:</b></font>"),value = "35.0")),
-      column(6,textInput("PRIMER_MAX_SELF_END_TH", label = HTML("<i class='fa fa fa-circle' aria-hidden='true'></i> <font size='3' color='red'><b>Max 3' Pair Complementarity:</b></font>"),value = "35.0"))
+      column(6,textInput("PRIMER_MAX_SELF_END", label = h5(HTML("<i class='fa fa fa-circle' aria-hidden='true'></i> <font size='3' color='red'><b>Max 3' Self Complementarity:</b></font>")
+                                                         , bsButton("qpr13", label = "", icon = icon("question"), style = "info", size = "small")), value = "35.0")
+             , bsPopover("qpr13", "The maximum allowable 3'-anchored global.", trigger = "focus")),
+      column(6,textInput("PRIMER_MAX_SELF_END_TH", label = h5(HTML("<i class='fa fa fa-circle' aria-hidden='true'></i> <font size='3' color='red'><b>Max 3' Pair Complementarity:</b></font>")
+                                                         , bsButton("qpr14", label = "", icon = icon("question"), style = "info", size = "small")), value = "35.0")
+             , bsPopover("qpr14", "Same as PRIMER_MAX_SELF_END but is based on thermodynamical approach - the stability of structure is analyzed. The value of tag is expressed as melting temperature. ", trigger = "focus"))
     ),
     textInput("PRIMER_PRODUCT_SIZE_RANGE", label = HTML('<i class="fa fa fa-circle" aria-hidden="true"></i> <font size="3" color="red"><b>Product Size Ranges:</b></font>'),value = "100-300,300-600,600-1000"),
     
     actionButton("submitprimer", strong("submit!",
-                                        bsButton("qpr1", label="", icon=icon("question"), style="info", size="small")
+                                        bsButton("qprGO", label="", icon=icon("question"), style="info", size="small")
     ), styleclass = "success"),
     conditionalPanel(condition="submitprimer != '0'", busyIndicator(HTML("<div style='color:red;font-size:30px'>Calculation In progress...</div>"), wait = 0)),
-    bsPopover("qpr1", "Whenever the genomic region or any option is updated, please click Go!",
+    bsPopover("qprGO", "Whenever the genomic region or any option is updated, please click Go!",
               trigger = "focus")
     
   ),
-  downloadButton("bulkdownloadprimerInfo.txt", "Download indels information"),
   mainPanel(
     dataTableOutput("primertable"),
     verbatimTextOutput("primerseq")
@@ -73,8 +106,6 @@ server <- function(input, output, session) {
         PRIMER_OPT_SIZE <- paste0("PRIMER_OPT_SIZE=", input$PRIMER_OPT_SIZE)
         PRIMER_MAX_SIZE <- paste0("PRIMER_MAX_SIZE=", input$PRIMER_SIZE[2])
         PRIMER_MIN_SIZE <- paste0("PRIMER_MIN_SIZE=", input$PRIMER_SIZE[1])
-        print(PRIMER_MIN_SIZE)
-        print(PRIMER_MAX_SIZE)
         
         PRIMER_OPT_TM <- paste0("PRIMER_OPT_TM=", input$PRIMER_OPT_TM)
         PRIMER_MAX_TM <- paste0("PRIMER_MAX_TM=", input$PRIMER_MAX_TM)
@@ -99,13 +130,9 @@ server <- function(input, output, session) {
         snppos <- read.table(paste0("./info/Position/", input$Chrprimer, ".snp.position"), sep = "\t", header = T)
         snpnu <- snppos[snppos$POS <= end & snppos$POS >= start, ]
         indelnu <- indelpos[indelpos$POS <= end & indelpos$POS >= start, ]
-        print(snpnu)
-        print(indelnu)
         allnu <- rbind(snpnu, indelnu)
         allnu$POS <- allnu$POS - start
-        print(allnu)
         SEQUENCE_TARGET <- paste0("SEQUENCE_TARGET=", str_c(allnu$POS, ",", allnu$length, collapse = " "))
-        print(SEQUENCE_TARGET)
         if (length(allnu$POS) > 0){
           primerorder <- paste(SEQUENCE_TEMPLATE, PRIMER_OPT_SIZE, PRIMER_MAX_SIZE, PRIMER_MIN_SIZE,
                                PRIMER_OPT_TM, PRIMER_MAX_TM, PRIMER_MIN_TM,
@@ -121,9 +148,7 @@ server <- function(input, output, session) {
                                PRIMER_MAX_SELF_ANY,  PRIMER_MAX_SELF_ANY_TH, PRIMER_MAX_SELF_END, PRIMER_MAX_SELF_END_TH,
                                "=", sep = "\n")
         }
-        print(input$PRIMER_SIZE)
         tmp.order <- file.path(tempdir(), "primer3.order")
-        print(tmp.order)
         writeLines(primerorder, tmp.order)
         tmp.output <- file.path(tempdir(), "primer3.output")
         writeLines(primerorder, tmp.order, sep = "\n")
@@ -161,7 +186,6 @@ server <- function(input, output, session) {
     }
     
   })
-  
   
 }
 
