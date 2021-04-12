@@ -37,6 +37,9 @@ snpInfo <- function(chr="chr7", start=29616705, end=29629223, accession=NULL, mu
   rownames(snp.allele) <- NULL
   
   dat.res <- merge(snp.allele, snpeff.info, by="snpID")
+  dat.res$reference <- as.character(dat.res$reference)
+  dat.res$alternative <- as.character(dat.res$alternative)
+  dat.res$snpID <- as.character(dat.res$snpID)
   dat.res$minor[dat.res$major == dat.res$reference] <- dat.res$alternative[dat.res$major == dat.res$reference]
   dat.res$minor[dat.res$major == dat.res$alternative] <- dat.res$reference[dat.res$major == dat.res$alternative]
   return(list(snp.info, dat.res))

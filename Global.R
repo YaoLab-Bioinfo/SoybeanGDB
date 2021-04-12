@@ -1,9 +1,10 @@
 
 options(warn=-1)
+options(scipen = 9)
 
-library(IRanges)
+#library(IRanges)#IRanges
 library(plotly)
-library(LDheatmap)
+#library(LDheatmap)
 library(chopsticks)
 library(foreach)
 library(ape)
@@ -12,20 +13,19 @@ library(plyr)
 library(dplyr)
 library(tidyr)
 library(gridExtra)
-library(ggtree)
+#library(ggtree)
 library(grid)
 library(snpStats)
 library(genetics)
 library(shinycssloaders)
 library(shinysky)
-#library(shinycustomloader)
 library(shinyWidgets)
 library(shinydisconnect)
 library(Biostrings)
-library(GenomicRanges)
+#library(GenomicRanges)
 library(XML)
-library(data.table)
-library(shinydashboard)
+#library(data.table)
+#library(shinydashboard)
 library(stringr)
 
 source("fetchSnp.R")
@@ -42,13 +42,10 @@ source("box_format.R")
 source("Homepage.R")
 
 soya.info <- read.table("./data/all.soya.txt", head=T, as.is=T, sep="\t", quote="")
-load("./data/zh13.gff.RData")
+gff <- data.table::fread("./data/zh13.gff", sep = "\t", data.table = FALSE)
 snp.lst <- read.table("./data/snp.RData.lst", head=T, as.is=T, sep="\t")
 load("./data/gene.info.RData")
-gene.info$start <- as.numeric(gene.info$start)
-gene.info$end <- as.numeric(gene.info$end)
 
-source("chooser.R")
 all.soya.cho <- paste(soya.info$ID, soya.info$Species, soya.info$Category, sep=", ")
 all.soya.cho <- c("Improved cultivar", "Landrace", "G. Soja", all.soya.cho)
 
@@ -84,4 +81,3 @@ Blast_Info_Title <- paste("qseqid: Query sequence ID;",
                           "evalue: Expect value;",
                           "bitscore: Bit score;",
                           sep = "<br>")
-

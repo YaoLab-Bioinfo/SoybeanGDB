@@ -11,6 +11,7 @@ fetchSnp <- function(chr="chr7", start=29616705, end=29629223, accession=NULL, m
   if (is.null(chr)) {
     return(NULL)
   } else {
+    library(IRanges)
     chr.size <- chrInfo$size[chrInfo$chr == chr]
     start <- max(0, start)
     end <- min(end, chr.size)
