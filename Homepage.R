@@ -1,20 +1,20 @@
-library(shinydashboard)
-Homepage <- dashboardPage(
-  dashboardHeader(disable = T),
-  dashboardSidebar(disable = T),
-  dashboardBody(
+Homepage <- shinydashboard::dashboardPage(
+  shinydashboard::dashboardHeader(disable = T),
+  shinydashboard::dashboardSidebar(disable = T),
+  shinydashboard::dashboardBody(
     tags$head(tags$style("section.content { overflow-y: hidden; }")),
     column(
       width = 10,
       offset = 1,
-      titleBox(title = p("SoybeanGDB: SNP Database of", em("Glycine max (Linn.) Merr.")))
+      titleBox(title = p("SoybeanGDB: A comprehensive genome database of soybean"))
     ),
     column(
       width = 10,
       offset = 1,
       textBox(
         width = 12,
-        p("The SNP database of", em("Glycine max (Linn.) Merr."), "(SoybeanGDB) is an interactive web-based platform and set of analytic tools for effcient retrieve and analysis of SNPs among 2898 soybean germplasm accessions based on the data reported by previous research(", a("Tian et al., 2019", href = "https://doi.org/10.1016/j.cell.2020.05.023", target = "_blank"), ")")
+        p("A total of 29 high-quality soybean genomes were collected, including a Chinese soybean", strong(em("Glycine max")), strong("[L.] Merr. cv. Zhonghuang 13."),
+          "High-quality SNPs and INDELs were identified among 2898 soybean accessions based on the genome of Zhonghuang 13.")
       )
     ),
 
@@ -24,14 +24,10 @@ Homepage <- dashboardPage(
       sectionBox(
         title = "Statistics",
         fluidRow(
-          valueBox("2898", "Germplasm Collections",  width = 4),
-          valueBox("15,446,616", "High quality SNPS", width = 4),          
-          valueBox("4,136,231", "High quality INDELS", width = 4)
-        ),
-        fluidRow(
-          valueBox("103", "G. Soja", width = 4),
-          valueBox("1747", "Improved cultivar", width = 4),
-          valueBox("1048", "Landrace", width = 4),
+          valueBox("2898", "Soybean germplasm collection",  width = 3),
+          valueBox("15,446,616", "High quality SNPS", width = 3),
+          valueBox("4,136,231", "High quality INDELS", width = 3),
+          valueBox("29", "High quality soybean genomes", width = 3)
         )
       )
     ),
@@ -43,95 +39,96 @@ Homepage <- dashboardPage(
         title = "Functionalities of SoybeanGDB",
         fluidRow(
           box(width = 4,
-              actionBttn("Browse_botton", "Browse", 
-                         icon = icon("folder-open-o", class = NULL, lib = "font-awesome"),
+              shinyWidgets::actionBttn("Browse_botton", "Browse SNPs", 
+                         icon = icon("window-maximize", class = NULL, lib = "font-awesome"),
                          block = TRUE, size = "lg", style="unite", color="default"),
-              h4("Browse Soybean by genomes")
+              h4("Browse SNPs among 2898 soybean accessions")
           ),
           
           box(width = 4,
-              actionBttn("Link_SnpInfo", "Search", 
-                         icon = icon("upload", class = NULL, lib = "font-awesome"),
-                         block = TRUE, size = "lg", style="unite", color="default"),
-              h4("Search SNP information")
-          ),
-          
-          box(width = 4,
-              actionBttn("Linkage_anal", "LDheatmap", 
+              shinyWidgets::actionBttn("Link_SnpInfo", "Search SNPs", 
                          icon = icon("search", class = NULL, lib = "font-awesome"),
                          block = TRUE, size = "lg", style="unite", color="default"),
-              h4("Linkage disequilibrium measurements between single nucleotide polymorphisms within a genomic region")
+              h4("Search SNPs among 2898 soybean accessions")
+          ),
+          
+          box(width = 4,
+              shinyWidgets::actionBttn("Linkage_anal", "LDheatmap", 
+                         icon = icon("fire", class = NULL, lib = "font-awesome"),
+                         block = TRUE, size = "lg", style="unite", color="default"),
+              h4("Linkage disequilibrium analysis between SNPs in a genomic region")
           )
         ),
         
         fluidRow(
           
           box(width = 4,
-              actionBttn("Link_diversity", "Diversity", 
-                         icon = icon("search", class = NULL, lib = "font-awesome"),
+              shinyWidgets::actionBttn("Link_diversity", "Nucleotide diversity", 
+                         icon = icon("hourglass", class = NULL, lib = "font-awesome"),
                          block = TRUE, size = "lg", style="unite", color="default"),
-              h4("Diversity")
+              h4("Nucleotide diversity analysis among different groups of soybean accessions")
           ),
           box(width = 4,
-              actionBttn("Link_Phylogenetic", "Phylogenetic", 
-                         icon = icon("cogs", class = NULL, lib = "font-awesome"),
+              shinyWidgets::actionBttn("Link_Phylogenetic", "Phylogenetic analysis", 
+                         icon = icon("cloud", class = NULL, lib = "font-awesome"),
                          block = TRUE, size = "lg", style="unite", color="default"),
-              h4("Phylogenetic")
+              h4("Phylogenetic analysis based on SNPs in a genomic region")
           ),
           
           box(width = 4,
-              actionBttn("Link_Indel", "Indel",
-                         icon = icon("eercast", class = NULL, lib = "font-awesome"),
-                         block = TRUE, size = "lg", style="unite", color="default"),
-              h4("Search Indel information")
+              shinyWidgets::actionBttn("Link_AlleleFreq", "Allele frequency", 
+                                       icon = icon("code-branch", class = NULL, lib = "font-awesome"),
+                                       block = TRUE, size = "lg", style="unite", color="default"),
+              h4("Allele frequency analysis of user-input SNP sites")
           )
           
         ),
         
         fluidRow(
-          
           box(width = 4,
-              actionBttn("Link_GeneInfoID", "Gene ID", 
-                         icon = icon("bullseye", class = NULL, lib = "font-awesome"),
-                         block = TRUE, size = "lg", style="unite", color="default"),
-              h4("Search soybean Genomes information")
+              shinyWidgets::actionBttn("Link_Indel", "INDELs",
+                                       
+                                       block = TRUE, size = "lg", style="unite", color="default"),
+              h4("Search INDELs among 2898 soybean accessions")
           ),
           
           box(width = 4,
-              actionBttn("Link_GeneInfoIT", "Gene Location", 
-                         icon = icon("bullseye", class = NULL, lib = "font-awesome"),
+              shinyWidgets::actionBttn("Link_GeneInfoID", "Search by gene ID", 
+                         icon = icon("id-card", class = NULL, lib = "font-awesome"),
                          block = TRUE, size = "lg", style="unite", color="default"),
-              h4("Search soybean Genomes information")
+              h4("Search 29 soybean genomes by gene ID")
           ),
           
           box(width = 4,
-              actionBttn("Link_blast", "BLAST", 
-                         icon = icon("rocket", class = NULL, lib = "font-awesome"),
+              shinyWidgets::actionBttn("Link_GeneInfoIT", "Search by genome location", 
+                         icon = icon("search-location", class = NULL, lib = "font-awesome"),
                          block = TRUE, size = "lg", style="unite", color="default"),
-              h4("Choose accession to blast")
-          ),
+              h4("Search 29 soybean genomes by location")
+          )
+
         ),
         
         fluidRow(
           box(width = 4,
-              actionBttn("Link_Primer", "Primer", 
-                         icon = icon("file-image-o", class = NULL, lib = "font-awesome"),
-                         block = TRUE, size = "lg", style="unite", color="default"),
-              h4("Design primer by Zhonghuang 13 genome")
+              shinyWidgets::actionBttn("Link_blast", "BLAST", 
+                                       icon = icon("rocket", class = NULL, lib = "font-awesome"),
+                                       block = TRUE, size = "lg", style="unite", color="default"),
+              h4("Search 29 soybean genomes using BLAST")
           ),
           
           box(width = 4,
-              actionBttn("Link_JBrowse", "JBrowse2", 
-                         icon = icon("bullseye", class = NULL, lib = "font-awesome"),
+              shinyWidgets::actionBttn("Link_Primer", "Primer Design", 
+                         icon = icon("drafting-compass", class = NULL, lib = "font-awesome"),
                          block = TRUE, size = "lg", style="unite", color="default"),
-              h4("Browse 27 genomes information")
+              h4("Design primers based on the genome of Zhonghuang 13")
           ),
           
+          
           box(width = 4,
-              actionBttn("Link_Accession", "Accession", 
-                         icon = icon("rocket", class = NULL, lib = "font-awesome"),
+              shinyWidgets::actionBttn("Link_Orthologous", "Orthologous", 
+                         icon = icon("tree", class = NULL, lib = "font-awesome"),
                          block = TRUE, size = "lg", style="unite", color="default"),
-              h4("Search soybean Accession")
+              h4("Orthologous Groups among 29 soybean genomes")
           )
         ) 
       )

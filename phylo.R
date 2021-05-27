@@ -9,12 +9,19 @@
 # For more info, please check the Phylogenetic menu of the MaizeSNPDB database.
 
 phylo <- function(chr="chr9", start=37800, end=41400, accession=NULL, mutType=NULL, snpSites = NULL) {
+  #library(foreach)
+  if (exists("snp.lst")){
+  }else{
+    snp.lst <- read.table("./data/snp.RData.lst", head=T, as.is=T, sep="\t")
+  }
+  
+  soya.tree <- read.table("./data/soya.tree.txt", head=T, as.is=T, sep="\t", row.names = 1)
   start <- as.numeric(start)
   end <- as.numeric(end)
-  reg.gr <- IRanges(start, end)
+  reg.gr <- IRanges::IRanges(start, end)
   snp.lst.chr <- snp.lst[snp.lst$chr==chr, ]
-  snp.lst.gr <- IRanges(start=snp.lst.chr$start, end=snp.lst.chr$end)
-  snp.fls <- snp.lst.chr$file[unique(queryHits(findOverlaps(snp.lst.gr, reg.gr)))]
+  snp.lst.gr <- IRanges::IRanges(start=snp.lst.chr$start, end=snp.lst.chr$end)
+  snp.fls <- snp.lst.chr$file[unique(S4Vectors::queryHits(GenomicRanges::findOverlaps(snp.lst.gr, reg.gr)))]
   
   snp.data.lst <- lapply(snp.fls, function(x){
     load(x)
@@ -32,12 +39,19 @@ phylo <- function(chr="chr9", start=37800, end=41400, accession=NULL, mutType=NU
   snpeff <- do.call(rbind, snpeff.fls.lst)
   snpeff <- snpeff[order(as.numeric(snpeff[, 1])), ]
   
-  start <- as.numeric(paste0(sprintf("%02d", as.numeric(substr(chr, 4, 4))), sprintf("%08d", start)))
-  end <- as.numeric(paste0(sprintf("%02d", as.numeric(substr(chr, 4, 4))), sprintf("%08d", end)))
+  start <- as.numeric(paste0(sprintf("%02d", as.numeric(substr(chr, 4, 5))), sprintf("%08d", start)))
+  end <- as.numeric(paste0(sprintf("%02d", as.numeric(substr(chr, 4, 5))), sprintf("%08d", end)))
   
   dat.res <- snp.data[as.numeric(rownames(snp.data))>=start & as.numeric(rownames(snp.data))<=end, , drop=FALSE]
   dat.res <- as.matrix(dat.res)
-  
+  #filter maf < 0.005
+  #maf <- apply(dat.res, 1, function(x){
+  #  numb <- sort(table(x), decreasing=TRUE)
+  #  p1 <- sum(as.numeric(numb[names(numb) == 1]) * 2, as.numeric(numb[names(numb) == 2]))
+  #  p2 <- sum(as.numeric(numb[names(numb) == 0]), as.numeric(numb[names(numb) == 1]), as.numeric(numb[names(numb) == 2]) * 2)
+  #  pct <- p1/p2
+  #})
+  #dat.res <- dat.res[maf >= 0.005, ]
   
   accession <- sapply(accession, function(x){
     if (x %in% c("Improved cultivar", "Landrace", "G. Soja")) {
@@ -79,24 +93,24 @@ phylo <- function(chr="chr9", start=37800, end=41400, accession=NULL, mutType=NU
     return(abs(x-y)/2 + as.numeric((x==1)&(y==1))/2)
   }
   
-  dist.mat.nume <- foreach(x=1:ncol(dat.res),.combine=rbind)%dopar%{colSums(dat.res%dis%dat.res[,x],na.rm=TRUE)}
+  dist.mat.nume <- foreach::foreach(x=1:ncol(dat.res),.combine=rbind)%dopar%{colSums(dat.res%dis%dat.res[,x],na.rm=TRUE)}
   dat.res[!is.na(dat.res)] <- 1
-  dist.mat.deno <- foreach(x=1:ncol(dat.res),.combine=rbind)%dopar%{colSums(!is.na(dat.res+dat.res[,x]))}
+  dist.mat.deno <- foreach::foreach(x=1:ncol(dat.res),.combine=rbind)%dopar%{colSums(!is.na(dat.res+dat.res[,x]))}
   
   dist.mat <- dist.mat.nume/dist.mat.deno
   rownames(dist.mat) <- colnames(dist.mat)
   
   ### tree
   dist.mat <- as.dist(dist.mat)
-  tre <- nj(dist.mat)
+  tre <- ape::nj(dist.mat)
   
-  p <- ggtree(tre, layout="circular", branch.length="none", size=0.01) + ggtitle("")
-  p <- p + theme_void()
-  p <- gheatmap(p, soya.tree, offset = 1, width=0.1, colnames = FALSE, color=NULL) +
-    scale_fill_manual(breaks=c("Improved cultivar", "Landrace",  
+  p <- ggtree::ggtree(tre, layout="circular", branch.length="none", size=0.01) + ggplot2::ggtitle("")
+  p <- p + ggplot2::theme_void()
+  p <- ggtree::gheatmap(p, soya.tree, offset = 1, width=0.1, colnames = FALSE, color=NULL) +
+    ggplot2::scale_fill_manual(breaks=c("Improved cultivar", "Landrace",  
                                "G. Soja"), 
                       values=c("blue", "red", 
-                               "purple"))
+                               "purple"), name = "")
   figurecp <<- p
   treNwk <<- tre
   return(p)

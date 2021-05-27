@@ -1,0 +1,30 @@
+names	type
+zhonghuang 13	Improved cultivar
+PI 562565	G. Soja
+PI 549046	G. Soja
+PI 578357	G. Soja
+Wm82	G. Soja
+W05	G. Soja
+Zhutwinning2	Landrace
+Zi Hua No.4	Landrace
+Tong Shan Tian E Dan	Landrace
+58-161	Landrace
+PI 398296	Landrace
+Zhang Chun Man Cang Jin	Landrace
+Feng Di Huang	Landrace
+Tie Jia Si Li Huang	Landrace
+Shi Sheng Chang Ye	Landrace
+Xu Dou No.1	Improved cultivar
+Tie Feng No.18	Improved cultivar
+Ju Xuan No.23	Improved cultivar
+Wan Dou No.28	Improved cultivar
+Amsoy	Improved cultivar
+Yu Dou No.22	Improved cultivar
+Jin Dou No.23	Improved cultivar
+Qi Huang No.34	Improved cultivar
+Han Dou No.5	Improved cultivar
+PI 548362	Improved cultivar
+Ji Dou No.17	Improved cultivar
+Dong Nong No.50	Improved cultivar
+Hei He No.43	Improved cultivar
+Ke Shan No.1	Improved cultivar

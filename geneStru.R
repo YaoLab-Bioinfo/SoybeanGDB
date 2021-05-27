@@ -1,12 +1,17 @@
 
 
-geneStru <- function(chr="chr9", start=59001, end=68031){ 
+geneStru <- function(chr="chr1", start=29765419, end=29793053){ 
   start <- as.numeric(start)
   end <- as.numeric(end)
-  reg.gr <- IRanges(start, end)
+  reg.gr <- IRanges::IRanges(start, end)
+  if (exists("snp.lst")){
+    
+  }else{
+    snp.lst <- read.table("./data/snp.RData.lst", head=T, as.is=T, sep="\t") 
+  }
   snp.lst.chr <- snp.lst[snp.lst$chr==chr, ]
-  snp.lst.gr <- IRanges(start=snp.lst.chr$start, end=snp.lst.chr$end)
-  snp.fls <- snp.lst.chr$file[unique(queryHits(findOverlaps(snp.lst.gr, reg.gr)))]
+  snp.lst.gr <- IRanges::IRanges(start=snp.lst.chr$start, end=snp.lst.chr$end)
+  snp.fls <- snp.lst.chr$file[unique(S4Vectors::queryHits(GenomicRanges::findOverlaps(snp.lst.gr, reg.gr)))]
   
   snp.allele.lst <- lapply(snp.fls, function(x){
     load(x)
@@ -15,22 +20,51 @@ geneStru <- function(chr="chr9", start=59001, end=68031){
   snp.allele <- do.call(rbind, snp.allele.lst)
   snp.allele <- snp.allele[order(as.numeric(rownames(snp.allele))), ]
   
-  start.c <- as.numeric(paste0(sprintf("%02d", as.numeric(substr(chr, 4, 4))), sprintf("%08d", start)))
-  end.c <- as.numeric(paste0(sprintf("%02d", as.numeric(substr(chr, 4, 4))), sprintf("%08d", end)))
+  start.c <- as.numeric(paste0(sprintf("%02d", as.numeric(substr(chr, 4, 5))), sprintf("%08d", start)))
+  end.c <- as.numeric(paste0(sprintf("%02d", as.numeric(substr(chr, 4, 5))), sprintf("%08d", end)))
   
   dat <- snp.allele[as.numeric(rownames(snp.allele))>=start.c & as.numeric(rownames(snp.allele))<=end.c, ]
-  snp.code.pos <- as.numeric(substr(rownames(dat), 3, 11))
   
+  snp.code.pos <- as.numeric(substr(rownames(dat), 3, 11))
+  #filter maf < 0.005
+  snp.data.lst <- lapply(snp.fls, function(x){
+    load(x)
+    return(snp.data.inter.Matrix)
+  })
+  snp.data <- do.call(rbind, snp.data.lst)
+  snp.data <- snp.data[order(as.numeric(rownames(snp.data))), ]
+  if (exists("soya.info")){
+    
+  }else{
+    soya.info <- read.table("./data/all.soya.txt", head=T, as.is=T, sep="\t", quote="")
+  }
+  colnames(snp.data) <- soya.info$ID
+  dat.res <- snp.data[as.numeric(rownames(snp.data))>=start.c & as.numeric(rownames(snp.data))<=end.c, , drop=FALSE]
+  dat.res <- as.matrix(dat.res)
+
+  maf <- apply(dat.res, 1, function(x){
+    numb <- sort(table(x), decreasing=TRUE)
+    p1 <- sum(as.numeric(numb[names(numb) == 1]) * 2, as.numeric(numb[names(numb) == 2]))
+    p2 <- sum(as.numeric(numb[names(numb) == 0]), as.numeric(numb[names(numb) == 1]), as.numeric(numb[names(numb) == 2]) * 2)
+    pct <- p1/p2
+  })
+  snp.code.pos <- snp.code.pos[maf >= 0.005]
+  
+  
+  if ( exists("gff") && gff[1,1]  == "SoyZH13_01G000001.m1" ){
+  }else {
+    gff <- data.table::fread("./data/zh13.gff", sep = "\t", data.table = FALSE)
+  }
   
   gff.mrna <- gff[gff$type == "mRNA", ]
   gff.reg.mrna <- gff.mrna[gff.mrna$chr==chr & gff.mrna$start>=start & gff.mrna$end<=end, ]
   gff.reg <- gff[gff$id %in% gff.reg.mrna$id, ]
   
-  gff.reg.mrna.ir <- IRanges(gff.reg.mrna$start, gff.reg.mrna$end)
-  gff.reg.mrna.op <- findOverlaps(gff.reg.mrna.ir, reduce(gff.reg.mrna.ir))
-  gff.reg.mrna$grp <- subjectHits(gff.reg.mrna.op)
+  gff.reg.mrna.ir <- IRanges::IRanges(gff.reg.mrna$start, gff.reg.mrna$end)
+  gff.reg.mrna.op <- GenomicRanges::findOverlaps(gff.reg.mrna.ir, GenomicRanges::reduce(gff.reg.mrna.ir))
+  gff.reg.mrna$grp <- S4Vectors::subjectHits(gff.reg.mrna.op)
   
-  gff.reg.mrna.1 <- gff.reg.mrna %>% group_by(grp) %>% mutate(y=row_number())
+  gff.reg.mrna.1 <- gff.reg.mrna %>% dplyr::group_by(grp) %>% dplyr::mutate(y = dplyr::row_number())
   
   gff.reg <- merge(gff.reg, gff.reg.mrna.1[, c("id", "y")], by="id")
   
@@ -44,7 +78,7 @@ geneStru <- function(chr="chr9", start=59001, end=68031){
     return(dat.mrna)
   })
   plot.mrna <- do.call(rbind, plot.mrna.lst)
-  p1 <- ggplot(plot.mrna) + geom_rect(aes(xmin=start, xmax=end, ymin=y+0.118, ymax=y+0.122,
+  p1 <- ggplot2::ggplot(plot.mrna) + ggplot2::geom_rect(ggplot2::aes(xmin=start, xmax=end, ymin=y+0.118, ymax=y+0.122,
                                           text=anno), 
                                       color="grey30", fill="grey30")
   
@@ -66,7 +100,7 @@ geneStru <- function(chr="chr9", start=59001, end=68031){
   })
   plot.nm <- do.call(rbind, plot.nm.lst)
   if (nrow(plot.nm)>0) {
-    p1 <- p1 + geom_rect(aes(xmin=start, xmax=end, ymin=ymin, ymax=ymax, text=anno), 
+    p1 <- p1 + ggplot2::geom_rect(ggplot2::aes(xmin=start, xmax=end, ymin=ymin, ymax=ymax, text=anno), 
                          color="grey30", fill="grey30", data=plot.nm)
   }
   
@@ -110,17 +144,17 @@ geneStru <- function(chr="chr9", start=59001, end=68031){
     return(dat.tail)
   })
   plot.tail <- do.call(rbind, plot.tail.lst)
-  p1 <- p1 + geom_polygon(aes(x=xx, y=yy, group=id), color="grey30", fill="grey30", 
+  p1 <- p1 + ggplot2::geom_polygon(ggplot2::aes(x=xx, y=yy, group=id), color="grey30", fill="grey30", 
                           data=plot.tail)
   
   snp.pos.df <- data.frame(x=snp.code.pos, ymin=1.23, ymax=1.25, stringsAsFactors = FALSE)
-  p1 <- p1 + geom_linerange(aes(x=x, ymin=ymin, ymax=ymax), data=snp.pos.df)
-  p1 <- p1 + geom_segment(aes(x=min(snp.code.pos), xend=max(snp.code.pos), y=1.25, yend=1.25))
+  p1 <- p1 + ggplot2::geom_linerange(ggplot2::aes(x=x, ymin=ymin, ymax=ymax), data=snp.pos.df)
+  p1 <- p1 + ggplot2::geom_segment(ggplot2::aes(x=min(snp.code.pos), xend=max(snp.code.pos), y=1.25, yend=1.25))
   
-  p1 <- p1 + scale_y_continuous("", breaks=NULL)
-  p1 <- p1 + theme(panel.grid.major=element_blank(),panel.grid.minor=element_blank()) + 
-    theme(panel.background=element_rect(fill="white",colour="white"))
-  p1 <- p1 + scale_x_continuous("", breaks=NULL)
+  p1 <- p1 + ggplot2::scale_y_continuous("", breaks=NULL)
+  p1 <- p1 + ggplot2::theme(panel.grid.major = ggplot2::element_blank(),panel.grid.minor = ggplot2::element_blank()) + 
+    ggplot2::theme(panel.background = ggplot2::element_rect(fill="white",colour="white"))
+  p1 <- p1 + ggplot2::scale_x_continuous("", breaks=NULL)
   
   return(p1)
 }

@@ -3,6 +3,8 @@ Zhonghuang 13	Improved_cultivar
 PI 562565	G.Soja
 PI 549046	G.Soja
 PI 578357	G.Soja
+Wm82	G.Soja
+W05	G.Soja
 Zhutwinning2	Landrace
 Zi Hua No.4	Landrace
 Tong Shan Tian E Dan	Landrace

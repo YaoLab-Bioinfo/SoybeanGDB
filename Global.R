@@ -2,58 +2,62 @@
 options(warn=-1)
 options(scipen = 9)
 
+library(shiny)
 #library(IRanges)#IRanges
-library(plotly)
+#library(plotly)
 #library(LDheatmap)
-library(chopsticks)
-library(foreach)
-library(ape)
-library(pegas)
-library(plyr)
-library(dplyr)
-library(tidyr)
-library(gridExtra)
+#library(chopsticks)
+#library(foreach)
+#library(ape)
+#library(pegas)
+#library(plyr)
+#library(dplyr)
+#library(tidyr)
+#library(gridExtra)
 #library(ggtree)
-library(grid)
-library(snpStats)
-library(genetics)
+#library(grid)
+##library(snpStats)
+##library(genetics)
 library(shinycssloaders)
-library(shinysky)
-library(shinyWidgets)
-library(shinydisconnect)
-library(Biostrings)
+#library(shinysky)
+#library(shinyWidgets)
+#library(shinydisconnect)
+#library(Biostrings)
 #library(GenomicRanges)
-library(XML)
+#library(XML)
 #library(data.table)
-#library(shinydashboard)
-library(stringr)
+library(shinydashboard)
+#library(stringr)
+#library(RLumShiny)
+`%>%` <- magrittr::`%>%`
+`%dopar%` <- foreach::`%dopar%`
 
-source("fetchSnp.R")
-source("fetchSnpAllele.R")
-source("ld.heatmap.R")
-source("phylo.R")
-source("nucDiv.R")
-source("GBrowser.R")
-source("anaReg.R")
-source("geneStru.R")
-source("snpInfo.R")
-source("validReg.R")
+#source("fetchSnp.R")
+#source("fetchSnpAllele.R")
+#source("ld.heatmap.R")
+#source("phylo.R")
+#source("nucDiv.R")
+#source("GBrowser.R")
+#source("anaReg.R")
+#source("geneStru.R")
+#source("snpInfo.R")
+#source("validReg.R")
 source("box_format.R")
 source("Homepage.R")
+#source("alleleFreq.R")
 
-soya.info <- read.table("./data/all.soya.txt", head=T, as.is=T, sep="\t", quote="")
-gff <- data.table::fread("./data/zh13.gff", sep = "\t", data.table = FALSE)
-snp.lst <- read.table("./data/snp.RData.lst", head=T, as.is=T, sep="\t")
+
+#gff <- data.table::fread("./data/zh13.gff", sep = "\t", data.table = FALSE)
+#snp.lst <- read.table("./data/snp.RData.lst", head=T, as.is=T, sep="\t")
 load("./data/gene.info.RData")
 
+soya.info <- read.table("./data/all.soya.txt", head=T, as.is=T, sep="\t", quote="")
 all.soya.cho <- paste(soya.info$ID, soya.info$Species, soya.info$Category, sep=", ")
 all.soya.cho <- c("Improved cultivar", "Landrace", "G. Soja", all.soya.cho)
 
-chrInfo <- read.table("./data/chrInfo.txt", head=T, as.is=T, sep="\t")
-BLASTdb.fl <- read.table("BLASTdb.txt", head=T, as.is=T, sep = "\t")
+#chrInfo <- read.table("./data/chrInfo.txt", head=T, as.is=T, sep="\t")
+#soya.tree <- read.table("./data/soya.tree.txt", head=T, as.is=T, sep="\t", row.names = 1)
 
-soya.tree <- read.table("./data/soya.tree.txt", 
-                       head=T, as.is=T, sep="\t", row.names = 1)
 mutationtypes <- c("3_prime_UTR_variant", "5_prime_UTR_premature_start_codon_gain_variant", "5_prime_UTR_variant", 
                    "downstream_gene_variant","initiator_codon_variant", "initiator_codon_variant&splice_region_variant",
                    "intergenic_region", "intragenic_variant", "intron_variant", "missense_variant",                                        
@@ -65,7 +69,7 @@ mutationtypes <- c("3_prime_UTR_variant", "5_prime_UTR_premature_start_codon_gai
                    "start_lost", "start_lost&splice_region_variant", "stop_gained", "stop_gained&splice_region_variant",                       
                    "stop_lost","stop_lost&splice_region_variant", "stop_retained_variant",  "synonymous_variant", "upstream_gene_variant"
 )
-exam1.fa <- readLines("exam1.fa")
+#exam1.fa <- readLines("exam1.fa")
 
 Blast_Info_Title <- paste("qseqid: Query sequence ID;",
                           "qlen: Query sequence length;",
