@@ -1,6 +1,6 @@
 
 options(warn=-1)
-options(scipen = 9)
+options(scipen = 19)
 
 library(shiny)
 #library(IRanges)#IRanges
@@ -53,6 +53,9 @@ load("./data/gene.info.RData")
 
 soya.info <- read.table("./data/all.soya.txt", head=T, as.is=T, sep="\t", quote="")
 all.soya.cho <- paste(soya.info$ID, soya.info$Species, soya.info$Category, sep=", ")
+
+all.soya.cho <- paste0(gsub(",.+", "", all.soya.cho) , ", ", soya.info$Names, ", ", gsub(".+,", "", all.soya.cho))
+
 all.soya.cho <- c("Improved cultivar", "Landrace", "G. Soja", all.soya.cho)
 
 #chrInfo <- read.table("./data/chrInfo.txt", head=T, as.is=T, sep="\t")
@@ -85,3 +88,11 @@ Blast_Info_Title <- paste("qseqid: Query sequence ID;",
                           "evalue: Expect value;",
                           "bitscore: Bit score;",
                           sep = "<br>")
+
+footerTagList <- list(
+  tags$footer(id = "myFooter",
+              shiny::includeHTML("www/footer.html"),
+              
+  )
+)
+expression_name_description <- read.table("./data/expression_name_description.txt", sep = "\t", header = T)

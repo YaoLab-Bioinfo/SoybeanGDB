@@ -216,7 +216,7 @@ GBrowser <- function(chr="chr1", start=29765419, end=29793053, accession=NULL, m
     ggplot2::theme(panel.background = ggplot2::element_rect(fill="white",colour="white"))
   p1 <- p1 + ggplot2::xlab("Chromosome position")
   
-  p1 <- p1 + ggplot2::guides(color = guide_legend(title=NULL))
+  p1 <- p1 + ggplot2::guides(color = ggplot2::guide_legend(title=NULL) )
   p1 <- p1 + ggplot2::theme(axis.ticks.y = ggplot2::element_blank(), axis.text.y = ggplot2::element_blank(),
                    axis.line.y = ggplot2::element_blank())
   p1 <- p1 + ggplot2::guides(fill=FALSE)

@@ -16,7 +16,7 @@ s14	Glycine max (L.) Merr.	G. Soja	PI 464929 A -2	China, Liao Ning
 s15	Glycine max (L.) Merr.	G. Soja	PI 483460 B	China, Liao Ning
 s16	Glycine max (L.) Merr.	G. Soja	PI 483464 A	China, Ning Xia
 s17	Glycine max (L.) Merr.	G. Soja	PI 468400 A	China, Ning Xia
-s18	Glycine max (L.) Merr.	G. Soja	PI 549046 *	China, Shaan Xi
+s18	Glycine max (L.) Merr.	G. Soja	PI 549046	China, Shaan Xi
 s19	Glycine max (L.) Merr.	G. Soja	PI 483465	China, Shaan Xi
 s20	Glycine max (L.) Merr.	G. Soja	PI 597459 C	China, Shan Dong
 s21	Glycine max (L.) Merr.	G. Soja	PI 597461 C	China, Shan Dong
@@ -46,7 +46,7 @@ s44	Glycine max (L.) Merr.	G. Soja	PI 407285	Japan, Kanagawa
 s45	Glycine max (L.) Merr.	G. Soja	PI 424096	North Korea
 s46	Glycine max (L.) Merr.	G. Soja	PI 339871 A	North Korea
 s47	Glycine max (L.) Merr.	G. Soja	PI 423991	Russian Federation, Federation Amur
-s48	Glycine max (L.) Merr.	G. Soja	PI 578357 *	Russian Federation, Federation Amur
+s48	Glycine max (L.) Merr.	G. Soja	PI 578357	Russian Federation, Federation Amur
 s49	Glycine max (L.) Merr.	G. Soja	PI 578341	Russian Federation, Federation Khabarovsk
 s50	Glycine max (L.) Merr.	G. Soja	PI 326582 A	Russian Federation, Federation Primorye
 s51	Glycine max (L.) Merr.	G. Soja	PI 522216	Russian Federation, Federation Primorye
@@ -54,7 +54,7 @@ s52	Glycine max (L.) Merr.	G. Soja	PI 522228	Russian Federation, Federation Prim
 s53	Glycine max (L.) Merr.	G. Soja	PI 522226	Russian Federation, Federation Primorye
 s54	Glycine max (L.) Merr.	G. Soja	PI 504286	South Korea, Chungchong Puk
 s55	Glycine max (L.) Merr.	G. Soja	PI 562559	South Korea, Jeolla Puk
-s56	Glycine max (L.) Merr.	G. Soja	PI 562565 *	South Korea, Jeolla Puk
+s56	Glycine max (L.) Merr.	G. Soja	PI 562565	South Korea, Jeolla Puk
 s57	Glycine max (L.) Merr.	G. Soja	PI 407197	South Korea, Kangwon
 s58	Glycine max (L.) Merr.	G. Soja	PI 407170	South Korea, Kyonggi
 s59	Glycine max (L.) Merr.	G. Soja	PI 407275	South Korea, Kyonggi
@@ -185,7 +185,7 @@ s183	Glycine max (L.) Merr.	Landrace	PI 424391	South Korea, Jeolla Puk
 s184	Glycine max (L.) Merr.	Landrace	PI 407849	South Korea, Jeolla Puk
 s185	Glycine max (L.) Merr.	Landrace	PI 339734	South Korea, Kangwon
 s186	Glycine max (L.) Merr.	Landrace	PI 407801	South Korea, Kyonggi
-s187	Glycine max (L.) Merr.	Landrace	PI 398296 *	South Korea, Kyonggi
+s187	Glycine max (L.) Merr.	Landrace	PI 398296	South Korea, Kyonggi
 s188	Glycine max (L.) Merr.	Landrace	PI 84631	South Korea, Kyonggi
 s189	Glycine max (L.) Merr.	Landrace	PI 83945-3	South Korea, Kyonggi
 s190	Glycine max (L.) Merr.	Landrace	PI 548417	United States, Minnesota
@@ -269,7 +269,7 @@ s267	Glycine max (L.) Merr.	Improved cultivar	PI 533602	United States, Arkansas
 s268	Glycine max (L.) Merr.	Improved cultivar	PI 533655	United States, Illinois
 s269	Glycine max (L.) Merr.	Improved cultivar	PI 547459	United States, Illinois
 s270	Glycine max (L.) Merr.	Improved cultivar	PI 547409	United States, Illinois
-s271	Glycine max (L.) Merr.	Improved cultivar	PI 548362 *	United States, Illinois
+s271	Glycine max (L.) Merr.	Improved cultivar	PI 548362	United States, Illinois
 s272	Glycine max (L.) Merr.	Improved cultivar	PI 547690	United States, Illinois
 s273	Glycine max (L.) Merr.	Improved cultivar	PI 547686	United States, Illinois
 s274	Glycine max (L.) Merr.	Improved cultivar	PI 591511	United States, Illinois
@@ -302,7 +302,7 @@ s300	Glycine max (L.) Merr.	Improved cultivar	PI 548985	United States, South Car
 s301	Glycine max (L.) Merr.	Improved cultivar	PI 548477	United States, Tennessee
 s302	Glycine max (L.) Merr.	Improved cultivar	PI 518664	United States, Virginia
 s303	Glycine max (L.) Merr.	Landrace	Dunfield	Belgium
-s304	Glycine max (L.) Merr.	Landrace	Zhutwinning2 *	China
+s304	Glycine max (L.) Merr.	Landrace	Zhutwinning2	China
 s305	Glycine max (L.) Merr.	Landrace	Zhu-Twinning-3 Nonshattering	China
 s306	Glycine max (L.) Merr.	Landrace	Xiao Qing Dou	China
 s307	Glycine max (L.) Merr.	Landrace	Te Da Dou No.1	China
@@ -404,7 +404,7 @@ s402	Glycine max (L.) Merr.	Landrace	Qing An Hei Dou  -1	China, Hei Long Jiang
 s403	Glycine max (L.) Merr.	Landrace	Si Li Jia Da Dou	China, Hei Long Jiang
 s404	Glycine max (L.) Merr.	Landrace	Wu Chang Liu Yue Bao	China, Hu Bei
 s405	Glycine max (L.) Merr.	Landrace	Huang Mao Dou	China, Hu Nan
-s406	Glycine max (L.) Merr.	Landrace	Chang Chun Man Cang Jin *	China, Ji Lin
+s406	Glycine max (L.) Merr.	Landrace	Chang Chun Man Cang Jin	China, Ji Lin
 s407	Glycine max (L.) Merr.	Landrace	PI 548318	China, Ji Lin
 s408	Glycine max (L.) Merr.	Landrace	Huai De Bai Hua Da Li	China, Ji Lin
 s409	Glycine max (L.) Merr.	Landrace	He Long You Tai	China, Ji Lin
@@ -413,9 +413,9 @@ s411	Glycine max (L.) Merr.	Landrace	Cha Mo Shi Dou	China, Ji Lin
 s412	Glycine max (L.) Merr.	Landrace	Sui Ning Da Qing Dou Jia	China, Jiang Su
 s413	Glycine max (L.) Merr.	Landrace	Su Dou No.1	China, Jiang Su
 s414	Glycine max (L.) Merr.	Landrace	Huai Yang Chun Dou	China, Jiang Su
-s415	Glycine max (L.) Merr.	Landrace	58-161 *	China, Jiang Su
+s415	Glycine max (L.) Merr.	Landrace	58-161	China, Jiang Su
 s416	Glycine max (L.) Merr.	Landrace	Shu Yang Da Qing Dou Jia	China, Jiang Su
-s417	Glycine max (L.) Merr.	Landrace	Tong Shan Tian E Dan *	China, Jiang Su
+s417	Glycine max (L.) Merr.	Landrace	Tong Shan Tian E Dan	China, Jiang Su
 s418	Glycine max (L.) Merr.	Landrace	Su Zhou Wu Yue Mao (Jia )	China, Jiang Su
 s419	Glycine max (L.) Merr.	Landrace	Guan Nan Chun Hei Dou	China, Jiang Su
 s420	Glycine max (L.) Merr.	Landrace	Pei Xian Da Bai Jiao	China, Jiang Su
@@ -561,7 +561,7 @@ s559	Glycine max (L.) Merr.	Landrace	PI 567238	China, Yun Nan
 s560	Glycine max (L.) Merr.	Landrace	Ri Ben Hei Qi	Japan
 s561	Glycine max (L.) Merr.	Landrace	PI 59845	Japan, Akita
 s562	Glycine max (L.) Merr.	Landrace	PI 81775	Japan, Akita
-s563	Glycine max (L.) Merr.	Landrace	Shi Sheng Chang Ye *	Japan, Hokkaido
+s563	Glycine max (L.) Merr.	Landrace	Shi Sheng Chang Ye	Japan, Hokkaido
 s564	Glycine max (L.) Merr.	Landrace	Bei Hai Dao Da Dou	Japan, Hokkaido
 s565	Glycine max (L.) Merr.	Landrace	§¬§å§Ò§Ñ§ß§ã§Ü§Ñ§ñ No.76	Russian Federation
 s566	Glycine max (L.) Merr.	Landrace	§·§Ö§â§ã§à§ß§ã§Ü§Ñ§ñ£±	Russian Federation
@@ -595,7 +595,7 @@ s593	Glycine max (L.) Merr.	Improved cultivar	Wan Dou No.24	China, An Hui
 s594	Glycine max (L.) Merr.	Improved cultivar	Wan Dou No.29	China, An Hui
 s595	Glycine max (L.) Merr.	Improved cultivar	Wan Dou No.30	China, An Hui
 s596	Glycine max (L.) Merr.	Improved cultivar	Meng Qing No.3	China, An Hui
-s597	Glycine max (L.) Merr.	Improved cultivar	Wan Dou No.28 *	China, An Hui
+s597	Glycine max (L.) Merr.	Improved cultivar	Wan Dou No.28	China, An Hui
 s598	Glycine max (L.) Merr.	Improved cultivar	Sui Ke No.928	China, An Hui
 s599	Glycine max (L.) Merr.	Improved cultivar	Fu 75-65	China, An Hui
 s600	Glycine max (L.) Merr.	Improved cultivar	Fu Yang No.335	China, An Hui
@@ -655,7 +655,7 @@ s653	Glycine max (L.) Merr.	Improved cultivar	Cang Dou No.10 -1	China, He Bei
 s654	Glycine max (L.) Merr.	Improved cultivar	Ji Dou No.15 -2	China, He Bei
 s655	Glycine max (L.) Merr.	Improved cultivar	Ji Dou No.18	China, He Bei
 s656	Glycine max (L.) Merr.	Improved cultivar	Wu Xing No.1	China, He Bei
-s657	Glycine max (L.) Merr.	Improved cultivar	Ji Dou No.17 *	China, He Bei
+s657	Glycine max (L.) Merr.	Improved cultivar	Ji Dou No.17	China, He Bei
 s658	Glycine max (L.) Merr.	Improved cultivar	Ji Huang	China, He Bei
 s659	Glycine max (L.) Merr.	Improved cultivar	Ji Dou No.19	China, He Bei
 s660	Glycine max (L.) Merr.	Improved cultivar	Jing Xuan No.2	China, He Bei
@@ -677,7 +677,7 @@ s675	Glycine max (L.) Merr.	Improved cultivar	Zheng 97196	China, He Nan
 s676	Glycine max (L.) Merr.	Improved cultivar	Yu Dou No.28	China, He Nan
 s677	Glycine max (L.) Merr.	Improved cultivar	Zhou Dou No.13	China, He Nan
 s678	Glycine max (L.) Merr.	Improved cultivar	Yu Dou No.18	China, He Nan
-s679	Glycine max (L.) Merr.	Improved cultivar	Yu Dou No.22 *	China, He Nan
+s679	Glycine max (L.) Merr.	Improved cultivar	Yu Dou No.22	China, He Nan
 s680	Glycine max (L.) Merr.	Improved cultivar	He Nan Zao Feng No.1	China, He Nan
 s681	Glycine max (L.) Merr.	Improved cultivar	Zhou Dou No.12	China, He Nan
 s682	Glycine max (L.) Merr.	Improved cultivar	Yu Dou No.12	China, He Nan
@@ -708,7 +708,7 @@ s706	Glycine max (L.) Merr.	Improved cultivar	Dong Nong L13	China, Hei Long Jian
 s707	Glycine max (L.) Merr.	Improved cultivar	Ke Bei No.1	China, Hei Long Jiang
 s708	Glycine max (L.) Merr.	Improved cultivar	Hei Nong No.69	China, Hei Long Jiang
 s709	Glycine max (L.) Merr.	Improved cultivar	He Feng No.46	China, Hei Long Jiang
-s710	Glycine max (L.) Merr.	Improved cultivar	Dong Nong No.50 *	China, Hei Long Jiang
+s710	Glycine max (L.) Merr.	Improved cultivar	Dong Nong No.50	China, Hei Long Jiang
 s711	Glycine max (L.) Merr.	Improved cultivar	Long Xuan No.1	China, Hei Long Jiang
 s712	Glycine max (L.) Merr.	Improved cultivar	Hei Nong No.2	China, Hei Long Jiang
 s713	Glycine max (L.) Merr.	Improved cultivar	Ken Nong No.5	China, Hei Long Jiang
@@ -804,13 +804,13 @@ s802	Glycine max (L.) Merr.	Improved cultivar	Qi Huang No.25	China, Shan Dong
 s803	Glycine max (L.) Merr.	Improved cultivar	Gao Feng No.1	China, Shan Dong
 s804	Glycine max (L.) Merr.	Improved cultivar	Qi Huang No.33	China, Shan Dong
 s805	Glycine max (L.) Merr.	Improved cultivar	Qi Huang No.30	China, Shan Dong
-s806	Glycine max (L.) Merr.	Improved cultivar	Ju Xuan No.23 *	China, Shan Dong
+s806	Glycine max (L.) Merr.	Improved cultivar	Ju Xuan No.23	China, Shan Dong
 s807	Glycine max (L.) Merr.	Improved cultivar	Qi Huang No.31	China, Shan Dong
 s808	Glycine max (L.) Merr.	Improved cultivar	Lin Dou No.10	China, Shan Dong
 s809	Glycine max (L.) Merr.	Improved cultivar	Qi Huang No.26	China, Shan Dong
 s810	Glycine max (L.) Merr.	Improved cultivar	Lu Dou No.4 -1	China, Shan Dong
 s811	Glycine max (L.) Merr.	Improved cultivar	Jin Yi No.43	China, Shan Xi
-s812	Glycine max (L.) Merr.	Improved cultivar	Jin Dou No.23 *	China, Shan Xi
+s812	Glycine max (L.) Merr.	Improved cultivar	Jin Dou No.23	China, Shan Xi
 s813	Glycine max (L.) Merr.	Improved cultivar	Jin Dou No.34	China, Shan Xi
 s814	Glycine max (L.) Merr.	Improved cultivar	Jin Dou No.29	China, Shan Xi
 s815	Glycine max (L.) Merr.	Improved cultivar	Jin Yi No.59	China, Shan Xi
@@ -860,7 +860,7 @@ s858	Glycine max (L.) Merr.	Improved cultivar	Lincoln	United States, Illinois
 s859	Glycine max (L.) Merr.	Improved cultivar	SRF300	United States, Illinois
 s860	Glycine max (L.) Merr.	Improved cultivar	PI 548533	United States, Illinois
 s861	Glycine max (L.) Merr.	Improved cultivar	Beeson	United States, Indiana
-s862	Glycine max (L.) Merr.	Improved cultivar	Amsoy *	United States, Iowa
+s862	Glycine max (L.) Merr.	Improved cultivar	Amsoy	United States, Iowa
 s863	Glycine max (L.) Merr.	Improved cultivar	PI 548560	United States, Minnesota
 s864	Glycine max (L.) Merr.	Improved cultivar	TK780	Unknown
 s865	Glycine max (L.) Merr.	Improved cultivar	AGS292	Unknown
@@ -1189,7 +1189,7 @@ s1187	Glycine max (L.) Merr.	Landrace	PI 291278	China, Hei Long Jiang
 s1188	Glycine max (L.) Merr.	Landrace	Shang Zhi Hei Qi	China, Hei Long Jiang
 s1189	Glycine max (L.) Merr.	Landrace	Mao Dou	China, Hei Long Jiang
 s1190	Glycine max (L.) Merr.	Landrace	PI 68680-2	China, Hei Long Jiang
-s1191	Glycine max (L.) Merr.	Landrace	Zi Hua No.4 *	China, Hei Long Jiang
+s1191	Glycine max (L.) Merr.	Landrace	Zi Hua No.4	China, Hei Long Jiang
 s1192	Glycine max (L.) Merr.	Landrace	Zi Hua No.4 -2	China, Hei Long Jiang
 s1193	Glycine max (L.) Merr.	Landrace	Chi Huang Dou No.1	China, Hu Bei
 s1194	Glycine max (L.) Merr.	Landrace	PI 587716 B	China, Hu Bei
@@ -1198,7 +1198,7 @@ s1196	Glycine max (L.) Merr.	Landrace	Da Bai Mao Dou	China, Hu Bei
 s1197	Glycine max (L.) Merr.	Landrace	Hua Mei Dou	China, Hu Bei
 s1198	Glycine max (L.) Merr.	Landrace	E Dou No.2	China, Hu Bei
 s1199	Glycine max (L.) Merr.	Landrace	Tie Jia Si Li Huang -2	China, Ji Lin
-s1200	Glycine max (L.) Merr.	Landrace	Feng Di Huang *	China, Ji Lin
+s1200	Glycine max (L.) Merr.	Landrace	Feng Di Huang	China, Ji Lin
 s1201	Glycine max (L.) Merr.	Landrace	PI 92630	China, Ji Lin
 s1202	Glycine max (L.) Merr.	Landrace	Ju Te Qi Feng Huang	China, Ji Lin
 s1203	Glycine max (L.) Merr.	Landrace	PI 88353	China, Ji Lin
@@ -1212,7 +1212,7 @@ s1210	Glycine max (L.) Merr.	Landrace	PI 92619	China, Ji Lin
 s1211	Glycine max (L.) Merr.	Landrace	Za Qi Dou	China, Ji Lin
 s1212	Glycine max (L.) Merr.	Landrace	Lan Qi	China, Ji Lin
 s1213	Glycine max (L.) Merr.	Landrace	PI 54620	China, Ji Lin
-s1214	Glycine max (L.) Merr.	Landrace	Tie Jia Si Li Huang *	China, Ji Lin
+s1214	Glycine max (L.) Merr.	Landrace	Tie Jia Si Li Huang	China, Ji Lin
 s1215	Glycine max (L.) Merr.	Landrace	PI 92583	China, Ji Lin
 s1216	Glycine max (L.) Merr.	Landrace	PI 91730	China, Ji Lin
 s1217	Glycine max (L.) Merr.	Landrace	PI 532443	China, Ji Lin
@@ -1768,7 +1768,7 @@ s1766	Glycine max (L.) Merr.	Improved cultivar	Nong Da Dou No.2	China, He Bei
 s1767	Glycine max (L.) Merr.	Improved cultivar	Cang Dou No.9	China, He Bei
 s1768	Glycine max (L.) Merr.	Improved cultivar	Shi Dou No.8  -1	China, He Bei
 s1769	Glycine max (L.) Merr.	Improved cultivar	Ji Dou No.4	China, He Bei
-s1770	Glycine max (L.) Merr.	Improved cultivar	Han Dou No.5 *	China, He Bei
+s1770	Glycine max (L.) Merr.	Improved cultivar	Han Dou No.5	China, He Bei
 s1771	Glycine max (L.) Merr.	Improved cultivar	Cang Dou No.4	China, He Bei
 s1772	Glycine max (L.) Merr.	Improved cultivar	Cang Dou No.7	China, He Bei
 s1773	Glycine max (L.) Merr.	Improved cultivar	Bao Dou No.3	China, He Bei
@@ -1879,7 +1879,7 @@ s1877	Glycine max (L.) Merr.	Improved cultivar	He Feng No.45	China, Hei Long Jia
 s1878	Glycine max (L.) Merr.	Improved cultivar	He Feng No.55	China, Hei Long Jiang
 s1879	Glycine max (L.) Merr.	Improved cultivar	Dong Nong No.48	China, Hei Long Jiang
 s1880	Glycine max (L.) Merr.	Improved cultivar	He Feng No.29	China, Hei Long Jiang
-s1881	Glycine max (L.) Merr.	Improved cultivar	Hei He No.43  *	China, Hei Long Jiang
+s1881	Glycine max (L.) Merr.	Improved cultivar	Hei He No.43	China, Hei Long Jiang
 s1882	Glycine max (L.) Merr.	Improved cultivar	Dong Nong No.53	China, Hei Long Jiang
 s1883	Glycine max (L.) Merr.	Improved cultivar	Ken Feng No.23	China, Hei Long Jiang
 s1884	Glycine max (L.) Merr.	Improved cultivar	Hei Nong No.33	China, Hei Long Jiang
@@ -1908,7 +1908,7 @@ s1906	Glycine max (L.) Merr.	Improved cultivar	Ken Feng No.5	China, Hei Long Jia
 s1907	Glycine max (L.) Merr.	Improved cultivar	Hei Jian No.1	China, Hei Long Jiang
 s1908	Glycine max (L.) Merr.	Improved cultivar	Hei Nong No.35	China, Hei Long Jiang
 s1909	Glycine max (L.) Merr.	Improved cultivar	He Feng No.38	China, Hei Long Jiang
-s1910	Glycine max (L.) Merr.	Improved cultivar	Tie Feng No.18 *	China, Hei Long Jiang
+s1910	Glycine max (L.) Merr.	Improved cultivar	Tie Feng No.18	China, Hei Long Jiang
 s1911	Glycine max (L.) Merr.	Improved cultivar	Feng Shou No.12	China, Hei Long Jiang
 s1912	Glycine max (L.) Merr.	Improved cultivar	Ke Jiao 112023	China, Hei Long Jiang
 s1913	Glycine max (L.) Merr.	Improved cultivar	Sui Nong No.21	China, Hei Long Jiang
@@ -2014,7 +2014,7 @@ s2012	Glycine max (L.) Merr.	Improved cultivar	Ha 96016	China, Hei Long Jiang
 s2013	Glycine max (L.) Merr.	Improved cultivar	Ke Jiao 11-1124	China, Hei Long Jiang
 s2014	Glycine max (L.) Merr.	Improved cultivar	Feng Shou No.5	China, Hei Long Jiang
 s2015	Glycine max (L.) Merr.	Improved cultivar	Hei He No.51	China, Hei Long Jiang
-s2016	Glycine max (L.) Merr.	Improved cultivar	Ke Shan No.1 *	China, Hei Long Jiang
+s2016	Glycine max (L.) Merr.	Improved cultivar	Ke Shan No.1	China, Hei Long Jiang
 s2017	Glycine max (L.) Merr.	Improved cultivar	Hei He No.41	China, Hei Long Jiang
 s2018	Glycine max (L.) Merr.	Improved cultivar	Ken Feng No.17	China, Hei Long Jiang
 s2019	Glycine max (L.) Merr.	Improved cultivar	Hei Nong No.53	China, Hei Long Jiang
@@ -2322,7 +2322,7 @@ s2320	Glycine max (L.) Merr.	Improved cultivar	Xu Dou 9313	China, Jiang Su
 s2321	Glycine max (L.) Merr.	Improved cultivar	Xu 94166 B	China, Jiang Su
 s2322	Glycine max (L.) Merr.	Improved cultivar	Sui Ke No.9	China, Jiang Su
 s2323	Glycine max (L.) Merr.	Improved cultivar	Sui Ke No.15	China, Jiang Su
-s2324	Glycine max (L.) Merr.	Improved cultivar	Xu Dou No.1 *	China, Jiang Su
+s2324	Glycine max (L.) Merr.	Improved cultivar	Xu Dou No.1	China, Jiang Su
 s2325	Glycine max (L.) Merr.	Improved cultivar	Nan Nong No.31	China, Jiang Su
 s2326	Glycine max (L.) Merr.	Improved cultivar	Su No.73	China, Jiang Su
 s2327	Glycine max (L.) Merr.	Improved cultivar	Nan Nong 1606	China, Jiang Su
@@ -2471,7 +2471,7 @@ s2469	Glycine max (L.) Merr.	Improved cultivar	Wei Dou No.274	China, Shan Dong
 s2470	Glycine max (L.) Merr.	Improved cultivar	He Dou No.14	China, Shan Dong
 s2471	Glycine max (L.) Merr.	Improved cultivar	Shan Ning No.14	China, Shan Dong
 s2472	Glycine max (L.) Merr.	Improved cultivar	Qi Huang No.36	China, Shan Dong
-s2473	Glycine max (L.) Merr.	Improved cultivar	Qi Huang No.34 *	China, Shan Dong
+s2473	Glycine max (L.) Merr.	Improved cultivar	Qi Huang No.34	China, Shan Dong
 s2474	Glycine max (L.) Merr.	Improved cultivar	Qi Huang No.35	China, Shan Dong
 s2475	Glycine max (L.) Merr.	Improved cultivar	Ji 4103	China, Shan Dong
 s2476	Glycine max (L.) Merr.	Improved cultivar	Wei Dou No.9	China, Shan Dong

@@ -75,13 +75,57 @@ alleleFreq <- function(snpSite = c("0133024709", "1403584545", "1403584761"),
   if(length(site.allele.freq) == 0){
     NULL
   }else{
+    pie.cols <- pieCols
+    
+  if ( length(accGroup) == 1){
+    op <- par(mfrow=c(3,2),
+              oma = c(0, 0, 0, 0),
+              mar = c(0, 2, 1, 0),
+              mgp = c(0, 0, 0),
+              xpd = NA)
+    
+    for (i in 1:length(site.allele.freq)) {
+      for (j in 1:nrow(site.allele.freq[[i]])) {
+        if (i == 1) {
+          if (j == 1) {
+            pie(site.allele.freq[[i]][j, ], col=pie.cols, label=NA, radius=1) + 
+              title(acc.group[j], line = -0.5, cex.main = 2) + title(ylab = yrowname[i], line = -0.4, cex.lab = 2)
+               plot(0, type = "n", axes = F, xlab="", ylab="")
+              legend("center", legend = names(site.allele.freq[[i]][j, ]), 
+                     fill = pie.cols, border = pie.cols, bty="n", cex = 2)
+          } else if (j == length(acc.group)) {
+            pie(site.allele.freq[[i]][j, ], col=pie.cols, label=NA, radius=1) + title(acc.group[j], line = -0.5, cex.main = 2)
+            plot(0, type = "n", axes = F, xlab="", ylab="")
+            legend("center", legend = names(site.allele.freq[[i]][j, ]), 
+                   fill = pie.cols, border = pie.cols, bty="n", cex = 2)
+          } else {
+            pie(site.allele.freq[[i]][j, ], col=pie.cols, label=NA, radius=1) + title(acc.group[j], line = -0.5, cex.main = 2)
+          }
+        } else {
+          if (j == 1) {
+            pie(site.allele.freq[[i]][j, ], col=pie.cols,
+                label=NA, radius=1) + title(ylab = yrowname[i], line = -0.4, cex.lab = 2)
+            plot(0, type = "n", axes = F, xlab="", ylab="")
+            legend("center", legend = names(site.allele.freq[[i]][j, ]), 
+                   fill = pie.cols, border = pie.cols, bty="n", cex = 2)
+          } else if (j == length(acc.group)) {
+            pie(site.allele.freq[[i]][j, ], col=pie.cols, label=NA, radius=1)
+            plot(0, type = "n", axes = F, xlab="", ylab="")
+            legend("center", legend = names(site.allele.freq[[i]][j, ]), 
+                   fill = pie.cols, border = pie.cols, bty="n", cex = 2)
+          } else {
+            pie(site.allele.freq[[i]][j, ], col=pie.cols, label=NA, radius=1)
+          }
+        }
+      }
+    }
+    
+  }else{
   op <- par(mfrow=c(length(site.allele.freq), length(acc.group) + 1 ),
             oma = c(0, 0, 0, 0),
             mar = c(0, 2, 1, 0),
             mgp = c(0, 0, 0),
             xpd = NA)
-  
-  pie.cols <- pieCols
   
   for (i in 1:length(site.allele.freq)) {
     for (j in 1:nrow(site.allele.freq[[i]])) {
@@ -112,7 +156,7 @@ alleleFreq <- function(snpSite = c("0133024709", "1403584545", "1403584761"),
       }
     }
   }
-  
+  }
   par(op)
   }
 }

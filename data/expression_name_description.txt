@@ -1,0 +1,28 @@
+Sample_name	Sample_description
+cotyledon-1	cotyledons at germination stage
+cotyledon-2	old cotyledons at trefoil stage
+flo-1	flower bud at flower bud differentiation stage
+flo-2	flower bud before flowering
+flo-3	flowers at florescence stage
+flo-4	flowers  after 5 days
+flo-5	flowers at wither stage
+leaf-1	old leaves at trefoil stage
+leaf-2	old leaves at flower bud differentiation stage
+leafbud-1	new leaves at germination stage
+leafbud-2	new leaves at trefoil stage
+leafbud-3	new leaves at flower bud differentiation stage
+pod-1	three weeks only pods with seed at the beginning stage of seed development
+pod-2	four weeks only pods with seed at the beginning stage of seed development
+pod-3	five weeks only pods  at the beginning stage of seed development
+pod&seed-1	two weeks pods with seed at the beginning stage of seed development
+pod&seed-2	three weeks pods with seed at the beginning stage of seed development
+pod&seed-3	four weeks pods with seed at the beginning stage of seed development
+root	roots at germination stage
+seed-1	three weeks developing seeds
+seed-2	five weeks developing seeds
+seed-3	six weeks developing seeds
+seed-4	eight weeks developing seeds
+seed-5	ten weeks developing seeds
+shoot_meristem	leaf bud at flower bud differentiation stage
+stem	stems at germination stage
+stem-2	stems at trefoil stage
