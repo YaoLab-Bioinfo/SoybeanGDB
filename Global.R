@@ -56,7 +56,7 @@ all.soya.cho <- paste(soya.info$ID, soya.info$Species, soya.info$Category, sep="
 
 all.soya.cho <- paste0(gsub(",.+", "", all.soya.cho) , ", ", soya.info$Names, ", ", gsub(".+,", "", all.soya.cho))
 
-all.soya.cho <- c("Improved cultivar", "Landrace", "G. Soja", all.soya.cho)
+all.soya.cho <- c("Improved cultivar", "Landrace", "Glycine soja", all.soya.cho)
 
 #chrInfo <- read.table("./data/chrInfo.txt", head=T, as.is=T, sep="\t")
 #soya.tree <- read.table("./data/soya.tree.txt", head=T, as.is=T, sep="\t", row.names = 1)
@@ -95,4 +95,6 @@ footerTagList <- list(
               
   )
 )
+
 expression_name_description <- read.table("./data/expression_name_description.txt", sep = "\t", header = T)
+

@@ -1,66 +1,66 @@
 ID	Species	Category	Names	Origin
-s1	Glycine max (L.) Merr.	G. Soja	PI 458535	China
-s2	Glycine max (L.) Merr.	G. Soja	PI 407301	China
-s3	Glycine max (L.) Merr.	G. Soja	PI 458538 -2	China, Hei Long Jiang
-s4	Glycine max (L.) Merr.	G. Soja	PI 479769	China, Hei Long Jiang
-s5	Glycine max (L.) Merr.	G. Soja	PI 458536	China, Hei Long Jiang
-s6	Glycine max (L.) Merr.	G. Soja	PI 522182 B	China, Hei Long Jiang
-s7	Glycine max (L.) Merr.	G. Soja	PI 447004	China, Ji Lin
-s8	Glycine max (L.) Merr.	G. Soja	PI 479752	China, Ji Lin
-s9	Glycine max (L.) Merr.	G. Soja	PI 407288	China, Ji Lin
-s10	Glycine max (L.) Merr.	G. Soja	PI 464935	China, Jiang Su
-s11	Glycine max (L.) Merr.	G. Soja	PI 464929 B	China, Liao Ning
-s12	Glycine max (L.) Merr.	G. Soja	PI 468916	China, Liao Ning
-s13	Glycine max (L.) Merr.	G. Soja	PI 464927 A -2	China, Liao Ning
-s14	Glycine max (L.) Merr.	G. Soja	PI 464929 A -2	China, Liao Ning
-s15	Glycine max (L.) Merr.	G. Soja	PI 483460 B	China, Liao Ning
-s16	Glycine max (L.) Merr.	G. Soja	PI 483464 A	China, Ning Xia
-s17	Glycine max (L.) Merr.	G. Soja	PI 468400 A	China, Ning Xia
-s18	Glycine max (L.) Merr.	G. Soja	PI 549046	China, Shaan Xi
-s19	Glycine max (L.) Merr.	G. Soja	PI 483465	China, Shaan Xi
-s20	Glycine max (L.) Merr.	G. Soja	PI 597459 C	China, Shan Dong
-s21	Glycine max (L.) Merr.	G. Soja	PI 597461 C	China, Shan Dong
-s22	Glycine max (L.) Merr.	G. Soja	PI 597459 D	China, Shan Dong
-s23	Glycine max (L.) Merr.	G. Soja	PI 597461 A	China, Shan Dong
-s24	Glycine max (L.) Merr.	G. Soja	PI 393551	China, Tai Wan
-s25	Glycine max (L.) Merr.	G. Soja	Y108	China, Zhe Jiang
-s26	Glycine max (L.) Merr.	G. Soja	Y188	China, Zhe Jiang
-s27	Glycine max (L.) Merr.	G. Soja	Y217	China, Zhe Jiang
-s28	Glycine max (L.) Merr.	G. Soja	Y155	China, Zhe Jiang
-s29	Glycine max (L.) Merr.	G. Soja	YJ038	China, Zhe Jiang
-s30	Glycine max (L.) Merr.	G. Soja	Y2300-1	China, Zhe Jiang
-s31	Glycine max (L.) Merr.	G. Soja	YJ086	China, Zhe Jiang
-s32	Glycine max (L.) Merr.	G. Soja	Y191	China, Zhe Jiang
-s33	Glycine max (L.) Merr.	G. Soja	Y282	China, Zhe Jiang
-s34	Glycine max (L.) Merr.	G. Soja	Y314	China, Zhe Jiang
-s35	Glycine max (L.) Merr.	G. Soja	Y200	China, Zhe Jiang
-s36	Glycine max (L.) Merr.	G. Soja	PI 407131	Japan
-s37	Glycine max (L.) Merr.	G. Soja	PI 407027	Japan, Akita
-s38	Glycine max (L.) Merr.	G. Soja	PI 366120	Japan, Akita
-s39	Glycine max (L.) Merr.	G. Soja	PI 366121	Japan, Fukushima
-s40	Glycine max (L.) Merr.	G. Soja	PI 593983	Japan, Hokkaido
-s41	Glycine max (L.) Merr.	G. Soja	PI 378692	Japan, Iwate
-s42	Glycine max (L.) Merr.	G. Soja	PI 366123	Japan, Iwate
-s43	Glycine max (L.) Merr.	G. Soja	PI 507662	Japan, Kagoshima
-s44	Glycine max (L.) Merr.	G. Soja	PI 407285	Japan, Kanagawa
-s45	Glycine max (L.) Merr.	G. Soja	PI 424096	North Korea
-s46	Glycine max (L.) Merr.	G. Soja	PI 339871 A	North Korea
-s47	Glycine max (L.) Merr.	G. Soja	PI 423991	Russian Federation, Federation Amur
-s48	Glycine max (L.) Merr.	G. Soja	PI 578357	Russian Federation, Federation Amur
-s49	Glycine max (L.) Merr.	G. Soja	PI 578341	Russian Federation, Federation Khabarovsk
-s50	Glycine max (L.) Merr.	G. Soja	PI 326582 A	Russian Federation, Federation Primorye
-s51	Glycine max (L.) Merr.	G. Soja	PI 522216	Russian Federation, Federation Primorye
-s52	Glycine max (L.) Merr.	G. Soja	PI 522228	Russian Federation, Federation Primorye
-s53	Glycine max (L.) Merr.	G. Soja	PI 522226	Russian Federation, Federation Primorye
-s54	Glycine max (L.) Merr.	G. Soja	PI 504286	South Korea, Chungchong Puk
-s55	Glycine max (L.) Merr.	G. Soja	PI 562559	South Korea, Jeolla Puk
-s56	Glycine max (L.) Merr.	G. Soja	PI 562565	South Korea, Jeolla Puk
-s57	Glycine max (L.) Merr.	G. Soja	PI 407197	South Korea, Kangwon
-s58	Glycine max (L.) Merr.	G. Soja	PI 407170	South Korea, Kyonggi
-s59	Glycine max (L.) Merr.	G. Soja	PI 407275	South Korea, Kyonggi
-s60	Glycine max (L.) Merr.	G. Soja	PI 407246	South Korea, Kyongsang Puk
-s61	Glycine max (L.) Merr.	G. Soja	PI 547831	United States
-s62	Glycine max (L.) Merr.	G. Soja	ZY020	Unknown
+s1	Glycine max (L.) Merr.	Glycine soja	PI 458535	China
+s2	Glycine max (L.) Merr.	Glycine soja	PI 407301	China
+s3	Glycine max (L.) Merr.	Glycine soja	PI 458538 -2	China, Hei Long Jiang
+s4	Glycine max (L.) Merr.	Glycine soja	PI 479769	China, Hei Long Jiang
+s5	Glycine max (L.) Merr.	Glycine soja	PI 458536	China, Hei Long Jiang
+s6	Glycine max (L.) Merr.	Glycine soja	PI 522182 B	China, Hei Long Jiang
+s7	Glycine max (L.) Merr.	Glycine soja	PI 447004	China, Ji Lin
+s8	Glycine max (L.) Merr.	Glycine soja	PI 479752	China, Ji Lin
+s9	Glycine max (L.) Merr.	Glycine soja	PI 407288	China, Ji Lin
+s10	Glycine max (L.) Merr.	Glycine soja	PI 464935	China, Jiang Su
+s11	Glycine max (L.) Merr.	Glycine soja	PI 464929 B	China, Liao Ning
+s12	Glycine max (L.) Merr.	Glycine soja	PI 468916	China, Liao Ning
+s13	Glycine max (L.) Merr.	Glycine soja	PI 464927 A -2	China, Liao Ning
+s14	Glycine max (L.) Merr.	Glycine soja	PI 464929 A -2	China, Liao Ning
+s15	Glycine max (L.) Merr.	Glycine soja	PI 483460 B	China, Liao Ning
+s16	Glycine max (L.) Merr.	Glycine soja	PI 483464 A	China, Ning Xia
+s17	Glycine max (L.) Merr.	Glycine soja	PI 468400 A	China, Ning Xia
+s18	Glycine max (L.) Merr.	Glycine soja	PI 549046	China, Shaan Xi
+s19	Glycine max (L.) Merr.	Glycine soja	PI 483465	China, Shaan Xi
+s20	Glycine max (L.) Merr.	Glycine soja	PI 597459 C	China, Shan Dong
+s21	Glycine max (L.) Merr.	Glycine soja	PI 597461 C	China, Shan Dong
+s22	Glycine max (L.) Merr.	Glycine soja	PI 597459 D	China, Shan Dong
+s23	Glycine max (L.) Merr.	Glycine soja	PI 597461 A	China, Shan Dong
+s24	Glycine max (L.) Merr.	Glycine soja	PI 393551	China, Tai Wan
+s25	Glycine max (L.) Merr.	Glycine soja	Y108	China, Zhe Jiang
+s26	Glycine max (L.) Merr.	Glycine soja	Y188	China, Zhe Jiang
+s27	Glycine max (L.) Merr.	Glycine soja	Y217	China, Zhe Jiang
+s28	Glycine max (L.) Merr.	Glycine soja	Y155	China, Zhe Jiang
+s29	Glycine max (L.) Merr.	Glycine soja	YJ038	China, Zhe Jiang
+s30	Glycine max (L.) Merr.	Glycine soja	Y2300-1	China, Zhe Jiang
+s31	Glycine max (L.) Merr.	Glycine soja	YJ086	China, Zhe Jiang
+s32	Glycine max (L.) Merr.	Glycine soja	Y191	China, Zhe Jiang
+s33	Glycine max (L.) Merr.	Glycine soja	Y282	China, Zhe Jiang
+s34	Glycine max (L.) Merr.	Glycine soja	Y314	China, Zhe Jiang
+s35	Glycine max (L.) Merr.	Glycine soja	Y200	China, Zhe Jiang
+s36	Glycine max (L.) Merr.	Glycine soja	PI 407131	Japan
+s37	Glycine max (L.) Merr.	Glycine soja	PI 407027	Japan, Akita
+s38	Glycine max (L.) Merr.	Glycine soja	PI 366120	Japan, Akita
+s39	Glycine max (L.) Merr.	Glycine soja	PI 366121	Japan, Fukushima
+s40	Glycine max (L.) Merr.	Glycine soja	PI 593983	Japan, Hokkaido
+s41	Glycine max (L.) Merr.	Glycine soja	PI 378692	Japan, Iwate
+s42	Glycine max (L.) Merr.	Glycine soja	PI 366123	Japan, Iwate
+s43	Glycine max (L.) Merr.	Glycine soja	PI 507662	Japan, Kagoshima
+s44	Glycine max (L.) Merr.	Glycine soja	PI 407285	Japan, Kanagawa
+s45	Glycine max (L.) Merr.	Glycine soja	PI 424096	North Korea
+s46	Glycine max (L.) Merr.	Glycine soja	PI 339871 A	North Korea
+s47	Glycine max (L.) Merr.	Glycine soja	PI 423991	Russian Federation, Federation Amur
+s48	Glycine max (L.) Merr.	Glycine soja	PI 578357	Russian Federation, Federation Amur
+s49	Glycine max (L.) Merr.	Glycine soja	PI 578341	Russian Federation, Federation Khabarovsk
+s50	Glycine max (L.) Merr.	Glycine soja	PI 326582 A	Russian Federation, Federation Primorye
+s51	Glycine max (L.) Merr.	Glycine soja	PI 522216	Russian Federation, Federation Primorye
+s52	Glycine max (L.) Merr.	Glycine soja	PI 522228	Russian Federation, Federation Primorye
+s53	Glycine max (L.) Merr.	Glycine soja	PI 522226	Russian Federation, Federation Primorye
+s54	Glycine max (L.) Merr.	Glycine soja	PI 504286	South Korea, Chungchong Puk
+s55	Glycine max (L.) Merr.	Glycine soja	PI 562559	South Korea, Jeolla Puk
+s56	Glycine max (L.) Merr.	Glycine soja	PI 562565	South Korea, Jeolla Puk
+s57	Glycine max (L.) Merr.	Glycine soja	PI 407197	South Korea, Kangwon
+s58	Glycine max (L.) Merr.	Glycine soja	PI 407170	South Korea, Kyonggi
+s59	Glycine max (L.) Merr.	Glycine soja	PI 407275	South Korea, Kyonggi
+s60	Glycine max (L.) Merr.	Glycine soja	PI 407246	South Korea, Kyongsang Puk
+s61	Glycine max (L.) Merr.	Glycine soja	PI 547831	United States
+s62	Glycine max (L.) Merr.	Glycine soja	ZY020	Unknown
 s63	Glycine max (L.) Merr.	Landrace	PI 153262	Belgium
 s64	Glycine max (L.) Merr.	Landrace	PI 548382	Canada, Manitoba
 s65	Glycine max (L.) Merr.	Landrace	PI 587552	China
@@ -870,47 +870,47 @@ s868	Glycine max (L.) Merr.	Improved cultivar	85-140	Unknown
 s869	Glycine max (L.) Merr.	Improved cultivar	23 P-3	Unknown
 s870	Glycine max (L.) Merr.	Improved cultivar	HK-12	Unknown
 s871	Glycine max (L.) Merr.	Improved cultivar	E182	Unknown
-s872	Glycine max (L.) Merr.	G. Soja	PI 483463	China
-s873	Glycine max (L.) Merr.	G. Soja	PI 101404 B	China
-s874	Glycine max (L.) Merr.	G. Soja	PI 561355	China, Hei Long Jiang
-s875	Glycine max (L.) Merr.	G. Soja	PI 458538 -1	China, Hei Long Jiang
-s876	Glycine max (L.) Merr.	G. Soja	PI 479768	China, Hei Long Jiang
-s877	Glycine max (L.) Merr.	G. Soja	PI 464866 A	China, Hei Long Jiang
-s878	Glycine max (L.) Merr.	G. Soja	PI 464891 B	China, Ji Lin
-s879	Glycine max (L.) Merr.	G. Soja	PI 479746 B	China, Ji Lin
-s880	Glycine max (L.) Merr.	G. Soja	PI 407294	China, Ji Lin
-s881	Glycine max (L.) Merr.	G. Soja	PI 479753 C	China, Ji Lin
-s882	Glycine max (L.) Merr.	G. Soja	PI 464890 A	China, Ji Lin
-s883	Glycine max (L.) Merr.	G. Soja	PI 407290	China, Ji Lin
-s884	Glycine max (L.) Merr.	G. Soja	PI 479744	China, Ji Lin
-s885	Glycine max (L.) Merr.	G. Soja	PI 407299	China, Liao Ning
-s886	Glycine max (L.) Merr.	G. Soja	PI 464929 A -1	China, Liao Ning
-s887	Glycine max (L.) Merr.	G. Soja	PI 464926	China, Liao Ning
-s888	Glycine max (L.) Merr.	G. Soja	PI 468399 B	China, Shan Dong
-s889	Glycine max (L.) Merr.	G. Soja	PI 326581	Russian Federation
-s890	Glycine max (L.) Merr.	G. Soja	PI 81762	Russian Federation
-s891	Glycine max (L.) Merr.	G. Soja	PI 567194	Russian Federation, Federation Amur
-s892	Glycine max (L.) Merr.	G. Soja	PI 578357 -2	Russian Federation, Federation Amur
-s893	Glycine max (L.) Merr.	G. Soja	PI 507719	Russian Federation, Federation Amur
-s894	Glycine max (L.) Merr.	G. Soja	PI 578340 A	Russian Federation, Federation Khabarovsk
-s895	Glycine max (L.) Merr.	G. Soja	PI 578343	Russian Federation, Federation Khabarovsk
-s896	Glycine max (L.) Merr.	G. Soja	PI 578340 B	Russian Federation, Federation Khabarovsk
-s897	Glycine max (L.) Merr.	G. Soja	PI 507791	Russian Federation, Federation Primorye
-s898	Glycine max (L.) Merr.	G. Soja	PI 507801	Russian Federation, Federation Primorye
-s899	Glycine max (L.) Merr.	G. Soja	PI 342620 B -1	Russian Federation, Federation Primorye
-s900	Glycine max (L.) Merr.	G. Soja	PI 522231 A	Russian Federation, Federation Primorye
-s901	Glycine max (L.) Merr.	G. Soja	PI 522225 A	Russian Federation, Federation Primorye
-s902	Glycine max (L.) Merr.	G. Soja	PI 507786	Russian Federation, Federation Primorye
-s903	Glycine max (L.) Merr.	G. Soja	PI 522230 A	Russian Federation, Federation Primorye
-s904	Glycine max (L.) Merr.	G. Soja	PI 522232	Russian Federation, Federation Primorye
-s905	Glycine max (L.) Merr.	G. Soja	PI 342622 B	Russian Federation, Federation Primorye
-s906	Glycine max (L.) Merr.	G. Soja	PI 507785	Russian Federation, Federation Primorye
-s907	Glycine max (L.) Merr.	G. Soja	PI 522229	Russian Federation, Federation Primorye
-s908	Glycine max (L.) Merr.	G. Soja	PI 522234	Russian Federation, Federation Primorye
-s909	Glycine max (L.) Merr.	G. Soja	PI 507797	Russian Federation, Federation Primorye
-s910	Glycine max (L.) Merr.	G. Soja	PI 522203	Russian Federation, Federation Primorye
-s911	Glycine max (L.) Merr.	G. Soja	PI 507805	Russian Federation, Federation Primorye
-s912	Glycine max (L.) Merr.	G. Soja	PI 342620 B -2	Russian Federation, Primorye
+s872	Glycine max (L.) Merr.	Glycine soja	PI 483463	China
+s873	Glycine max (L.) Merr.	Glycine soja	PI 101404 B	China
+s874	Glycine max (L.) Merr.	Glycine soja	PI 561355	China, Hei Long Jiang
+s875	Glycine max (L.) Merr.	Glycine soja	PI 458538 -1	China, Hei Long Jiang
+s876	Glycine max (L.) Merr.	Glycine soja	PI 479768	China, Hei Long Jiang
+s877	Glycine max (L.) Merr.	Glycine soja	PI 464866 A	China, Hei Long Jiang
+s878	Glycine max (L.) Merr.	Glycine soja	PI 464891 B	China, Ji Lin
+s879	Glycine max (L.) Merr.	Glycine soja	PI 479746 B	China, Ji Lin
+s880	Glycine max (L.) Merr.	Glycine soja	PI 407294	China, Ji Lin
+s881	Glycine max (L.) Merr.	Glycine soja	PI 479753 C	China, Ji Lin
+s882	Glycine max (L.) Merr.	Glycine soja	PI 464890 A	China, Ji Lin
+s883	Glycine max (L.) Merr.	Glycine soja	PI 407290	China, Ji Lin
+s884	Glycine max (L.) Merr.	Glycine soja	PI 479744	China, Ji Lin
+s885	Glycine max (L.) Merr.	Glycine soja	PI 407299	China, Liao Ning
+s886	Glycine max (L.) Merr.	Glycine soja	PI 464929 A -1	China, Liao Ning
+s887	Glycine max (L.) Merr.	Glycine soja	PI 464926	China, Liao Ning
+s888	Glycine max (L.) Merr.	Glycine soja	PI 468399 B	China, Shan Dong
+s889	Glycine max (L.) Merr.	Glycine soja	PI 326581	Russian Federation
+s890	Glycine max (L.) Merr.	Glycine soja	PI 81762	Russian Federation
+s891	Glycine max (L.) Merr.	Glycine soja	PI 567194	Russian Federation, Federation Amur
+s892	Glycine max (L.) Merr.	Glycine soja	PI 578357 -2	Russian Federation, Federation Amur
+s893	Glycine max (L.) Merr.	Glycine soja	PI 507719	Russian Federation, Federation Amur
+s894	Glycine max (L.) Merr.	Glycine soja	PI 578340 A	Russian Federation, Federation Khabarovsk
+s895	Glycine max (L.) Merr.	Glycine soja	PI 578343	Russian Federation, Federation Khabarovsk
+s896	Glycine max (L.) Merr.	Glycine soja	PI 578340 B	Russian Federation, Federation Khabarovsk
+s897	Glycine max (L.) Merr.	Glycine soja	PI 507791	Russian Federation, Federation Primorye
+s898	Glycine max (L.) Merr.	Glycine soja	PI 507801	Russian Federation, Federation Primorye
+s899	Glycine max (L.) Merr.	Glycine soja	PI 342620 B -1	Russian Federation, Federation Primorye
+s900	Glycine max (L.) Merr.	Glycine soja	PI 522231 A	Russian Federation, Federation Primorye
+s901	Glycine max (L.) Merr.	Glycine soja	PI 522225 A	Russian Federation, Federation Primorye
+s902	Glycine max (L.) Merr.	Glycine soja	PI 507786	Russian Federation, Federation Primorye
+s903	Glycine max (L.) Merr.	Glycine soja	PI 522230 A	Russian Federation, Federation Primorye
+s904	Glycine max (L.) Merr.	Glycine soja	PI 522232	Russian Federation, Federation Primorye
+s905	Glycine max (L.) Merr.	Glycine soja	PI 342622 B	Russian Federation, Federation Primorye
+s906	Glycine max (L.) Merr.	Glycine soja	PI 507785	Russian Federation, Federation Primorye
+s907	Glycine max (L.) Merr.	Glycine soja	PI 522229	Russian Federation, Federation Primorye
+s908	Glycine max (L.) Merr.	Glycine soja	PI 522234	Russian Federation, Federation Primorye
+s909	Glycine max (L.) Merr.	Glycine soja	PI 507797	Russian Federation, Federation Primorye
+s910	Glycine max (L.) Merr.	Glycine soja	PI 522203	Russian Federation, Federation Primorye
+s911	Glycine max (L.) Merr.	Glycine soja	PI 507805	Russian Federation, Federation Primorye
+s912	Glycine max (L.) Merr.	Glycine soja	PI 342620 B -2	Russian Federation, Primorye
 s913	Glycine max (L.) Merr.	Landrace	PI 153293	Belgium
 s914	Glycine max (L.) Merr.	Landrace	PI 438364	Canada, Ontario
 s915	Glycine max (L.) Merr.	Landrace	PI 89061-2	China

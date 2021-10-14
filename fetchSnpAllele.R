@@ -80,7 +80,7 @@ fetchSnpAllele <- function(chr="chr7", start=29616705, end=29629223, accession=N
     
     accession <- gsub(",.+", "", accession)
     accession <- sapply(accession, function(x){
-      if (x %in% c("Improved cultivar", "Landrace", "G. Soja")) {
+      if (x %in% c("Improved cultivar", "Landrace", "Glycine soja")) {
         x.dat <- readLines(paste0("./data/", x, ".soya.txt"))
         return(x.dat)
       } else {

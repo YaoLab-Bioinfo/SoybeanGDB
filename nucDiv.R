@@ -3,13 +3,13 @@
 # Change to the directory of MaizeSNPDB using the setwd function of R.
 # Usage: type the next three lines in R Console without the leading #
 # source("Global.R")
-# nuc.div.plot <- nucDiv(chr="chr12", nuc.start=5609599, nuc.end=5630626, step=20, groups=c("G. Soja", "Improved cultivar"), numerator="G. Soja", denominator="Improved cultivar", mutType = NULL)
+# nuc.div.plot <- nucDiv(chr="chr12", nuc.start=5609599, nuc.end=5630626, step=20, groups=c("Glycine soja", "Improved cultivar"), numerator="Glycine soja", denominator="Improved cultivar", mutType = NULL)
 # grid.draw(grid.arrange(nuc.div.plot[[1]], nuc.div.plot[[2]], ncol=1, heights=c(2.3, 1)))
 # Then the nucleotide diversity in this region would be displayed in a plotting device.
 # For more info, please check the Diversity menu of the MaizeSNPDB database.
 
 nucDiv <- function(chr="chr12", nuc.start=5609599, nuc.end=5630626, step=20, 
-                   groups=c("G. Soja", "Improved cultivar"), numerator="G. Soja", denominator="Improved cultivar",
+                   groups=c("Glycine soja", "Improved cultivar"), numerator="Glycine soja", denominator="Improved cultivar",
                    mutType = NULL) {
   
   if ( exists("fetchSnpAllele") ){

@@ -3,12 +3,12 @@
 # Change to the directory of ECOGEMS using the setwd function of R.
 # Usage: type the next two lines in R Console without the leading #
 # source("Global.R")
-# allele.plot <- alleleFreq(snpSite = c("0133024709", "1403584545", "1403584761"), accGroup = c("Landrace", "G. Soja", "Improved cultivar"), pieCols = c("cornflowerblue", "forestgreen", "red"))
+# allele.plot <- alleleFreq(snpSite = c("0133024709", "1403584545", "1403584761"), accGroup = c("Landrace", "Glycine soja", "Improved cultivar"), pieCols = c("cornflowerblue", "forestgreen", "red"))
 # Then the result plot would be displayed in a plotting device.
 # For more info, please check the AlleleFreq menu of the ECOGEMS database.
 
 alleleFreq <- function(snpSite = c("0133024709", "1403584545", "1403584761"),
-                       accGroup = c("Improved cultivar", "Landrace", "G. Soja"),
+                       accGroup = c("Improved cultivar", "Landrace", "Glycine soja"),
                        pieCols = c("cornflowerblue", "forestgreen") ) {
   if ( exists("snpInfo") ){
   }else{
@@ -71,6 +71,20 @@ alleleFreq <- function(snpSite = c("0133024709", "1403584545", "1403584761"),
   snpSite <- snpSite[!sapply(site.allele.freq, is.null)]
   site.allele.freq[sapply(site.allele.freq, is.null)] <- NULL
   yrowname <- substr(snpSite, 1, 10)
+  
+  freqsall <- rbind(data.frame(site.allele.freq, check.names = F), rep(yrowname, each = 2))
+  freqsall <- rbind(freqsall, colnames(freqsall))
+  rownames(freqsall)[4] <- "Position"
+  rownames(freqsall)[5] <- "Nucleotide"
+  freqsall <- freqsall[c(4,5,1:3),]
+  freqsall <- data.frame(t(freqsall), row.names = NULL, stringsAsFactors = F)
+  freqsalls <- plyr::ddply(freqsall, plyr::.(Position), function(x){
+           d <- paste0(x[1,], ":", x[2,])
+        })
+  freqsalls <- freqsalls[, -2]
+  colnames(freqsalls) <- c("ID", "Allele", "Improved cultivar", "Landrace", "Glycine soja")
+  
+  freqsallwrite <<- freqsalls
   
   if(length(site.allele.freq) == 0){
     NULL

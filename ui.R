@@ -8,7 +8,7 @@ shinyUI(
       span("SoybeanGDB:", style = "font-size:40px;color:white;"), 
       span("a comprehensive genome database of soybean", style = "font-size:30px;color:white;"),
       style = "background-color:#0073B7;margin-left: -15px;margin-right: -15px;margin-top: -20px;margin-bottom: -10px;"
-    ), windowTitle = "Welcome to Soybean!"),
+    ), windowTitle = "Welcome to SoybeanGDB!"),
     
     includeCSS("www/footer.css"),
     
@@ -31,7 +31,7 @@ shinyUI(
  
     navbarPage(
       title = "",
-      windowTitle = "A comprehensive genome database of soybean",
+      windowTitle = "A comprehensive genome database of soybeanGDB",
       id = "The_page",
       #home
       tabPanel(
@@ -43,22 +43,23 @@ shinyUI(
       navbarMenu(
         title = HTML("<strong style='font-size:20px'>Genomes</strong>"),
         tabPanel(
-          title = HTML("<strong style='font-size:20px'>Search by gene ID</strong>"), icon = icon("id-card"),
+          title = HTML("<strong style='font-size:20px'>Search by gene IDs</strong>"), icon = icon("id-card"),
+          
           sidebarPanel(
-            tags$style("#searchgeneid {font-size:15px;font-family:sans-serif;}"),
             width = 3,
+            tags$style("#BDG_Paste {font-size:15px;font-family:sans-serif;}"),
             fixedRow(
               column(12,
-                     h4(HTML('<i class="fas fa-dot-circle" aria-hidden="true"></i> <font size="5" color="red"><b>Search by gene ID</b></font>'),
+                     h4(HTML('<i class="fa fa-circle" aria-hidden="true"></i> <font size="4" color="red"><b>Search by gene IDs</b></font>'),
                         bsButton("qsgsid", label="", icon=icon("question"), style="info", size="small")),
-                     bsPopover("qsgsid", "Search any one of the 29 soybean genomes by gene ID", trigger = "focus")
+                     bsPopover("qsgsid", "Search any one of the 31 soybean genomes by gene IDs", trigger = "focus")
               )
             ),
             
             tags$style(type='text/css', ".selectize-dropdown-content {max-height: 600px; }"),
-            selectInput("variety_ID", label = h4(HTML('<i class="fa fa fa-circle" aria-hidden="true"></i> <font size="4" color="red"><b>Select a genome</b></font>')), 
-                        list(`G. soja` = list("PI 562565", "PI 549046", "PI 578357", "W05"),
-                             `Improved cultivar` = list("Zhonghuang 13", "Williams 82", "Xu Dou No.1", "Tie Feng No.18", "Ju Xuan No.23", "Wan Dou No.28", "Amsoy",
+            selectInput("variety_BDG", label = h4(HTML('<i class="fa fa-play" aria-hidden="true"></i> <font size="4" color="red"><b>Select a genome</b></font>')), 
+                        list(`Glycine soja` = list("PI 483463", "PI 562565", "PI 549046", "PI 578357", "W05"),
+                             `Improved cultivar` = list("Zhonghuang 13", "Williams 82", "Lee", "Xu Dou No.1", "Tie Feng No.18", "Ju Xuan No.23", "Wan Dou No.28", "Amsoy",
                                                         "Yu Dou No.22", "Jin Dou No.23", "Qi Huang No.34", "Han Dou No.5", "PI 548362",
                                                         "Ji Dou No.17", "Dong Nong No.50", "Hei He No.43", "Ke Shan No.1"),
                              `Landrace` = list("Zhutwinning2", "Zi Hua No.4", "Tong Shan Tian E Dan", "58-161", "PI 398296",
@@ -66,11 +67,15 @@ shinyUI(
                         selected = "Zhonghuang 13"
             ),
             
-            textInput("searchgeneid", label = h4(HTML('<i class="fa fa fa-circle" aria-hidden="true"></i> <font size="4" color="red"><b>Input Gene ID</b></font>')),
-                      value = "SoyZH13_02G148200"),
+            textAreaInput("BDG_Paste", label = h4(HTML('<i class="fa fa-play" aria-hidden="true"></i> <font size="4" color="red"><b>Input a list of gene model names</b></font>')),
+                          value = "SoyZH13_03G069002\nSoyZH13_03G069001\nSoyZH13_03G069100\nSoyZH13_01G071100", resize = "vertical", height='200px', width = '200%',
+                          placeholder = "The Gene ID must in the database"),
             
-            shinysky::actionButton("submit_GSID", strong("Submit!"), styleclass = "success"),
-            
+            shinysky::actionButton("submit_GSID", strong("Submit!", 
+                                                         bsButton("qsgsid1", label="", icon=icon("question"), style="info", size="small")
+            ), styleclass = "success"),
+            bsPopover("qsgsid1", "Whenever the Gene ID is updated, please click Submit!",
+                      trigger = "focus"),
             shinysky::actionButton("clearSERID", strong("Reset"), styleclass = "warning"),
             shinysky::actionButton("SERExamID", strong("Load example"), styleclass = "info"),
             conditionalPanel(condition="input.submit_GSID != '0'", shinysky::busyIndicator(HTML("<div style='color:red;font-size:30px'>Calculation In progress...</div>"), wait = 0))
@@ -79,112 +84,116 @@ shinyUI(
           mainPanel(
             width = 9,
             fluidRow(
-              column(3, uiOutput("downloadgenesid01")),
-              column(3, uiOutput("downloadgenesid02")), 
-              column(3, uiOutput("downloadgenesid03")),
-              column(3, uiOutput("downloadgenesid04"))
-              #column(3, downloadButton("genesequence_ID.txt", "Download Gene Sequence", style = "width:100%;", class = "buttDown")),
-              #column(3, downloadButton("cdssequence_ID.txt", "Download CDS Sequence", style = "width:100%;", class = "buttDown")),
-              #column(3, downloadButton("cdnasequence_ID.txt", "Download cDNA Sequence", style = "width:100%;", class = "buttDown")),
-              #column(3, downloadButton("prosequence_ID.txt", "Download Protein Sequence", style = "width:100%;", class = "buttDown")),
-              #tags$style(".buttDown{background-color:black; color: white; font-size: 16px;}")
+              column(3, uiOutput("downloadBDG01")),
+              column(3, uiOutput("downloadBDG02")), 
+              column(3, uiOutput("downloadBDG03")),
+              column(3, uiOutput("downloadBDG04"))
+            ),
+            
+            htmlOutput("geneinfoid_title"),
+            column(12, DT::dataTableOutput("geneinfoid")),
+            tags$head(tags$style("#geneinfoid_title{color: red;
+                                       font-style: bold;
+                                       font-size: 18px;
+                                       font-family:Times New Roman;
+                                      }"
+            ),
+            tags$style("#geneinfoid{
+                     width = 100%;
+                     max-height: 300px;
+            }")
             ),
             
             htmlOutput("geneticIDstructure_title"),
             uiOutput("geneticIDstructureif"),
-            #plotOutput("geneticIDstructure", width = "100%", height = "100px", click = "plot_click"),
+            #plotOutput("geneticIDstructure", width = "100%", height = "100px"),
+            
             tags$head(tags$style("#geneticIDstructure_title{color: red;
                                        font-style: bold;
                                        font-size: 18px;
                                        font-family:Times New Roman;
-                                       width = 100%;
                                       }"
-            ),
-            tags$style("#geneticIDstructureif{
-                     width = 100%;
-                     
-          }")
-            ),
+            )),
             
-            htmlOutput("seq_title"),
-            verbatimTextOutput("seq"),
-            tags$head(tags$style("#seq_title{color: red;
-                                       font-size: 18px;
-                                       font-style: bold;
-                                       font-family:Times New Roman;
-                                      }"
-            ),
-            tags$style("#seq{
-                     max-width = 100%;
-                     white-space: pre-wrap;
-                     max-height: 300px;
-          }")
-            ),
-            
-            htmlOutput("cds_title"),
-            verbatimTextOutput("cds"),
-            tags$head(tags$style("#cds_title{color: red;
+            htmlOutput("gene_title_id"),
+            verbatimTextOutput("gene_id"),
+            tags$head(tags$style("#gene_title_id{color: red;
                                        font-style: bold;
                                        font-size: 18px;
                                        font-family:Times New Roman;
                                       }"
             ),
-            tags$style("#cds{
+            tags$style("#gene_id{
                      width = 100%;
                      max-height: 300px;
                      white-space: pre-wrap;
-                     
-          }")
+            }")
             ),
             
-            htmlOutput("cdna_title"),
-            verbatimTextOutput("cdna"),
-            tags$head(tags$style("#cdna_title{color: red;
+            htmlOutput("cds_title_id"),
+            verbatimTextOutput("cds_id"),
+            tags$head(tags$style("#cds_title_id{color: red;
                                        font-style: bold;
                                        font-size: 18px;
                                        font-family:Times New Roman;
                                       }"
             ),
-            tags$style("#cdna{
+            tags$style("#cds_id{
+                     width = 100%;
+                     max-height: 300px;
+                     white-space: pre-wrap;
+            }")
+            ),
+            
+            htmlOutput("cdna_title_id"),
+            verbatimTextOutput("cdna_id"),
+            tags$head(tags$style("#cdna_title_id{color: red;
+                                       font-style: bold;
+                                       font-size: 18px;
+                                       font-family:Times New Roman;
+                                      }"
+            ),
+            tags$style("#cdna_id{
                      width = 100%;
                      max-height: 300px;
                      white-space: pre-wrap;
                      
-          }")
+            }")
             ),
             
-            htmlOutput("pro_title"),
-            shiny::verbatimTextOutput("pro"),
-            tags$head(tags$style("#pro_title{color: red;
+            htmlOutput("pro_title_id"),
+            shiny::verbatimTextOutput("pro_id"),
+            tags$head(tags$style("#pro_title_id{color: red;
                                        font-style: bold;
                                        font-size: 18px;
                                        font-family:Times New Roman;
                                       }"
             ),
-            tags$style("#pro{
+            tags$style("#pro_id{
                      width = 100%;
                      max-height: 300px;
                      white-space: pre-wrap;
                      
                      
-          }")
+            }")
             ),
             
-            htmlOutput("gffinfotitle"),
-            DT::dataTableOutput("gffinfo"),
-            br(), br(),
-            tags$head(tags$style("#gffinfotitle{color: red;
+            htmlOutput("gffinfotitle_id"),
+            column(12,
+                   DT::dataTableOutput("gffinfo_id")),
+            tags$head(tags$style("#gffinfotitle_id{color: red;
                                        font-style: bold;
                                        font-size: 18px;
                                        font-family:Times New Roman;
                                       }"
             ),
-            tags$style("#gffinfo{
+            tags$style("#gffinfo_id{
                      width = 100%;
                      max-height: 300px;
-          }")
+            }")
             ),
-            uiOutput("zhanwei1")
+            column(12, br() ),
+            uiOutput("zhanwei3")
           )
         ),
         
@@ -196,16 +205,16 @@ shinyUI(
             tags$style("#geneinterval {font-size:15px;font-family:sans-serif;}"),
             fixedRow(
               column(12,
-                     h4(HTML('<i class="fas fa-dot-circle" aria-hidden="true"></i> <font size="5" color="red"><b>Search by genome location</b></font>'),
+                     h4(HTML('<i class="fa fa-circle" aria-hidden="true"></i> <font size="4" color="red"><b>Search by genome location</b></font>'),
                         bsButton("qsgsit", label="", icon=icon("question"), style="info", size="small")),
-                     bsPopover("qsgsit", "Search any one of the 29 soybean genomes by genome location", trigger = "focus")
+                     bsPopover("qsgsit", "Search any one of the 31 soybean genomes by genome location", trigger = "focus")
               )
             ),
             
             tags$style(type='text/css', ".selectize-dropdown-content {max-height: 600px; }"),
-            selectInput("variety_IT", label = h4(HTML('<i class="fa fa fa-circle" aria-hidden="true"></i> <font size="4" color="red"><b>Select a genome</b></font>')), 
-                        list(`G. soja` = list("PI 562565", "PI 549046", "PI 578357", "W05"),
-                             `Improved cultivar` = list("Zhonghuang 13", "Williams 82", "Xu Dou No.1", "Tie Feng No.18", "Ju Xuan No.23", "Wan Dou No.28", "Amsoy",
+            selectInput("variety_IT", label = h4(HTML('<i class="fa fa-play" aria-hidden="true"></i> <font size="4" color="red"><b>Select a genome</b></font>')), 
+                        list(`Glycine soja` = list("PI 483463", "PI 562565", "PI 549046", "PI 578357", "W05"),
+                             `Improved cultivar` = list("Zhonghuang 13", "Williams 82", "Lee", "Xu Dou No.1", "Tie Feng No.18", "Ju Xuan No.23", "Wan Dou No.28", "Amsoy",
                                                         "Yu Dou No.22", "Jin Dou No.23", "Qi Huang No.34", "Han Dou No.5", "PI 548362",
                                                         "Ji Dou No.17", "Dong Nong No.50", "Hei He No.43", "Ke Shan No.1"),
                              `Landrace` = list("Zhutwinning2", "Zi Hua No.4", "Tong Shan Tian E Dan", "58-161", "PI 398296",
@@ -213,15 +222,18 @@ shinyUI(
                         selected = "Zhonghuang 13"
             ),
             
-            textInput("geneinterval", label = h4(HTML('<i class="fa fa fa-circle" aria-hidden="true"></i> <font size="4" color="red"><b>Genomic region</b></font>')),
+            textInput("geneinterval", label = h4(HTML('<i class="fa fa-play" aria-hidden="true"></i> <font size="4" color="red"><b>Input a genomic region</b></font>')),
                       value = "chr1:20260371-20686979"),
             
-            shinysky::actionButton("submit_GSIT", strong("Submit!"), styleclass = "success"),
+            shinysky::actionButton("submit_GSIT", strong("Submit!", 
+                                                         bsButton("qsgsit1", label="", icon=icon("question"), style="info", size="small")
+            ), styleclass = "success"),
             
+            bsPopover("qsgsit1", "Whenever the  genome location is updated, please click Submit!",
+                      trigger = "focus"),
             shinysky::actionButton("clearSERIT", strong("Reset"), styleclass = "warning"),
             shinysky::actionButton("SERExamIT", strong("Load example"), styleclass = "info"),
             conditionalPanel(condition="input.submit_GSIT != '0'", shinysky::busyIndicator(HTML("<div style='color:red;font-size:30px'>Calculation In progress...</div>"), wait = 0))
-            
           ),
           
           mainPanel(
@@ -249,7 +261,7 @@ shinyUI(
             tags$style("#geneinfo{
                      width = 100%;
                      max-height: 300px;
-          }")
+            }")
             ),
             
             htmlOutput("geneticITstructure_title"),
@@ -261,8 +273,7 @@ shinyUI(
                                        font-size: 18px;
                                        font-family:Times New Roman;
                                       }"
-            )
-            ),
+            )),
             
             htmlOutput("gene_title_it"),
             verbatimTextOutput("gene_it"),
@@ -276,7 +287,7 @@ shinyUI(
                      width = 100%;
                      max-height: 300px;
                      white-space: pre-wrap;
-          }")
+            }")
             ),
             
             htmlOutput("cds_title_it"),
@@ -292,7 +303,7 @@ shinyUI(
                      max-height: 300px;
                      white-space: pre-wrap;
                      
-          }")
+            }")
             ),
             
             htmlOutput("cdna_title_it"),
@@ -308,7 +319,7 @@ shinyUI(
                      max-height: 300px;
                      white-space: pre-wrap;
                      
-          }")
+            }")
             ),
             
             htmlOutput("pro_title_it"),
@@ -325,7 +336,7 @@ shinyUI(
                      white-space: pre-wrap;
                      
                      
-          }")
+            }")
             ),
             
             htmlOutput("gffinfotitle_it"),
@@ -340,12 +351,12 @@ shinyUI(
             tags$style("#gffinfo_it{
                      width = 100%;
                      max-height: 300px;
-          }")
+            }")
             ),
             
             htmlOutput("repeatmasker_title_it"),
             column(12, DT::dataTableOutput("repeatmasker")),
-            br(), br(),
+            column(12, br()),
             tags$head(tags$style("#repeatmasker_title_it{color: red;
                                        font-style: bold;
                                        font-size: 18px;
@@ -355,29 +366,26 @@ shinyUI(
             tags$style("#repeatmasker{
                      width = 100%;
                      max-height: 300px;
-          }")
+            }")
             ),
             uiOutput("zhanwei2")
           )
         ),
         
         tabPanel(
-          title = HTML("<strong style='font-size:20px'>Bulk search by gene IDs</strong>"), icon = icon("file-download"),
-          
+          title = HTML("<strong style='font-size:20px'>Genomic distribution of genes</strong>"),icon = icon("location-arrow"),
           sidebarPanel(
             width = 3,
-            tags$style("#BDG_Paste {font-size:15px;font-family:sans-serif;}"),
-            fixedRow(
-              column(12,
-                     h4(HTML('<i class="fas fa-dot-circle" aria-hidden="true"></i> <font size="5" color="red"><b>Bulk search by gene IDs</b></font>'),
-                        bsButton("qsbdg", label="", icon=icon("question"), style="info", size="small")),
-                     bsPopover("qsbdg", "Search any one of the 29 soybean genomes by multiple gene IDs", trigger = "focus")
-              )
-            ),
+            tags$style("#GL_Paste {font-size:15px;font-family:sans-serif;}"),
+            h4(HTML('<i class="fa fa-circle" aria-hidden="true"></i> <font size="4" color="red"><b>Genomic distribution of genes</b></font>'),
+               bsButton("qGL0", label="", icon=icon("question"), style="info", size="small")),
+            bsPopover("qGL0", "Visualize genomic distribution of genes", trigger = "focus"),
+            
             tags$style(type='text/css', ".selectize-dropdown-content {max-height: 600px; }"),
-            selectInput("variety_BDG", label = h4(HTML('<i class="fa fa fa-circle" aria-hidden="true"></i> <font size="4" color="red"><b>Select a genome</b></font>')), 
-                        list(`G. soja` = list("PI 562565", "PI 549046", "PI 578357", "W05"),
-                             `Improved cultivar` = list("Zhonghuang 13", "Williams 82", "Xu Dou No.1", "Tie Feng No.18", "Ju Xuan No.23", "Wan Dou No.28", "Amsoy",
+            
+            selectInput("variety_GL", label = h4(HTML('<i class="fa fa-play" aria-hidden="true"></i> <font size="4" color="red"><b>Select a genome</b></font>')), 
+                        list(`Glycine soja` = list("PI 483463", "PI 562565", "PI 549046", "PI 578357", "W05"),
+                             `Improved cultivar` = list("Zhonghuang 13", "Williams 82", "Lee", "Xu Dou No.1", "Tie Feng No.18", "Ju Xuan No.23", "Wan Dou No.28", "Amsoy",
                                                         "Yu Dou No.22", "Jin Dou No.23", "Qi Huang No.34", "Han Dou No.5", "PI 548362",
                                                         "Ji Dou No.17", "Dong Nong No.50", "Hei He No.43", "Ke Shan No.1"),
                              `Landrace` = list("Zhutwinning2", "Zi Hua No.4", "Tong Shan Tian E Dan", "58-161", "PI 398296",
@@ -385,46 +393,433 @@ shinyUI(
                         selected = "Zhonghuang 13"
             ),
             
-            textAreaInput("BDG_Paste", label = HTML('<i class="fa fa-play" aria-hidden="true"></i> <font size="4" color="red">Input a list of gene model names</font>'),
-                          value = "SoyZH13_03G069002\nSoyZH13_03G069001\nSoyZH13_03G069100\nSoyZH13_01G071100", resize = "vertical", height='200px', width = '200%',
+            textAreaInput("GL_Paste", label = h4(HTML('<i class="fa fa-play" aria-hidden="true"></i> <font size="4" color="red"><b>Input a list of gene model names</b></font>')),
+                          value = "SoyZH13_20G124201\nSoyZH13_14G131103\nSoyZH13_10G049500\nSoyZH13_01G054202\nSoyZH13_13G043301\nSoyZH13_10G214500\nSoyZH13_05G061800\nSoyZH13_11G118400\nSoyZH13_02G038800\nSoyZH13_16G155300\nSoyZH13_13G319400\nSoyZH13_19G153500\nSoyZH13_20G135100\nSoyZH13_18G142622\nSoyZH13_12G186900\nSoyZH13_11G123500\nSoyZH13_18G024500\nSoyZH13_20G078300\nSoyZH13_02G231900\nSoyZH13_03G179600",
+                          resize = "vertical", height='200px', width = '200%',
                           placeholder = "The Gene ID must in the database"),
             
-            shinysky::actionButton("submit_BDG", strong("Submit!"), styleclass = "success"),
-            shinysky::actionButton("clearBDG", strong("Reset"), styleclass = "warning"),
-            shinysky::actionButton("BDGExam", strong("Load example"), styleclass = "info"),
-            conditionalPanel(condition="input.submit_BDG != '0'", shinysky::busyIndicator(HTML("<div style='color:red;font-size:30px'>Calculation In progress...</div>"), wait = 0))
             
+            shinysky::actionButton("GL_sbumit", strong("submit!",
+                                                       bsButton("qGL3", label="", icon=icon("question"), style="info", size="small")
+            ), styleclass = "success"),
+            shinysky::actionButton("cleargl", strong("Reset"), styleclass = "warning"),
+            shinysky::actionButton("glExam", strong("Load example"), styleclass = "info"),
+            conditionalPanel(condition="ORT_sbumit != '0'", shinysky::busyIndicator(HTML("<div style='color:red;font-size:30px'>Calculation In progress...</div>"), wait = 0)),
+            bsPopover("qGL3", "Whenever the list of Gene IDs is updated, please click Submit!",
+                      trigger = "focus"),
+            br(),
+            numericInput("genelocheight", h4(HTML('<i class="fa fa-play" aria-hidden="true"></i> <font size="4" color="red"><b>Plot height</b></font>')), value = 1000),
+            numericInput("genelocwidth", h4(HTML('<i class="fa fa-play" aria-hidden="true"></i> <font size="4" color="red"><b>Plot width</b></font>')), value = 1000)
           ),
+          
           mainPanel(
             width = 9,
             br(),
-            fluidRow(
-              column(3, uiOutput("downloadBDG01")),
-              column(3, uiOutput("downloadBDG02")), 
-              column(3, uiOutput("downloadBDG03")),
-              column(3, uiOutput("downloadBDG04"))
-            ),
+            column(6, uiOutput("downloadgeneloc1")), 
+            column(6, uiOutput("downloadgeneloc2")),
+            #downloadButton("downloadSL.pdf", "Download pdf-file"),
+            #downloadButton("downloadGL.svg", "Download svg-file"),
+            uiOutput("genelocplotif"),
+            #plotOutput("GLplot", height = "800px", width = "100%"),
             br(),
+            br(),
+            br()
+          )
+        ),
+        
+        tabPanel(
+          title = HTML("<strong style='font-size:20px'>Transcription factors</strong>"),icon = icon("house-user"),
+          sidebarPanel(
+            tags$head(tags$script(HTML('Shiny.addCustomMessageHandler("jsCode",function(message) {eval(message.value);});')),
+                      tags$style(
+                        HTML(
+                          "
+                        .multicol{
+                        -webkit-column-count: 5; /* Chrome, Safari, Opera */
+                        -moz-column-count: 5;    /* Firefox */
+                        column-count: 5;
+                        column-gap: 40px;
+          
+                        }
+                        "
+                        ) #/ HTML
+                      ) #/ style
+            ), #/ head
             
-            htmlOutput("gffinfotitle_BDG"),
-            DT::dataTableOutput("gffinfo_BDG"),
-            br(), br(),
-            tags$head(tags$style("#gffinfotitle_BDG{color: red;
+            width = 3,
+            
+            h4(HTML('<i class="fa fa-circle" aria-hidden="true"></i> <font size="4" color="red"><b>Transcription factors</b></font>'),
+               bsButton("qtrf0", label="", icon=icon("question"), style="info", size="small")),
+            bsPopover("qtrf0", "Genome-wide Prediction and Classification of Soybean Transcription Factors (TF) and Transcriptional Regulators (TR)", trigger = "focus"),
+            
+            tags$style(type='text/css', ".selectize-dropdown-content {max-height: 600px; }"),
+            
+            selectInput("variety_trf", label = h4(HTML('<i class="fa fa-play" aria-hidden="true"></i> <font size="4" color="red"><b>Select a genome</b></font>')), 
+                        list(`Glycine soja` = list("PI 483463", "PI 562565", "PI 549046", "PI 578357", "W05"),
+                             `Improved cultivar` = list("Zhonghuang 13", "Williams 82", "Lee", "Xu Dou No.1", "Tie Feng No.18", "Ju Xuan No.23", "Wan Dou No.28", "Amsoy",
+                                                        "Yu Dou No.22", "Jin Dou No.23", "Qi Huang No.34", "Han Dou No.5", "PI 548362",
+                                                        "Ji Dou No.17", "Dong Nong No.50", "Hei He No.43", "Ke Shan No.1"),
+                             `Landrace` = list("Zhutwinning2", "Zi Hua No.4", "Tong Shan Tian E Dan", "58-161", "PI 398296",
+                                               "Zhang Chun Man Cang Jin", "Feng Di Huang", "Tie Jia Si Li Huang", "Shi Sheng Chang Ye")),
+                        selected = "Zhonghuang 13"
+            ),
+            conditionalPanel(condition="ORT_sbumit != '0'", shinysky::busyIndicator(HTML("<div style='color:red;font-size:30px'>Calculation In progress...</div>"), wait = 0))
+          ),
+          
+          mainPanel(
+            width = 9,
+            column(12,htmlOutput("trfaccessions_title")),
+            column(12,uiOutput("trfaccessions")),
+            tags$head(tags$style("#trfaccessions_title{color: red;
+                                       font-style: bold;
+                                       font-size: 18px;
+                                       font-family:Times New Roman;
+                                      }"
+            )),
+            column(12,br()),
+            column(12,htmlOutput("trftitle_BDG")),
+            column(12,DT::dataTableOutput("trf_BDG")),
+            tags$head(tags$style("#trftitle_BDG{color: red;
                                        font-style: bold;
                                        font-size: 18px;
                                        font-family:Times New Roman;
                                       }"
             ),
-            tags$style("#gffinfo_BDG{
+            tags$style("#trf_BDG{
                      width = 100%;
                      max-height: 300px;
-          }")
+            }")
             ),
-            uiOutput("zhanwei3")
+            htmlOutput("description_title_trf"),
+            verbatimTextOutput("description_trf"),
+            tags$head(tags$style("#description_title_trf{color: red;
+                                       font-style: bold;
+                                       font-size: 18px;
+                                       font-family:Times New Roman;
+                                      }"
+            ),
+            tags$style("#description_trf{
+                     width = 100%;
+                     max-height: 300px;
+                     white-space: pre-wrap;
+                     
+            }")
+            ),
+            
+            htmlOutput("gene_title_trf"),
+            verbatimTextOutput("gene_trf"),
+            tags$head(tags$style("#gene_title_trf{color: red;
+                                       font-style: bold;
+                                       font-size: 18px;
+                                       font-family:Times New Roman;
+                                      }"
+            ),
+            tags$style("#gene_trf{
+                     width = 100%;
+                     max-height: 300px;
+                     white-space: pre-wrap;
+                     
+            }")
+            ),
+            
+            htmlOutput("cds_title_trf"),
+            verbatimTextOutput("cds_trf"),
+            tags$head(tags$style("#cds_title_trf{color: red;
+                                       font-style: bold;
+                                       font-size: 18px;
+                                       font-family:Times New Roman;
+                                      }"
+            ),
+            tags$style("#cds_trf{
+                     width = 100%;
+                     max-height: 300px;
+                     white-space: pre-wrap;
+                     
+            }")
+            ),
+            
+            htmlOutput("cdna_title_trf"),
+            verbatimTextOutput("cdna_trf"),
+            tags$head(tags$style("#cdna_title_trf{color: red;
+                                       font-style: bold;
+                                       font-size: 18px;
+                                       font-family:Times New Roman;
+                                      }"
+            ),
+            tags$style("#cdna_trf{
+                     width = 100%;
+                     max-height: 300px;
+                     white-space: pre-wrap;
+                     
+            }")
+            ),
+            
+            htmlOutput("pro_title_trf"),
+            shiny::verbatimTextOutput("pro_trf"),
+            tags$head(tags$style("#pro_title_trf{color: red;
+                                       font-style: bold;
+                                       font-size: 18px;
+                                       font-family:Times New Roman;
+                                      }"
+            ),
+            tags$style("#pro_trf{
+                     width = 100%;
+                     max-height: 300px;
+                     white-space: pre-wrap;
+                     
+                     
+            }")
+            ),
+            
+            htmlOutput("gffinfotitle_trf"),
+            column(12,
+                   DT::dataTableOutput("gffinfo_trf")),
+            tags$head(tags$style("#gffinfotitle_trf{color: red;
+                                       font-style: bold;
+                                       font-size: 18px;
+                                       font-family:Times New Roman;
+                                      }"
+            ),
+            tags$style("#gffinfo_trf{
+                     width = 100%;
+                     max-height: 300px;
+            }")
+            ),
+            column(12,br()),
+            column(12,br())
+          )
+        ),
+        
+        #Genome synteny
+        tabPanel(
+          title = HTML("<strong style='font-size:20px'>Genome synteny</strong>"),icon = icon("bezier-curve"),
+          sidebarPanel(
+            width = 3,
+            h4(HTML('<i class="fa fa-circle" aria-hidden="true"></i> <font size="4" color="red"><b>Genome synteny</b></font>'),
+               bsButton("qgsy0", label="", icon=icon("question"), style="info", size="small")),
+            bsPopover("qgsy0", "Browse syntenic chromosome regions between different soybean genomes.", trigger = "focus"),
+            
+            tags$style(type='text/css', ".selectize-dropdown-content {max-height: 600px; }"),
+            selectInput("variety_gsy1", label = h4(HTML('<i class="fa fa-play" aria-hidden="true"></i> <font size="4" color="red"><b>Choose a reference genome</b></font>')), 
+                        c("Zhonghuang 13", "Williams 82"),
+                        selected = "Zhonghuang 13"
+            ),
+            
+            conditionalPanel(condition="input.variety_gsy1 == 'Zhonghuang 13'", 
+                             selectInput("variety_gsy21", label = h4(HTML('<i class="fa fa-play" aria-hidden="true"></i> <font size="4" color="red"><b>Choose a genome to query</b></font>')), 
+                                         list(`Glycine soja` = list("PI 483463", "PI 562565", "PI 549046", "PI 578357", "W05"),
+                                              `Improved cultivar` = list("Williams 82", "Lee", "Xu Dou No.1", "Tie Feng No.18", "Ju Xuan No.23", "Wan Dou No.28", "Amsoy",
+                                                                         "Yu Dou No.22", "Jin Dou No.23", "Qi Huang No.34", "Han Dou No.5", "PI 548362",
+                                                                         "Ji Dou No.17", "Dong Nong No.50", "Hei He No.43", "Ke Shan No.1"),
+                                              `Landrace` = list("Zhutwinning2", "Zi Hua No.4", "Tong Shan Tian E Dan", "58-161", "PI 398296",
+                                                                "Zhang Chun Man Cang Jin", "Feng Di Huang", "Tie Jia Si Li Huang", "Shi Sheng Chang Ye")),
+                                         selected = "W05"
+                             )
+            ),
+            conditionalPanel(condition="input.variety_gsy1 == 'Williams 82'", 
+                             selectInput("variety_gsy22", label = h4(HTML('<i class="fa fa-play" aria-hidden="true"></i> <font size="4" color="red"><b>Choose a genome to query</b></font>')), 
+                                         list(`Glycine soja` = list("PI 483463", "PI 562565", "PI 549046", "PI 578357", "W05"),
+                                              `Improved cultivar` = list("Zhonghuang 13","Lee", "Xu Dou No.1", "Tie Feng No.18", "Ju Xuan No.23", "Wan Dou No.28", "Amsoy",
+                                                                         "Yu Dou No.22", "Jin Dou No.23", "Qi Huang No.34", "Han Dou No.5", "PI 548362",
+                                                                         "Ji Dou No.17", "Dong Nong No.50", "Hei He No.43", "Ke Shan No.1"),
+                                              `Landrace` = list("Zhutwinning2", "Zi Hua No.4", "Tong Shan Tian E Dan", "58-161", "PI 398296",
+                                                                "Zhang Chun Man Cang Jin", "Feng Di Huang", "Tie Jia Si Li Huang", "Shi Sheng Chang Ye")),
+                                         selected = "W05"
+                             )
+                             
+            ),
+            
+            selectInput("variety_gsy3", label = h4(HTML('<i class="fa fa-play" aria-hidden="true"></i> <font size="4" color="red"><b>Choose a chromosome</b></font>')), 
+                        c(paste0("chr", 1:20)),
+                        selected = "chr1"
+            ),
+            
+            conditionalPanel(condition="submit_gsy != '0'", shinysky::busyIndicator(HTML("<div style='color:red;font-size:30px'>Calculation In progress...</div>"), wait = 0)),
+            shinysky::actionButton("submit_gsy", strong("Submit!"), styleclass = "success")
+          ),
+          
+          mainPanel(
+            width = 9,
+            uiOutput("zhanwei5"),
+            column(12,htmlOutput("gsy_BDG_title")),
+            column(12,DT::dataTableOutput("gsy_BDG")),
+            tags$head(tags$style("#trfaccessions_title{color: red;
+                                       font-style: bold;
+                                       font-size: 18px;
+                                       font-family:Times New Roman;
+                                      }"
+            )),
+            column(12,htmlOutput("genomedata1_title")),
+            column(12,DT::dataTableOutput("genomedata1")),
+            tags$head(tags$style("#trfaccessions_title{color: red;
+                                       font-style: bold;
+                                       font-size: 18px;
+                                       font-family:Times New Roman;
+                                      }"
+            )),
+            column(12,htmlOutput("genomedata2_title")),
+            column(12,DT::dataTableOutput("genomedata2")),
+            
+            column(12,br()),
+            column(12,br())
+          )
+        ),
+        
+        #Structural variations
+        tabPanel(
+          title = HTML("<strong style='font-size:20px'>Structural variations</strong>"), icon = icon("sliders-h"),
+          
+          sidebarPanel(
+            width = 3,
+            h4(HTML('<i class="fa fa-circle" aria-hidden="true"></i> <font size="4" color="red"><b>Structural variations</b></font>'),
+               bsButton("qgsv0", label="", icon=icon("question"), style="info", size="small")),
+            bsPopover("qgsv0", "Browse structural variations identified between different soybean genomes.", trigger = "focus"),
+            
+            tags$style(type='text/css', ".selectize-dropdown-content {max-height: 600px; }"),
+            selectInput("variety_gsv1", label = h4(HTML('<i class="fa fa-play" aria-hidden="true"></i> <font size="4" color="red"><b>Choose a reference genome</b></font>')), 
+                        c("Zhonghuang 13", "Williams 82"),
+                        selected = "Zhonghuang 13"
+            ),
+            
+            conditionalPanel(condition="input.variety_gsv1 == 'Zhonghuang 13'", 
+                             selectInput("variety_gsv21", label = h4(HTML('<i class="fa fa-play" aria-hidden="true"></i> <font size="4" color="red"><b>Choose a genome to query</b></font>')), 
+                                         list(`Glycine soja` = list("PI 483463", "PI 562565", "PI 549046", "PI 578357", "W05"),
+                                              `Improved cultivar` = list("Williams 82", "Lee", "Xu Dou No.1", "Tie Feng No.18", "Ju Xuan No.23", "Wan Dou No.28", "Amsoy",
+                                                                         "Yu Dou No.22", "Jin Dou No.23", "Qi Huang No.34", "Han Dou No.5", "PI 548362",
+                                                                         "Ji Dou No.17", "Dong Nong No.50", "Hei He No.43", "Ke Shan No.1"),
+                                              `Landrace` = list("Zhutwinning2", "Zi Hua No.4", "Tong Shan Tian E Dan", "58-161", "PI 398296",
+                                                                "Zhang Chun Man Cang Jin", "Feng Di Huang", "Tie Jia Si Li Huang", "Shi Sheng Chang Ye")),
+                                         selected = "W05"
+                             ),
+            ),
+            conditionalPanel(condition="input.variety_gsv1 == 'Williams 82'", 
+                             selectInput("variety_gsv22", label = h4(HTML('<i class="fa fa-play" aria-hidden="true"></i> <font size="4" color="red"><b>Choose a genome to query</b></font>')), 
+                                         list(`Glycine soja` = list("PI 483463", "PI 562565", "PI 549046", "PI 578357", "W05"),
+                                              `Improved cultivar` = list("Zhonghuang 13","Lee", "Xu Dou No.1", "Tie Feng No.18", "Ju Xuan No.23", "Wan Dou No.28", "Amsoy",
+                                                                         "Yu Dou No.22", "Jin Dou No.23", "Qi Huang No.34", "Han Dou No.5", "PI 548362",
+                                                                         "Ji Dou No.17", "Dong Nong No.50", "Hei He No.43", "Ke Shan No.1"),
+                                              `Landrace` = list("Zhutwinning2", "Zi Hua No.4", "Tong Shan Tian E Dan", "58-161", "PI 398296",
+                                                                "Zhang Chun Man Cang Jin", "Feng Di Huang", "Tie Jia Si Li Huang", "Shi Sheng Chang Ye")),
+                                         selected = "W05"
+                             ),
+                             
+            ),
+            
+            selectInput("variety_gsv3", label = h4(HTML('<i class="fa fa-play" aria-hidden="true"></i> <font size="4" color="red"><b>Choose a chromosome</b></font>')), 
+                        c(paste0("chr", 1:20)),
+                        selected = "chr1"
+            ),
+            conditionalPanel(condition="submit_gsv != '0'", shinysky::busyIndicator(HTML("<div style='color:red;font-size:30px'>Calculation In progress...</div>"), wait = 0)),
+            shinysky::actionButton("submit_gsv", strong("Submit!"), styleclass = "success")
+          ),
+          
+          mainPanel(
+            tabsetPanel(id = "genestructure_tab",
+                        tabPanel("Duplication",
+                                 fixedRow(
+                                   DT::dataTableOutput("dupresult"),
+                                   column(12,htmlOutput("dupdata1_title")),
+                                   column(12,DT::dataTableOutput("dupdata1")),
+                                   tags$head(tags$style("#trfaccessions_title{color: red;
+                                       font-style: bold;
+                                       font-size: 18px;
+                                       font-family:Times New Roman;
+                                      }"
+                                   )),
+                                   column(12,htmlOutput("dupdata2_title")),
+                                   column(12,DT::dataTableOutput("dupdata2")))
+                                 
+                        ),
+                        
+                        tabPanel("Inversion",
+                                 fixedRow(
+                                   DT::dataTableOutput("invresult"),
+                                   column(12,htmlOutput("invdata1_title")),
+                                   column(12,DT::dataTableOutput("invdata1")),
+                                   tags$head(tags$style("#trfaccessions_title{color: red;
+                                       font-style: bold;
+                                       font-size: 18px;
+                                       font-family:Times New Roman;
+                                      }"
+                                   )),
+                                   column(12,htmlOutput("invdata2_title")),
+                                   column(12,DT::dataTableOutput("invdata2")))
+                        ),
+                        
+                        tabPanel("Tandem repeat",
+                                 fixedRow(
+                                   DT::dataTableOutput("tdmresult"),
+                                   column(12,htmlOutput("tdmdata1_title")),
+                                   column(12,DT::dataTableOutput("tdmdata1")),
+                                   tags$head(tags$style("#trfaccessions_title{color: red;
+                                       font-style: bold;
+                                       font-size: 18px;
+                                       font-family:Times New Roman;
+                                      }"
+                                   )),
+                                   column(12,htmlOutput("tdmdata2_title")),
+                                   column(12,DT::dataTableOutput("tdmdata2")))
+                        ),
+                        
+                        tabPanel("Translocation",
+                                 fixedRow(
+                                   DT::dataTableOutput("transresult"),
+                                   column(12,htmlOutput("transdata1_title")),
+                                   column(12,DT::dataTableOutput("transdata1")),
+                                   tags$head(tags$style("#trfaccessions_title{color: red;
+                                       font-style: bold;
+                                       font-size: 18px;
+                                       font-family:Times New Roman;
+                                      }"
+                                   )),
+                                   column(12,htmlOutput("transdata2_title")),
+                                   column(12,DT::dataTableOutput("transdata2")))
+                        ),
+                        
+                        tabPanel("Deletion",
+                                 fixedRow(
+                                   DT::dataTableOutput("delresult"),
+                                   column(12,htmlOutput("deldata1_title")),
+                                   column(12,DT::dataTableOutput("deldata1")),
+                                   tags$head(tags$style("#trfaccessions_title{color: red;
+                                       font-style: bold;
+                                       font-size: 18px;
+                                       font-family:Times New Roman;
+                                      }"
+                                   )),
+                                   column(12,htmlOutput("deldata2_title")),
+                                   column(12,DT::dataTableOutput("deldata2")))
+                        ),
+                        
+                        tabPanel("Insertion",
+                                 fixedRow(
+                                   DT::dataTableOutput("insresult"),
+                                   column(12,htmlOutput("insdata1_title")),
+                                   column(12,DT::dataTableOutput("insdata1")),
+                                   tags$head(tags$style("#trfaccessions_title{color: red;
+                                       font-style: bold;
+                                       font-size: 18px;
+                                       font-family:Times New Roman;
+                                      }"
+                                   )),
+                                   column(12,htmlOutput("insdata2_title")),
+                                   column(12,DT::dataTableOutput("insdata2")))
+                        ),
+                        br()
+            )
           )
         )
       ),
       
+      # JBrowse
+      tabPanel(
+        title = HTML("<strong style='font-size:20px'>JBrowse</strong>"), icon = icon("list"),
+        h4(HTML('<i class="fa fa-circle" aria-hidden="true"></i> <font size="4" color="red"><b>JBrowse of 31 soybean genomes</b></font>'),
+           bsButton("qjb1", label="", icon=icon("question"), style="info", size="small")),
+        bsPopover("qjb1", "Click the name of a soybean genome to view in JBrowse", trigger = "focus"),
+        DT::dataTableOutput('JBrowsetable'),
+        br()
+      ),
       
       navbarMenu(
         title = HTML("<strong style='font-size:20px'>SNPs</strong>"),
@@ -437,11 +832,11 @@ shinyUI(
             #text input
             tags$style("#regB {font-size:15px;font-family:sans-serif;}"),
             width = 3,
-            tags$div(h4(HTML('<i class="fas fa-dot-circle" aria-hidden="true"></i> <font size="5" color="red"><b>Browse SNPs</b></font>'),
+            tags$div(h4(HTML('<i class="fa fa-circle" aria-hidden="true"></i> <font size="4" color="red"><b>Browse SNPs</b></font>'),
                         bsButton("qgbv", label="", icon=icon("question"), style="info", size="small"))),
             bsPopover("qgbv", "For a specified genomic region or gene model, all the SNPs among user-selected soybean accessions were extracted and subjected to genome browser visualization", trigger = "focus"),
             
-            textInput("regB", label = h4(HTML('<i class="fa fa fa-circle" aria-hidden="true"></i> <font size="4" color="red"><b>Genomic region</b></font>'),
+            textInput("regB", label = h4(HTML('<i class="fa fa-play" aria-hidden="true"></i> <font size="4" color="red"><b>Genomic region</b></font>'),
                                          bsButton("q6", label="", icon=icon("question"), style="info", size="small")),
                       value = "chr1:29765419-29793053"),
             
@@ -459,18 +854,18 @@ shinyUI(
             
             conditionalPanel(condition="input.submit_browse != '0'", shinysky::busyIndicator(HTML("<div style='color:red;font-size:30px'>Calculation In progress...</div>"), wait = 0)),
             
-            sliderInput(inputId = "GBUP",  label = h4(HTML('<i class="fa fa fa-circle" aria-hidden="true"></i> <font size="4" color="red"><b>Upstream (bp)</b></font>'),
+            sliderInput(inputId = "GBUP",  label = h4(HTML('<i class="fa fa-play" aria-hidden="true"></i> <font size="4" color="red"><b>Upstream (bp)</b></font>'),
                                                       bsButton("qg2", label="", icon=icon("question"), style="info", size="small")
             ), min = 0, max = 50000, value = 0, ticks = FALSE),
             bsPopover("qg2", "Extend the input genomic region to its upstream.",
                       trigger = "focus"),
             
-            sliderInput("GBDOWN", h4(HTML('<i class="fa fa fa-circle" aria-hidden="true"></i> <font size="4" color="red"><b>Downstream (bp)</b></font>'),
+            sliderInput("GBDOWN", h4(HTML('<i class="fa fa-play" aria-hidden="true"></i> <font size="4" color="red"><b>Downstream (bp)</b></font>'),
                                      bsButton("qg4", label="", icon=icon("question"), style="info", size="small")
             ), min = 0, max = 50000, value = 0, ticks = FALSE),
             bsPopover("qg4", "Extend the input genomic region to its downstream.", trigger = "focus"),
             
-            shinyWidgets::multiInput("mychooserB", h4(HTML('<i class="fa fa fa-circle" aria-hidden="true"></i> <font size="4" color="red"><b>Select soybean accessions</b></font>'),
+            shinyWidgets::multiInput("mychooserB", h4(HTML('<i class="fa fa-play" aria-hidden="true"></i> <font size="4" color="red"><b>Select soybean accessions</b></font>'),
                                                       bsButton("qg3", label="", icon=icon("question"), style="info", size="small")),
                                      choices = all.soya.cho,
                                      selected = all.soya.cho,
@@ -481,13 +876,14 @@ shinyUI(
                                        selected_header = "You have selected:"
                                      )
             ),
+            
             bsPopover("qg3", "Only the chosen soybean accessions will be used.", trigger = "focus"),
             fluidRow(
               column(6, actionButton("browsenone1", strong("Deselect all"), width = "100%", style="color: #fff; background-color: #337ab7; border-color: #2e6da4")),
               column(6, actionButton("browseall1", strong("Select all"), width = "100%", style="color: #fff; background-color: #337ab7; border-color: #2e6da4"))
             ),
             
-            shinyWidgets::multiInput("GB_mut_group", h4(HTML('<i class="fa fa fa-circle" aria-hidden="true"></i> <font size="4" color="red"><b>Mutation effect</b></font>'),
+            shinyWidgets::multiInput("GB_mut_group", h4(HTML('<i class="fa fa-play" aria-hidden="true"></i> <font size="4" color="red"><b>Mutation effect</b></font>'),
                                                         bsButton("qg1", label="", icon=icon("question"), style="info", size="small")),
                                      choices = mutationtypes,
                                      selected = mutationtypes,
@@ -517,6 +913,7 @@ shinyUI(
               #column(4, downloadButton("downloadGB.pdf",  style = "width:100%;", "Download pdf-file", class = "buttDown")),
               #tags$style(".buttDown{background-color:black; color: white; font-size: 16px;}")
             ),
+            
             plotly::plotlyOutput("gbrowser", height = '600px', width = '100%')
           )
         ),
@@ -530,23 +927,23 @@ shinyUI(
             width = 3,
             fixedRow(
               column(12,
-                     tags$div(h4(HTML('<i class="fas fa-dot-circle" aria-hidden="true"></i> <font size="5" color="red"><b>Search SNPs</b></font>'),
+                     tags$div(h4(HTML('<i class="fa fa-circle" aria-hidden="true"></i> <font size="4" color="red"><b>Search SNPs</b></font>'),
                                  bsButton("qqsi", label="", icon=icon("question"), style="info", size="small"))),
                      bsPopover("qqsi", "Search SNPs among 2898 soybean accessions in an input genomic region or gene model.", trigger = "focus")
               )
             ),
             
-            textInput("regBB", label = h4(HTML('<i class="fa fa fa-circle" aria-hidden="true"></i> <font size="4" color="red"><b>Genomic region</b></font>'),
+            textInput("regBB", label = h4(HTML('<i class="fa fa-play" aria-hidden="true"></i> <font size="4" color="red"><b>Genomic region</b></font>'),
                                           bsButton("q1", label="", icon=icon("question"), style="info", size="small")),
                       value = "chr7:29560705-29573051"),
             
             bsPopover("q1", "A genomic region can be determined by chromosome positions or gene locus. For example, chr7:29560705-29573051 or SoyZH13_01G186100.",
                       trigger = "focus"),
             
-            shinyWidgets::multiInput("mychooserD", h4(HTML('<i class="fa fa fa-circle" aria-hidden="true"></i> <font size="4" color="red"><b>Select soybean accessions</b></font>'),
+            shinyWidgets::multiInput("mychooserD", h4(HTML('<i class="fa fa-play" aria-hidden="true"></i> <font size="4" color="red"><b>Select soybean accessions</b></font>'),
                                                       bsButton("qdl2", label="", icon=icon("question"), style="info", size="small")),
                                      choices = all.soya.cho,
-                                     selected = "G. Soja",
+                                     selected = "Glycine soja",
                                      width = 800,
                                      options = list(
                                        enable_search = TRUE,
@@ -585,7 +982,6 @@ shinyUI(
               column(4, uiOutput("downloadSD02")),
               column(4, uiOutput("downloadSD03"))
               
-              
               #column(4, downloadButton("bulkdownloadsnpInfo.txt", style = "width:100%;", "Download SNPs information", class = "buttDown")),
               #column(4, downloadButton("bulkdownloadsnp.txt", style = "width:100%;", "Download genotype data", class = "buttDown")),
               #column(4, downloadButton("bulkdownloadgene.txt", style = "width:100%;", "Download gene annotation", class = "buttDown")),
@@ -610,13 +1006,13 @@ shinyUI(
             
             fixedRow(
               column(12,
-                     tags$div(h4(HTML('<i class="fas fa-dot-circle" aria-hidden="true"></i> <font size="5" color="red"><b>Linkage disequilibrium analysis</b></font>'),
+                     tags$div(h4(HTML('<i class="fa fa-circle" aria-hidden="true"></i> <font size="4" color="red"><b>Linkage disequilibrium analysis</b></font>'),
                                  bsButton("qlda", label="", icon=icon("question"), style="info", size="small"))),
                      bsPopover("qlda", " For a specified genomic region or gene model, a heat map can be created to display the pairwise linkage disequilibrium between different SNP sites", trigger = "focus")
               )
             ),
             
-            textInput("regL", label = h4(HTML('<i class="fa fa fa-circle" aria-hidden="true"></i> <font size="4" color="red"><b>Genomic region</b></font>'),
+            textInput("regL", label = h4(HTML('<i class="fa fa-play" aria-hidden="true"></i> <font size="4" color="red"><b>Genomic region</b></font>'),
                                          bsButton("q5", label="", icon=icon("question"), style="info", size="small")),
                       value = "SoyZH13_09G103313"),
             
@@ -637,7 +1033,7 @@ shinyUI(
             br(),
             
             h4(HTML('<i class="fa fa-cog"></i> <font size="5" color="red"><b>Plot options</b></font>')),
-            radioButtons("flip", h4(HTML('<i class="fa fa fa-circle" aria-hidden="true"></i> <font size="4" color="red"><b>Flip the figure</b></font>')), list( "TRUE" = 1, "FALSE" = 0)),
+            radioButtons("flip", h4(HTML('<i class="fa fa-play" aria-hidden="true"></i> <font size="4" color="red"><b>Flip the figure</b></font>')), list( "TRUE" = 1, "FALSE" = 0)),
             
             conditionalPanel(
               condition = "input.flip==1",
@@ -654,26 +1050,26 @@ shinyUI(
             
             conditionalPanel(
               condition = "input.flip==0",
-              radioButtons("showText", h4(HTML('<i class="fa fa fa-circle" aria-hidden="true"></i> <font size="4" color="red"><b>Print LD measurements</b></font>')), list("FALSE" =  0, "TRUE" = 1)),
-              textInput("ldpos", label = h4(HTML('<i class="fa fa fa-circle" aria-hidden="true"></i> <font size="4" color="red"><b>Label SNPs</b></font>')), value = "5, 8")
+              radioButtons("showText", h4(HTML('<i class="fa fa-play" aria-hidden="true"></i> <font size="4" color="red"><b>Print LD measurements</b></font>')), list("FALSE" =  0, "TRUE" = 1)),
+              textInput("ldpos", label = h4(HTML('<i class="fa fa-play" aria-hidden="true"></i> <font size="4" color="red"><b>Label SNPs</b></font>')), value = "5, 8")
             ),
             
             radioButtons("ldcol",
-                         label = h4(HTML('<i class="fa fa fa-circle" aria-hidden="true"></i> <font size="4" color="red"><b>Color</b></font>')), list("grey.colors(20)" = 1, "heat.colors(20)" = 2)
+                         label = h4(HTML('<i class="fa fa-play" aria-hidden="true"></i> <font size="4" color="red"><b>Color</b></font>')), list("grey.colors(20)" = 1, "heat.colors(20)" = 2)
             ),
             
-            sliderInput("ldUp", h4(HTML('<i class="fa fa fa-circle" aria-hidden="true"></i> <font size="4" color="red"><b>Upstream (bp)</b></font>'),
+            sliderInput("ldUp", h4(HTML('<i class="fa fa-play" aria-hidden="true"></i> <font size="4" color="red"><b>Upstream (bp)</b></font>'),
                                    bsButton("ql4", label="", icon=icon("question"), style="info", size="small")
             ), min = 0, max = 50000, value = 0, ticks = FALSE),
             bsPopover("ql4", "Extend the input genomic region to its upstream.", trigger = "focus"),
             
-            sliderInput("ldDown", h4(HTML('<i class="fa fa fa-circle" aria-hidden="true"></i> <font size="4" color="red"><b>Downstream (bp)</b></font>'),
+            sliderInput("ldDown", h4(HTML('<i class="fa fa-play" aria-hidden="true"></i> <font size="4" color="red"><b>Downstream (bp)</b></font>'),
                                      bsButton("ql5", label="", icon=icon("question"), style="info", size="small")
             ), min = 0, max = 50000, value = 0, ticks = FALSE),
             bsPopover("ql5", "Extend the input genomic region to its downstream.", trigger = "focus"),
             
             shinyWidgets::multiInput(
-              "ld_mut_group", h4(HTML('<i class="fa fa fa-circle" aria-hidden="true"></i> <font size="4" color="red"><b>Mutation effect</b></font>'),
+              "ld_mut_group", h4(HTML('<i class="fa fa-play" aria-hidden="true"></i> <font size="4" color="red"><b>Mutation effect</b></font>'),
                                  bsButton("ql1", label="", icon=icon("question"), style="info", size="small")),
               choices = mutationtypes,
               selected = mutationtypes,
@@ -691,7 +1087,7 @@ shinyUI(
               column(6, actionButton("ldall2", strong("Select all"), width = "100%", style="color: #fff; background-color: #337ab7; border-color: #2e6da4"))
             ),
             
-            shinyWidgets::multiInput("mychooserLD", p(h4(HTML('<i class="fa fa fa-circle" aria-hidden="true"></i> <font size="4" color="red"><b>Select soybean accessions</b></font>'),
+            shinyWidgets::multiInput("mychooserLD", p(h4(HTML('<i class="fa fa-play" aria-hidden="true"></i> <font size="4" color="red"><b>Select soybean accessions</b></font>'),
                                                          bsButton("ql3", label="", icon=icon("question"), style="info", size="small"))),
                                      choices = all.soya.cho,
                                      selected = all.soya.cho,
@@ -713,8 +1109,8 @@ shinyUI(
             checkboxInput("ldSize", "Adjust plot size", FALSE),
             conditionalPanel(
               condition = "input.ldSize",
-              numericInput("ldHeight", h4(HTML('<i class="fa fa fa-circle" aria-hidden="true"></i> <font size="4" color="red"><b>Plot height</b></font>')), value = 730),
-              numericInput("ldWidth", h4(HTML('<i class="fa fa fa-circle" aria-hidden="true"></i> <font size="4" color="red"><b>Plot width</b></font>')), value = 1000)
+              numericInput("ldHeight", h4(HTML('<i class="fa fa-play" aria-hidden="true"></i> <font size="4" color="red"><b>Plot height</b></font>')), value = 730),
+              numericInput("ldWidth", h4(HTML('<i class="fa fa-play" aria-hidden="true"></i> <font size="4" color="red"><b>Plot width</b></font>')), value = 1000)
             )
           ),
           
@@ -744,13 +1140,13 @@ shinyUI(
             
             fixedRow(
               column(12,
-                     tags$div(h4(HTML('<i class="fas fa-dot-circle" aria-hidden="true"></i> <font size="5" color="red"><b>Nucleotide diversity analysis</b></font>'),
+                     tags$div(h4(HTML('<i class="fa fa-circle" aria-hidden="true"></i> <font size="4" color="red"><b>Nucleotide diversity analysis</b></font>'),
                                  bsButton("qnda", label="", icon=icon("question"), style="info", size="small"))),
                      bsPopover("qnda", "Calculate and demonstrate nucleotide diversities among subgroups of soybean accessions in specified genomic regions.", trigger = "focus")
               )
             ),
             
-            textInput("regD", label = h4(HTML('<i class="fa fa fa-circle" aria-hidden="true"></i> <font size="4" color="red"><b>Genomic region</b></font>'),
+            textInput("regD", label = h4(HTML('<i class="fa fa-play" aria-hidden="true"></i> <font size="4" color="red"><b>Genomic region</b></font>'),
                                          bsButton("q3", label="", icon=icon("question"), style="info", size="small")),
                       value = "SoyZH13_12G067900"),
             
@@ -770,7 +1166,7 @@ shinyUI(
             br(),
             h4(HTML('<i class="fa fa-cog" aria-hidden="true"></i> <font size="5" color="red"><b>Plot options</b></font>')),
             
-            numericInput("snpnumD", h4(HTML('<i class="fa fa fa-circle" aria-hidden="true"></i> <font size="4" color="red"><b>Number of SNPs in each window</b></font>'),
+            numericInput("snpnumD", h4(HTML('<i class="fa fa-play" aria-hidden="true"></i> <font size="4" color="red"><b>Number of SNPs in each window</b></font>'),
                                        bsButton("qd6", label="", icon=icon("question"), style="info", size="small")
             ), value = 10, min = 5, max = 20),
             bsPopover("qd6", "A specified genomic region would be split into non-overlapping window so that each window contains specified number of SNPs. The nucleotide diversity of all soybean accessions belong to the specified ecotypes in each window would be calculated.",
@@ -778,49 +1174,46 @@ shinyUI(
             
             shinyWidgets::pickerInput(
               inputId = "div_acc_group",
-              label = h4(HTML('<i class="fa fa fa-circle" aria-hidden="true"></i> <font size="4" color="red"><b>Ecotypes to calculate diversity</b></font>')),
-              choices = c("Improved cultivar", "Landrace", "G. Soja"),
-              selected = c("Landrace", "G. Soja"),
+              label = h4(HTML('<i class="fa fa-play" aria-hidden="true"></i> <font size="4" color="red"><b>Ecotypes to calculate diversity</b></font>')),
+              choices = c("Improved cultivar", "Landrace", "Glycine soja"),
+              selected = c("Landrace", "Glycine soja"),
               multiple = TRUE,
               options = list(style = "btn-primary")
             ),
             
-            selectInput("nuc_numerator", h4(HTML('<i class="fa fa fa-circle" aria-hidden="true"></i> <font size="4" color="red"><b>Numerator ecotype</b></font>'),
+            selectInput("nuc_numerator", h4(HTML('<i class="fa fa-play" aria-hidden="true"></i> <font size="4" color="red"><b>Numerator ecotype</b></font>'),
                                             bsButton("qd7", label="", icon=icon("question"), style="info", size="small")
-            ), choices = c("G. Soja", "Improved cultivar", "Landrace")),
+            ), choices = c("Glycine soja", "Improved cultivar", "Landrace")),
             bsPopover("qd7", "The nucleotide diversity of soybean accessions belong to the Numerator ecotype would be divided by the nucleotide diversity of soybean accessions belong to the Denominator ecotype for comparison.",
                       trigger = "focus"),
-            selectInput("nuc_denominator", h4(HTML('<i class="fa fa fa-circle" aria-hidden="true"></i> <font size="4" color="red"><b>Denominator ecotype</b></font>')), choices = 
-                          c("Improved cultivar", "Landrace", "G. Soja")),
+            selectInput("nuc_denominator", h4(HTML('<i class="fa fa-play" aria-hidden="true"></i> <font size="4" color="red"><b>Denominator ecotype</b></font>')), choices = 
+                          c("Improved cultivar", "Landrace", "Glycine soja")),
             
-            tags$div(align = 'left',
-                     class = 'multicol', style = "width: 100%",
-                     shinyWidgets::multiInput("div_mut_group", h4(HTML('<i class="fa fa fa-circle" aria-hidden="true"></i> <font size="4" color="red"><b>Mutation effect</b></font>'),
-                                                                  bsButton("qd1", label="", icon=icon("question"), style="info", size="small")),
-                                              choices = mutationtypes,
-                                              selected = mutationtypes,
-                                              width = 800,
-                                              options = list(
-                                                enable_search = TRUE,
-                                                non_selected_header = "Choose from:",
-                                                selected_header = "You have selected:"
-                                              )
-                     ),
-                     bsPopover("qd1", "Only SNPs with selected mutation effects will be used.",
-                               trigger = "focus")
+            shinyWidgets::multiInput("div_mut_group", h4(HTML('<i class="fa fa-play" aria-hidden="true"></i> <font size="4" color="red"><b>Mutation effect</b></font>'),
+                                                         bsButton("qd1", label="", icon=icon("question"), style="info", size="small")),
+                                     choices = mutationtypes,
+                                     selected = mutationtypes,
+                                     width = 800,
+                                     options = list(
+                                       enable_search = TRUE,
+                                       non_selected_header = "Choose from:",
+                                       selected_header = "You have selected:"
+                                     )
             ),
+            bsPopover("qd1", "Only SNPs with selected mutation effects will be used.",
+                      trigger = "focus"),
             
             fluidRow(
               column(6, actionButton("diversitynone2", strong("Deselect all"), width = "100%", style="color: #fff; background-color: #337ab7; border-color: #2e6da4")),
               column(6, actionButton("diversityldall2", strong("Select all"), width = "100%", style="color: #fff; background-color: #337ab7; border-color: #2e6da4"))
             ),
             
-            sliderInput("divUp", h4(HTML('<i class="fa fa fa-circle" aria-hidden="true"></i> <font size="4" color="red"><b>Upstream (bp)</b></font>'),
+            sliderInput("divUp", h4(HTML('<i class="fa fa-play" aria-hidden="true"></i> <font size="4" color="red"><b>Upstream (bp)</b></font>'),
                                     bsButton("qd4", label="", icon=icon("question"), style="info", size="small")
             ), min = 0, max = 50000, value = 10000, ticks = FALSE),
             bsPopover("qd4", "Extend the input genomic region to its upstream.", trigger = "focus"),
             
-            sliderInput("divDown", h4(HTML('<i class="fa fa fa-circle" aria-hidden="true"></i> <font size="4" color="red"><b>Downstream (bp)</b></font>'),
+            sliderInput("divDown", h4(HTML('<i class="fa fa-play" aria-hidden="true"></i> <font size="4" color="red"><b>Downstream (bp)</b></font>'),
                                       bsButton("qd5", label="", icon=icon("question"), style="info", size="small")
             ), min = 0, max = 50000, value = 10000, ticks = FALSE),
             bsPopover("qd5", "Extend the input genomic region to its downstream", trigger = "focus"),
@@ -828,8 +1221,8 @@ shinyUI(
             checkboxInput("divSize", "Adjust plot size", FALSE),
             conditionalPanel(
               condition = "input.divSize",
-              numericInput("divHeight", HTML('<i class="fa fa fa-circle" aria-hidden="true"></i> <font size="4" color="red"><b>Plot height:</b></font>'), value = 730),
-              numericInput("divWidth", HTML('<i class="fa fa fa-circle" aria-hidden="true"></i> <font size="4" color="red"><b>Plot width:</b></font>'), value = 1000)
+              numericInput("divHeight", h4(HTML('<i class="fa fa-play" aria-hidden="true"></i> <font size="4" color="red"><b>Plot height</b></font>')), value = 730),
+              numericInput("divWidth", h4(HTML('<i class="fa fa-play" aria-hidden="true"></i> <font size="4" color="red"><b>Plot width</b></font>')), value = 1000)
             )
           ),
           
@@ -857,13 +1250,13 @@ shinyUI(
             tags$style("#af_snp_site {font-size:15px;font-family:sans-serif;}"),
             fixedRow(
               column(12,
-                     tags$div(h4(HTML('<i class="fas fa-dot-circle" aria-hidden="true"></i> <font size="5" color="red"><b>Allele frequency analysis</b></font>'),
+                     tags$div(h4(HTML('<i class="fa fa-circle" aria-hidden="true"></i> <font size="4" color="red"><b>Allele frequency analysis</b></font>'),
                                  bsButton("qaf11", label="", icon=icon("question"), style="info", size="small"))),
                      bsPopover("qaf11", "Calculate and demonstrate allele frequency of input SNP sites.", trigger = "focus")
               )
             ),
             
-            textAreaInput("af_snp_site", label = h4(HTML('<i class="fa fa fa-circle" aria-hidden="true"></i> <font size="4" color="red"><b>Input SNP sites</b></font>'),
+            textAreaInput("af_snp_site", label = h4(HTML('<i class="fa fa-play" aria-hidden="true"></i> <font size="4" color="red"><b>Input SNP sites</b></font>'),
                                                     bsButton("qaf3", label="", icon=icon("question"), style="info", size="small")), 
                           width="100%", resize="vertical", height="150px", 
                           placeholder = "One SNP site in one row", 
@@ -874,9 +1267,9 @@ shinyUI(
             
             shinyWidgets::pickerInput(
               inputId = "af_acc_group",
-              label = h4(HTML('<i class="fa fa fa-circle" aria-hidden="true"></i> <font size="4" color="red"><b>Ecotypes to calculate allele frequency</b></font>')), 
-              choices = c("Improved cultivar", "Landrace", "G. Soja"),
-              selected = c("Improved cultivar", "Landrace", "G. Soja"),
+              label = h4(HTML('<i class="fa fa-play" aria-hidden="true"></i> <font size="4" color="red"><b>Ecotypes to calculate allele frequency</b></font>')), 
+              choices = c("Improved cultivar", "Landrace", "Glycine soja"),
+              selected = c("Improved cultivar", "Landrace", "Glycine soja"),
               multiple = TRUE
             ),
             selectInput("jscolora", h4(HTML('<i class="fa fa fa-play" aria-hidden="true"></i> <font size="3" color="red"><b>Allele colors</b></font>'),
@@ -884,8 +1277,8 @@ shinyUI(
                         choices = c("steelblue, yellow2", "mediumspringgreen, mediumvioletred", "orchid, palegreen", "cornflowerblue, forestgreen"), selected = "steelblue, yellow2" ),
             bsPopover("qaf2", "Colors for the major and minor allele in the pie chart, respectively!", trigger = "focus"),
             
-            numericInput("afHeight", h4(HTML('<i class="fa fa fa-circle" aria-hidden="true"></i> <font size="4" color="red"><b>Plot height</b></font>')), value = 650),
-            numericInput("afWidth", h4(HTML('<i class="fa fa fa-circle" aria-hidden="true"></i> <font size="4" color="red"><b>Plot width</b></font>')), value = 800),
+            numericInput("afHeight", h4(HTML('<i class="fa fa-play" aria-hidden="true"></i> <font size="4" color="red"><b>Plot height</b></font>')), value = 650),
+            numericInput("afWidth", h4(HTML('<i class="fa fa-play" aria-hidden="true"></i> <font size="4" color="red"><b>Plot width</b></font>')), value = 800),
             
             shinysky::actionButton("submitaf1", strong("Submit!",
                                                        bsButton("qaf1", label="", icon=icon("question"), style="info", size="small")
@@ -903,7 +1296,8 @@ shinyUI(
             
             fluidRow(
               column(4, uiOutput("downloadAfq01")),
-              column(4, uiOutput("downloadAfq02"))
+              column(4, uiOutput("downloadAfq02")),
+              column(4, uiOutput("downloadAfq03"))
             ),
             
             br(),
@@ -913,10 +1307,9 @@ shinyUI(
           )
         )
         # Phylogenetic tree
-
       ),
-
-
+      
+      
       #Indel
       tabPanel(
         title = HTML("<strong style='font-size:20px'>INDELs</strong>"),
@@ -926,23 +1319,23 @@ shinyUI(
           width = 3,
           fixedRow(
             column(12,
-                   h4(HTML('<i class="fas fa-dot-circle" aria-hidden="true"></i> <font size="5" color="red"><b>Search INDELs</b></font>'),
+                   h4(HTML('<i class="fa fa-circle" aria-hidden="true"></i> <font size="4" color="red"><b>Search INDELs</b></font>'),
                       bsButton("qii", label="", icon=icon("question"), style="info", size="small")),
                    bsPopover("qii", "Search INDELs among 2898 soybean accessions in an input genomic region or gene model", trigger = "focus")
             )
           ),
           
-          textInput("regi", label = h4(HTML('<i class="fa fa fa-circle" aria-hidden="true"></i> <font size="4" color="red"><b>Genomic region</b></font>'),
+          textInput("regi", label = h4(HTML('<i class="fa fa-play" aria-hidden="true"></i> <font size="4" color="red"><b>Genomic region</b></font>'),
                                        bsButton("qi1", label="", icon=icon("question"), style="info", size="small")),
                     value = "SoyZH13_01G186100"),
           
           bsPopover("qi1", "A genomic region can be determined by chromosome positions or gene locus. For example, chr1:29506705-29659223 or SoyZH13_01G186100.",
                     trigger = "focus"),
           
-          shinyWidgets::multiInput("mychooseri", p(h4(HTML('<i class="fa fa fa-circle" aria-hidden="true"></i> <font size="4" color="red"><b>Select soybean accessions</b></font>'),
+          shinyWidgets::multiInput("mychooseri", p(h4(HTML('<i class="fa fa-play" aria-hidden="true"></i> <font size="4" color="red"><b>Select soybean accessions</b></font>'),
                                                       bsButton("qindel2", label="", icon=icon("question"), style="info", size="small"))),
                                    choices = all.soya.cho,
-                                   selected = c("G. Soja"),
+                                   selected = c("Glycine soja"),
                                    width = 800,
                                    options = list(
                                      enable_search = TRUE,
@@ -979,6 +1372,7 @@ shinyUI(
             #tags$style(".buttDown{background-color:black; color: white; font-size: 16px;}")
           ),
           br(),
+          
           htmlOutput("indeltabletitle"),
           DT::dataTableOutput("indeltable"),
           br(), br(),
@@ -990,18 +1384,127 @@ shinyUI(
           )
         )
       ),
-      
+
+      #Expression
+      navbarMenu(
+        title = HTML("<strong style='font-size:20px'>Expression</strong>"),
+        #Gene expression
+        tabPanel(
+          title = HTML("<strong style='font-size:20px'>Gene expression analysis</strong>"),
+          sidebarPanel(
+            #Expression pattern of protein coding genes in 27 different soybean samples
+            tags$style("#gtsgeneid {font-size:15px;font-family:sans-serif;}"),
+            width = 3,
+            
+            h4(HTML('<i class="fa fa-circle" aria-hidden="true"></i> <font size="4" color="red"><b>Gene expression analysis</b></font>'),
+               bsButton("qsgts0", label="", icon=icon("question"), style="info", size="small")),
+            bsPopover("qsgts0", "Inspect expression levels of input genes in different tissues/stages.", trigger = "focus"),
+            
+            textInput("gtsgeneid", label = h4(HTML('<i class="fa fa-play" aria-hidden="true"></i> <font size="4" color="red"><b>Input gene ID</b></font>'), 
+                                              bsButton("qsgts1", label="", icon=icon("question"), style="info", size="small")),
+                      value = "SoyZH13_05G201900"),
+            bsPopover("qsgts1", "Input a gene ID of the Zhonghuang 13 genome!",
+                      trigger = "focus"),
+            shinyWidgets::multiInput("Gexp_mut_group", h4(HTML('<i class="fa fa-play" aria-hidden="true"></i> <font size="4" color="red"><b>Choose tissues/stages</b></font>'),
+                                                          bsButton("qsgex", label="", icon=icon("question"), style="info", size="small")),
+                                     choices = c("cotyledon-1", "root", "stem", "leafbud-1", "leafbud-2", "leaf-1", "cotyledon-2", "stem-2", "leafbud-3", "leaf-2", "flo-1", "shoot_meristem", "flo-2", "flo-3", "flo-4", "flo-5", "pod&seed-1", "pod&seed-2", "pod&seed-3", "pod-1", "pod-2", "pod-3", "seed-1", "seed-2", "seed-3", "seed-4", "seed-5"),
+                                     selected = c("cotyledon-1", "root", "stem", "leafbud-1", "leafbud-2", "leaf-1", "cotyledon-2", "stem-2", "leafbud-3", "leaf-2", "flo-1", "shoot_meristem", "flo-2", "flo-3", "flo-4", "flo-5", "pod&seed-1", "pod&seed-2", "pod&seed-3", "pod-1", "pod-2", "pod-3", "seed-1", "seed-2", "seed-3", "seed-4", "seed-5"),
+                                     width = 800,
+                                     options = list(
+                                       enable_search = TRUE,
+                                       non_selected_header = "Choose from:",
+                                       selected_header = "You have selected:"
+                                     )
+            ),
+            
+            fluidRow(
+              column(6, actionButton("accessiongexnone", strong("Deselect all"), width = "100%", style="color: #fff; background-color: #337ab7; border-color: #2e6da4")),
+              column(6, actionButton("accessiongexall", strong("Select all"), width = "100%", style="color: #fff; background-color: #337ab7; border-color: #2e6da4"))
+            ),
+            br(),
+            
+            shinyWidgets::actionBttn("Searchname_description", "Information of 27 collected samples", 
+                                     block = TRUE, size = "sm", style="unite", color="default"),
+            bsModal("name-description", "Information of 27 collected samples", "Searchname_description", size = "large", 
+                    DT::dataTableOutput("expressionname1", width = "100%")
+            ),
+            
+            br(),
+            
+            bsPopover("qsgex", "Choose one or multiple tissues and development stages.",
+                      trigger = "focus"),
+            shinysky::actionButton("submit_GSgst", strong("Submit!",
+                                                          bsButton("qsgts2", label="", icon=icon("question"), style="info", size="small")
+            ), styleclass = "success"),
+            
+            shinysky::actionButton("cleargst", strong("Reset"), styleclass = "warning"),
+            shinysky::actionButton("gstExamID", strong("Load example"), styleclass = "info"),
+            conditionalPanel(condition="submit_GSgst != '0'", shinysky::busyIndicator(HTML("<div style='color:red;font-size:30px'>Calculation In progress...</div>"), wait = 0)),
+            bsPopover("qsgts2", "Click this button to start the analysis!",
+                      trigger = "focus"),
+            br(),
+            numericInput("gstheight", h4(HTML('<i class="fa fa-play" aria-hidden="true"></i> <font size="4" color="red"><b>Plot height</b></font>')), value = 800),
+            numericInput("gstwidth", h4(HTML('<i class="fa fa-play" aria-hidden="true"></i> <font size="4" color="red"><b>Plot width</b></font>')), value = 1300)
+          ),
+          
+          mainPanel(
+            width = 9,
+            htmlOutput("gstout_title"),
+            DT::dataTableOutput("gstoutresult", width = "100%"),
+            uiOutput("gstbarplotif")
+            #plotOutput("gstbarplot", height = "800px", width = "100%")
+          )
+        ),
+        
+        #Gene co-correlation
+        tabPanel(
+          title = HTML("<strong style='font-size:20px'>Gene co-expression analysis</strong>"),
+          sidebarPanel(
+            #Expression pattern of protein coding genes in 27 different soybean samples
+            width = 3,
+            
+            h4(HTML('<i class="fa fa-circle" aria-hidden="true"></i> <font size="4" color="red"><b>Gene co-expression analysis</b></font>'),
+               bsButton("qsgcor0", label="", icon=icon("question"), style="info", size="small")),
+            bsPopover("qsgcor0", "Perform co-expression analysis of genes across multiple tissues/samples.", trigger = "focus"),
+            
+            tags$style("#genecorPaste {font-size:15px;font-family:sans-serif;}"),
+            textAreaInput("genecorPaste", label = h4(HTML('<i class="fa fa-play" aria-hidden="true"></i> <font size="4" color="red"><b>Input a list of gene model names</b></font>'), 
+                                                     bsButton("qsgcor1", label="", icon=icon("question"), style="info", size="small")),
+                          value = "", resize = "vertical", height='200px', width = '200%',
+                          placeholder = "One Gene ID in one row"),
+            bsPopover("qsgcor1", "Input at least two Gene IDs of the Zhonghuang 13 genome!", trigger = "focus"),
+            shinysky::actionButton("submit_GSgcor", strong("Submit!",
+                                                           bsButton("qsgcor2", label="", icon=icon("question"), style="info", size="small")), styleclass = "success"),
+            shinysky::actionButton("cleargcor", strong("Reset"), styleclass = "warning"),
+            shinysky::actionButton("gcorExamID", strong("Load example"), styleclass = "info"),
+            conditionalPanel(condition="submit_GSgcor != '0'", shinysky::busyIndicator(HTML("<div style='color:red;font-size:30px'>Calculation In progress...</div>"), wait = 0)),
+            bsPopover("qsgcor2", "Click this button to start the analysis!",
+                      trigger = "focus"),
+            numericInput("genecorheight", h4(HTML('<i class="fa fa-play" aria-hidden="true"></i> <font size="4" color="red"><b>Plot height</b></font>')), value = 1000),
+            numericInput("genecorwidth", h4(HTML('<i class="fa fa-play" aria-hidden="true"></i> <font size="4" color="red"><b>Plot width</b></font>')), value = 1000),
+          ),
+          
+          mainPanel(
+            width = 9,
+            htmlOutput("gcorout_title"),
+            DT::dataTableOutput("gcordata", width = "100%"),
+            uiOutput("genecorplotif"),
+            br(), br()
+            #plotOutput("genecorplot", height = "800px", width = "100%"),
+          )
+        )
+      ),
       
       #TOOLS
+      
       navbarMenu(
         title = HTML("<strong style='font-size:20px'>Tools</strong>"), icon = icon("toolbox", lib = "font-awesome"),
-        
         #Blast
         tabPanel(
           title = HTML("<strong style='font-size:20px'>BLAST</strong>"),
           icon = icon("rocket", class = NULL, lib = "font-awesome"),
           tags$style("#BLASTev {font-size:15px;font-family:sans-serif;}"),
-          h4(HTML('<i class="fas fa-dot-circle" aria-hidden="true"></i> <font size="5" color="red"><b>Search one or multiple soybean genomes by sequence similarity using BLAST</b></font>'),
+          h4(HTML('<i class="fa fa-circle" aria-hidden="true"></i> <font size="4" color="red"><b>Search one or multiple soybean genomes by sequence similarity using BLAST</b></font>'),
              bsButton("qBlastTitle", label="", icon=icon("question"), style="info", size="small")),
           bsPopover("qBlastTitle", title = Blast_Info_Title, content = NULL, trigger = "focus"),
           
@@ -1009,21 +1512,21 @@ shinyUI(
                       tabPanel("Input",
                                fixedRow(
                                  column(5,
-                                        selectInput("In_blast", label = tags$div(HTML('<i class="fa fa-play" aria-hidden="true"></i> <font size="4" color="red">Paste or upload input data?</font>'),
+                                        selectInput("In_blast", label = h4(HTML('<i class="fa fa-play" aria-hidden="true"></i> <font size="4" color="red"><b>Paste or upload input data?</b></font>'),
                                                                                  bsButton("qBlastIn", label="", icon=icon("question"), style="info", size="small")
                                         ), choices = list("Paste input data" = "paste", 
                                                           "Upload input data" = "upload"), 
                                         selected = "paste"),
-                                        bsPopover("qBlastIn", "The input data must be DNA sequences in fasta format.", trigger = "focus"),
+                                        bsPopover("qBlastIn", "The input data must be DNA sequences or Protein sequences in fasta format.", trigger = "focus"),
                                         
                                         conditionalPanel(condition="input.In_blast == 'paste'", 
-                                                         textAreaInput("BlastSeqPaste", label = HTML('<i class="fa fa-play" aria-hidden="true"></i> <font size="4" color="red">Input sequence</font>'),
+                                                         textAreaInput("BlastSeqPaste", label = h4(HTML('<i class="fa fa-play" aria-hidden="true"></i> <font size="4" color="red"><b>Input sequence</b></font>')),
                                                                        value = "", resize = "vertical", height='400px', width = '200%',
                                                                        placeholder = "The input sequences must be in fasta format")
                                         ),
                                         conditionalPanel(condition="input.In_blast == 'upload'", 
                                                          fileInput("BlastSeqUpload",
-                                                                   label = h4("Upload file"), multiple = FALSE, width = "100%"),
+                                                                   label = h4(HTML('<i class="fa fa-play" aria-hidden="true"></i> <font size="4" color="red"><b>Upload file</b></font>')), multiple = FALSE, width = "100%"),
                                                          downloadButton("BLAST_Input.txt", "Example BLAST input data", style = "width:100%;", class = "buttDown")
                                         )
                                  ),
@@ -1031,10 +1534,11 @@ shinyUI(
                                  column(4,
                                         shinyWidgets::multiInput(
                                           inputId = "BLASTdb",
-                                          label = tags$div(HTML('<i class="fa fa-play" aria-hidden="true"></i> <font size="4" color="red">Choose BLAST databases</font>'),
+                                          label = h4(HTML('<i class="fa fa-play" aria-hidden="true"></i> <font size="4" color="red"><b>Choose BLAST databases</b></font>'),
                                                            bsButton("qblastDB", label="", icon=icon("question"), style="info", size="small")
                                           ),
                                           choices = c("Zhonghuang 13","PI 562565","PI 549046","PI 578357","W05",
+                                                      "PI 483463", "Lee", 
                                                       "Zhutwinning2","Zi Hua No.4","Tong Shan Tian E Dan","58-161","PI 398296",
                                                       "Zhang Chun Man Cang Jin","Feng Di Huang","Tie Jia Si Li Huang","Shi Sheng Chang Ye",
                                                       "Williams 82","Xu Dou No.1","Tie Feng No.18","Ju Xuan No.23","Wan Dou No.28","Amsoy","Yu Dou No.22","Jin Dou No.23",
@@ -1052,31 +1556,31 @@ shinyUI(
                                  ),
                                  
                                  column(3,
-                                        selectInput("program_database", label = tags$div(HTML('<i class="fa fa-play"></i> <font size="4" color="red">Database type</font>'),
+                                        selectInput("program_database", label = h4(HTML('<i class="fa fa-play"></i> <font size="4" color="red"><b>Database type</b></font>'),
                                                                                          bsButton("qBLASTpdata", label="", icon=icon("question"), style="info", size="small")),
                                                     choices=c("Genome Sequence", "Protein Sequence", "Gene Sequence", "CDS sequence"), width = NULL),
                                         bsPopover("qBLASTpdata", "Set the type of BLAST database to search against.", 
                                                   trigger = "focus"),
-                                        textInput("BLASTev", label = tags$div(HTML('<i class="fa fa-play"></i> <font size="4" color="red">E-value cutoff</font>'),
+                                        textInput("BLASTev", label = h4(HTML('<i class="fa fa-play"></i> <font size="4" color="red"><b>E-value cutoff</b></font>'),
                                                                               bsButton("qBLASTev", label="", icon=icon("question"), style="info", size="small")), 
                                                   value = "10", width = NULL, placeholder = NULL),
                                         bsPopover("qBLASTev", "Set E-value threshold to filter the BLAST output.",
                                                   trigger = "focus"),
                                         
                                         conditionalPanel(condition="input.program_database == 'Genome Sequence'", 
-                                                         selectInput("programdna", label = tags$div(HTML('<i class="fa fa-play"></i> <font size="4" color="red">Program</font>')), 
+                                                         selectInput("programdna", label = h4(HTML('<i class="fa fa-play"></i> <font size="4" color="red"><b>Program</b></font>')), 
                                                                      choices=c("blastn","tblastn", "tblastx"), width = NULL),
                                         ),
                                         conditionalPanel(condition="input.program_database == 'Protein Sequence'", 
-                                                         selectInput("programpro", label = tags$div(HTML('<i class="fa fa-play"></i> <font size="4" color="red">Program</font>')), 
+                                                         selectInput("programpro", label = h4(HTML('<i class="fa fa-play"></i> <font size="4" color="red"><b>Program</b></font>')), 
                                                                      choices=c("blastp", "blastx"), width = NULL),
                                         ),
                                         conditionalPanel(condition="input.program_database == 'Gene Sequence'", 
-                                                         selectInput("programgene", label = tags$div(HTML('<i class="fa fa-play"></i> <font size="4" color="red">Program</font>')), 
+                                                         selectInput("programgene", label = h4(HTML('<i class="fa fa-play"></i> <font size="4" color="red"><b>Program</b></font>')), 
                                                                      choices=c("blastn","tblastn", "tblastx"), width = NULL),
                                         ),
                                         conditionalPanel(condition="input.program_database == 'CDS sequence'", 
-                                                         selectInput("programcds", label = tags$div(HTML('<i class="fa fa-play"></i> <font size="4" color="red">Program</font>')), 
+                                                         selectInput("programcds", label = h4(HTML('<i class="fa fa-play"></i> <font size="4" color="red"><b>Program</b></font>')), 
                                                                      choices=c("blastn","tblastn", "tblastx"), width = NULL),
                                         ),
                                         
@@ -1172,86 +1676,86 @@ shinyUI(
             
             fixedRow(
               column(12,
-                     h4(HTML('<i class="fas fa-dot-circle" aria-hidden="true"></i> <font size="5" color="red"><b>Desigin primer</b></font>'),
+                     h4(HTML('<i class="fa fa-circle" aria-hidden="true"></i> <font size="4" color="red"><b>Desigin primer</b></font>'),
                         bsButton("qdp", label="", icon=icon("question"), style="info", size="small")),
                      bsPopover("qdp", "Design PCR primers for an input genomic region targeting SNPs and INDELs in this region.", trigger = "focus")
               )
             ),
             
-            h4(HTML('<i class="fa fa fa-circle"></i> <font size="4" color="black"><b>Parameter settings</b></font>')),
+            h4(HTML('<i class="fa fa-play"></i> <font size="4" color="black"><b>Parameter settings</b></font>')),
             
             
-            textInput("primergene", label = h4(HTML('<i class="fa fa fa-circle" aria-hidden="true"></i> <font size="3" color="red"><b>Genomic region</b></font>')
+            textInput("primergene", label = h4(HTML('<i class="fa fa-play" aria-hidden="true"></i> <font size="3" color="red"><b>Genomic region</b></font>')
                                                , bsButton("qpr0", label = "", icon = icon("question"), style = "info", size = "small")),value = "SoyZH13_02G148200"),
             bsPopover("qpr0", "A genomic region can be determined by chromosome positions or gene locus. For example, chr2:17603220-17604802 or SoyZH13_02G148200.", trigger = "focus"),
             
-            sliderInput("PRIMER_OPT_SIZE", label = h4(HTML('<i class="fa fa fa-circle" aria-hidden="true"></i> <font size="3" color="red"><b>Optimal primer size (bp)</b></font>'),
+            sliderInput("PRIMER_OPT_SIZE", label = h4(HTML('<i class="fa fa-play" aria-hidden="true"></i> <font size="3" color="red"><b>Optimal primer size (bp)</b></font>'),
                                                       bsButton("qpr1", label="", icon=icon("question"), style="info", size="small")),min = 16, max = 30, value = 20),
             bsPopover("qpr1", "Optimum length (in bases) of a primer. Primer3 will attempt to pick primers close to this length.",
                       trigger = "focus"),
             
-            sliderInput("PRIMER_SIZE", label = h4(HTML('<i class="fa fa fa-circle" aria-hidden="true"></i> <font size="3" color="red"><b>Primer size range (bp)</b></font>')
+            sliderInput("PRIMER_SIZE", label = h4(HTML('<i class="fa fa-play" aria-hidden="true"></i> <font size="3" color="red"><b>Primer size range (bp)</b></font>')
                                                   , bsButton("qpr2", label="", icon=icon("question"), style="info", size="small")), min = 1, max = 35, 
                         value = c(18, 25)),
             bsPopover("qpr2", "Minimum acceptable length  and Maximum acceptable length (in bases) of a primer", trigger = "focus"),    
             
-            textInput("PRIMER_OPT_TM", label = h4(HTML('<i class="fa fa fa-circle" aria-hidden="true"></i> <font size="3" color="red"><b>Optimal primer TM (℃)</b></font>')
+            textInput("PRIMER_OPT_TM", label = h4(HTML('<i class="fa fa-play" aria-hidden="true"></i> <font size="3" color="red"><b>Optimal primer TM (℃)</b></font>')
                                                   , bsButton("qpr3", label = "", icon = icon("question"), style = "info", size = "small")),value = "59.0"),
             bsPopover("qpr3", "Optimum melting temperature (Celsius) for a primer.", trigger = "focus"),    
             
             fluidRow(
-              column(6,textInput("PRIMER_MIN_TM", label = h4(HTML('<i class="fa fa fa-circle" aria-hidden="true"></i> <font size="3" color="red"><b>Min primer TM (℃)</b></font>')
+              column(6,textInput("PRIMER_MIN_TM", label = h4(HTML('<i class="fa fa-play" aria-hidden="true"></i> <font size="3" color="red"><b>Min primer TM (℃)</b></font>')
                                                              , bsButton("qpr4", label = "", icon = icon("question"), style = "info", size = "small")),value = "57.0"),
                      bsPopover("qpr4", "Minimum acceptable melting temperature (Celsius) for a primer oligo.", trigger = "focus")),
-              column(6,textInput("PRIMER_MAX_TM", label = h4(HTML('<i class="fa fa fa-circle" aria-hidden="true"></i> <font size="3" color="red"><b>Max primer TM (℃)</b></font>')
+              column(6,textInput("PRIMER_MAX_TM", label = h4(HTML('<i class="fa fa-play" aria-hidden="true"></i> <font size="3" color="red"><b>Max primer TM (℃)</b></font>')
                                                              , bsButton("qpr5", label = "", icon = icon("question"), style = "info", size = "small")),value = "62.0"),
                      bsPopover("qpr5", "Maximum acceptable melting temperature (Celsius) for a primer oligo.", trigger = "focus"))
             ),
             
-            textInput("PRIMER_OPT_GC_PERCENT", label = h4(HTML('<i class="fa fa fa-circle" aria-hidden="true"></i> <font size="3" color="red"><b>Optimal GC percent:</b></font>')
+            textInput("PRIMER_OPT_GC_PERCENT", label = h4(HTML('<i class="fa fa-play" aria-hidden="true"></i> <font size="3" color="red"><b>Optimal GC percent:</b></font>')
                                                           , bsButton("qpr6", label = "", icon = icon("question"), style = "info", size = "small")),value = "50.0"),
             bsPopover("qpr6", "Optimum GC percent.", trigger = "focus"),
             
-            sliderInput("PRIMER_GC", label = h4(HTML('<i class="fa fa fa-circle" aria-hidden="true"></i> <font size="3" color="red"><b>GC percent range (bp)</b></font>')
+            sliderInput("PRIMER_GC", label = h4(HTML('<i class="fa fa-play" aria-hidden="true"></i> <font size="3" color="red"><b>GC percent range (bp)</b></font>')
                                                 , bsButton("qpr7", label = "", icon = icon("question"), style = "info", size = "small")), min = 0, max = 100, 
                         value = c(20, 80), step=0.1),
             bsPopover("qpr7", "Minimum allowed percentage of Gs and Cs in any primer and Maximum allowable percentage of Gs and Cs in any primer generated by Primer.", trigger = "focus"),
             
-            textInput("PRIMER_MAX_NS_ACCEPTED", label = h4(HTML("<i class='fa fa fa-circle' aria-hidden='true'></i> <font size='4' color='red'><b>Max #N's accepted</b></font>")
+            textInput("PRIMER_MAX_NS_ACCEPTED", label = h4(HTML("<i class='fa fa-play' aria-hidden='true'></i> <font size='4' color='red'><b>Max #N's accepted</b></font>")
                                                            , bsButton("qpr8", label = "", icon = icon("question"), style = "info", size = "small")),value = "0"),
             bsPopover("qpr8", "Maximum number of unknown bases (N) allowable in any primer.", trigger = "focus"),
             
             fluidRow(
-              column(6,textInput("PRIMER_MAX_POLY_X", label = h4(HTML('<i class="fa fa fa-circle" aria-hidden="true"></i> <font size="3" color="red"><b>Max Poly-X</b></font>')
+              column(6,textInput("PRIMER_MAX_POLY_X", label = h4(HTML('<i class="fa fa-play" aria-hidden="true"></i> <font size="3" color="red"><b>Max Poly-X</b></font>')
                                                                  , bsButton("qpr9", label = "", icon = icon("question"), style = "info", size = "small")),value = "10"),
                      bsPopover("qpr9", "The maximum allowable length of a mononucleotide repeat, for example AAAAAA.", trigger = "focus")),
-              column(6,textInput("PRIMER_INTERNAL_MAX_POLY_X", label = h4(HTML('<i class="fa fa fa-circle" aria-hidden="true"></i> <font size="3" color="red"><b>Max Internal Poly-X</b></font>')
+              column(6,textInput("PRIMER_INTERNAL_MAX_POLY_X", label = h4(HTML('<i class="fa fa-play" aria-hidden="true"></i> <font size="3" color="red"><b>Max Internal Poly-X</b></font>')
                                                                           , bsButton("qpr10", label = "", icon = icon("question"), style = "info", size = "small")),value = "15"),
                      bsPopover("qpr10", "Equivalent parameter of PRIMER_MAX_POLY_X for the internal oligo.", trigger = "focus"))
             ),
             
             fluidRow(
-              column(6,textInput("PRIMER_MAX_SELF_ANY", label = h4(HTML('<i class="fa fa fa-circle" aria-hidden="true"></i> <font size="3" color="red"><b>Max Self Complementarity</b></font>')
+              column(6,textInput("PRIMER_MAX_SELF_ANY", label = h4(HTML('<i class="fa fa-play" aria-hidden="true"></i> <font size="3" color="red"><b>Max Self Complementarity</b></font>')
                                                                    , bsButton("qpr11", label = "", icon = icon("question"), style = "info", size = "small")), value = "45.0"),
                      bsPopover("qpr11", "It is the maximum allowable local alignment score when testing a single primer for (local) self-complementarity.", trigger = "focus")),
               
-              column(6,textInput("PRIMER_MAX_SELF_ANY_TH", label = h4(HTML('<i class="fa fa fa-circle" aria-hidden="true"></i> <font size="3" color="red"><b>Max Pair Complementarity</b></font>')
+              column(6,textInput("PRIMER_MAX_SELF_ANY_TH", label = h4(HTML('<i class="fa fa-play" aria-hidden="true"></i> <font size="3" color="red"><b>Max Pair Complementarity</b></font>')
                                                                       , bsButton("qpr12", label = "", icon = icon("question"), style = "info", size = "small")), value = "45.0"),
                      bsPopover("qpr12", "The maximum primer pair complementarity.", trigger = "focus"))
             ),
             
             fluidRow(
-              column(6,textInput("PRIMER_MAX_SELF_END", label = h4(HTML("<i class='fa fa fa-circle' aria-hidden='true'></i> <font size='3' color='red'><b>Max 3' Self Complementarity</b></font>")
+              column(6,textInput("PRIMER_MAX_SELF_END", label = h4(HTML("<i class='fa fa-play' aria-hidden='true'></i> <font size='3' color='red'><b>Max 3' Self Complementarity</b></font>")
                                                                    , bsButton("qpr13", label = "", icon = icon("question"), style = "info", size = "small")), value = "35.0")
                      , bsPopover("qpr13", "The maximum allowable 3\\'-anchored global.", trigger = "focus")),
-              column(6,textInput("PRIMER_MAX_SELF_END_TH", label = h4(HTML("<i class='fa fa fa-circle' aria-hidden='true'></i> <font size='3' color='red'><b>Max 3' Pair Complementarity</b></font>")
+              column(6,textInput("PRIMER_MAX_SELF_END_TH", label = h4(HTML("<i class='fa fa-play' aria-hidden='true'></i> <font size='3' color='red'><b>Max 3' Pair Complementarity</b></font>")
                                                                       , bsButton("qpr14", label = "", icon = icon("question"), style = "info", size = "small")), value = "35.0")
                      , bsPopover("qpr14", "Same as PRIMER_MAX_SELF_END but is based on thermodynamical approach - the stability of structure is analyzed. The value of tag is expressed as melting temperature. ", trigger = "focus"))
             ),
             
-            textInput("PRIMER_PRODUCT_SIZE_RANGE", label = h4(HTML('<i class="fa fa fa-circle" aria-hidden="true"></i> <font size="3" color="red"><b>Product Size Ranges</b></font>')
-                                                              , bsButton("qpr15", label = "", icon = icon("question"), style = "info", size = "small")), value = "100-300,300-600,600-1000")
-            , bsPopover("qpr15", "If one desires PCR products in either the range from 100 to 300 bases or in the range from 300 to 600 (or 600 to 1000) bases then one would set this parameter to 100-300,300-600,600-1000.", trigger = "focus"),
+            textInput("PRIMER_PRODUCT_SIZE_RANGE", label = h4(HTML('<i class="fa fa-play" aria-hidden="true"></i> <font size="3" color="red"><b>Product Size Ranges</b></font>')
+                                                              , bsButton("qpr15", label = "", icon = icon("question"), style = "info", size = "small")), value = "100-300,300-600,600-1000"), 
+            bsPopover("qpr15", "If one desires PCR products in either the range from 100 to 300 bases or in the range from 300 to 600 (or 600 to 1000) bases then one would set this parameter to 100-300,300-600,600-1000.", trigger = "focus"),
             
             shinysky::actionButton("submitprimer", strong("Submit!",
                                                           bsButton("qprGO", label="", icon=icon("question"), style="info", size="small")
@@ -1259,7 +1763,7 @@ shinyUI(
             shinysky::actionButton("clearprimer", strong("Reset"), styleclass = "warning"),
             shinysky::actionButton("primerExam", strong("Load example"), styleclass = "info"),
             conditionalPanel(condition="submitprimer != '0'", shinysky::busyIndicator(HTML("<div style='color:red;font-size:30px'>Calculation In progress...</div>"), wait = 0)),
-            bsPopover("qprGO", "Whenever the genomic region or any option is updated, please click Go!",
+            bsPopover("qprGO", "Whenever the genomic region or any option is updated, please click Submit!",
                       trigger = "focus")
           ),
           
@@ -1287,7 +1791,7 @@ shinyUI(
                      width = 100%;
                      white-space: pre-wrap;
           
-          }")
+            }")
             )
           )
         ),
@@ -1300,14 +1804,14 @@ shinyUI(
           sidebarPanel(
             fixedRow(
               column(12,
-                     h4(HTML('<i class="fas fa-dot-circle" aria-hidden="true"></i> <font size="5" color="red"><b>Orthologous Groups Search</b></font>'),
+                     h4(HTML('<i class="fa fa-circle" aria-hidden="true"></i> <font size="4" color="red"><b>Orthologous Groups Search</b></font>'),
                         bsButton("qor1", label="", icon=icon("question"), style="info", size="small")),
-                     bsPopover("qor1", "Orthologous Groups among 29 soybean genomes.", trigger = "focus")
+                     bsPopover("qor1", "Orthologous Groups among 31 soybean genomes.", trigger = "focus")
               )
             ),
-            textInput("ORT_ID", label = h4(HTML('<i class="fa fa fa-circle" aria-hidden="true"></i> <font size="4" color="red"><b>Input gene model</b></font>'),
+            textInput("ORT_ID", label = h4(HTML('<i class="fa fa-play" aria-hidden="true"></i> <font size="4" color="red"><b>Input a gene model</b></font>'),
                                            bsButton("qor2", label="", icon=icon("question"), style="info", size="small")),value = "SoyZH13_01G225600"),
-            bsPopover("qor2", "Input gene model of any of the 29 soybean genomes.",
+            bsPopover("qor2", "Input a single gene model of any of the 31 soybean genomes.",
                       trigger = "focus"),
             shinysky::actionButton("ORT_sbumit", strong("Submit!"), styleclass = "success"),
             shinysky::actionButton("clearort", strong("Reset"), styleclass = "warning"),
@@ -1331,15 +1835,15 @@ shinyUI(
           sidebarPanel(
             width = 3,
             tags$style("#GOGENErePaste {font-size:15px;font-family:sans-serif;}"),
-            h4(HTML('<i class="fas fa-dot-circle" aria-hidden="true"></i> <font size="5" color="red"><b>GO Annotation</b></font>'),
+            h4(HTML('<i class="fa fa-circle" aria-hidden="true"></i> <font size="4" color="red"><b>GO Annotation</b></font>'),
                bsButton("qGOre0", label="", icon=icon("question"), style="info", size="small")),
             bsPopover("qGOre0", "Perform GO annotation for input gene sets.", trigger = "focus"),
             
             tags$style(type='text/css', ".selectize-dropdown-content {max-height: 600px; }"),
-            selectInput("GO_variety_ID", label = h4(HTML('<i class="fa fa fa-circle" aria-hidden="true"></i> <font size="4" color="red"><b>Select a genome</b></font>'),
+            selectInput("GO_variety_ID", label = h4(HTML('<i class="fa fa-play" aria-hidden="true"></i> <font size="4" color="red"><b>Select a genome</b></font>'),
                                                     bsButton("qGOre1", label="", icon=icon("question"), style="info", size="small")), 
-                        list(`G.soja` = list("PI 562565", "PI 549046", "PI 578357", "W05"),
-                             `Improved cultivar` = list("Zhonghuang 13", "Williams 82", "Xu Dou No.1", "Tie Feng No.18", "Ju Xuan No.23", "Wan Dou No.28", "Amsoy",
+                        list(`G.soja` = list("PI 483463", "PI 562565", "PI 549046", "PI 578357", "W05"),
+                             `Improved cultivar` = list("Zhonghuang 13", "Williams 82", "Lee", "Xu Dou No.1", "Tie Feng No.18", "Ju Xuan No.23", "Wan Dou No.28", "Amsoy",
                                                         "Yu Dou No.22", "Jin Dou No.23", "Qi Huang No.34", "Han Dou No.5", "PI 548362",
                                                         "Ji Dou No.17", "Dong Nong No.50", "Hei He No.43", "Ke Shan No.1"),
                              `Landrace` = list("Zhutwinning2", "Zi Hua No.4", "Tong Shan Tian E Dan", "58-161", "PI 398296",
@@ -1349,7 +1853,7 @@ shinyUI(
             bsPopover("qGOre1", "Select a genome for the input gene set.",
                       trigger = "focus"),
             
-            selectInput("In_GOre", label = tags$div(HTML('<i class="fa fa-play" aria-hidden="true"></i> <font size="4" color="red">Paste or upload input data?</font>'),
+            selectInput("In_GOre", label = h4(HTML('<i class="fa fa-play" aria-hidden="true"></i> <font size="4" color="red"><b>Paste or upload input data?</b></font>'),
                                                     bsButton("qGOre2", label="", icon=icon("question"), style="info", size="small")
             ), choices = list("Paste input data" = "paste2", 
                               "Upload input data" = "upload2"), 
@@ -1357,17 +1861,17 @@ shinyUI(
             bsPopover("qGOre2", "The input data must be multiple gene model names.", trigger = "focus"),
             
             conditionalPanel(condition="input.In_GOre == 'paste2'", 
-                             textAreaInput("GOGENErePaste", label = HTML('<i class="fa fa-play" aria-hidden="true"></i> <font size="4" color="red">Input a list of gene model names</font>'),
+                             textAreaInput("GOGENErePaste", label = h4(HTML('<i class="fa fa-play" aria-hidden="true"></i> <font size="4" color="red"><b>Input a list of gene model names</b></font>')),
                                            value = "", resize = "vertical", height='200px', width = '200%',
                                            placeholder = "One Gene ID in one row.")
             ),
             conditionalPanel(condition="input.In_GOre == 'upload2'", 
                              fileInput("GOGENEreUpload",
-                                       label = h4("Upload file"), multiple = FALSE, width = "100%"),
+                                       label = h4(HTML('<i class="fa fa-play" aria-hidden="true"></i> <font size="4" color="red"><b>Upload file</b></font>')), multiple = FALSE, width = "100%"),
                              downloadButton("GOre_Input.txt", "Example input gene set", style = "width:100%;", class = "buttDown")
             ),
             
-            sliderInput("GOnrow", h4(HTML('<i class="fa fa fa-circle" aria-hidden="true"></i> <font size="4" color="red"><b>Maximum number of GO terms</b></font>'),
+            sliderInput("GOnrow", h4(HTML('<i class="fa fa-play" aria-hidden="true"></i> <font size="4" color="red"><b>Maximum number of GO terms</b></font>'),
                                      bsButton("qGOid4", label="", icon=icon("question"), style="info", size="small")
             ), min = 1, max = 50, value = 30, ticks = FALSE),
             bsPopover("qGOid4", "Maximum number of GO terms to display",
@@ -1383,8 +1887,8 @@ shinyUI(
             bsPopover("qGO3", "Click this button to start the annotation!",
                       trigger = "focus"),
             
-            numericInput("goanheight", HTML('<i class="fa fa fa-circle" aria-hidden="true"></i> <font size="4" color="red"><b>Plot height</b></font>'), value = 800),
-            numericInput("goanwidth", HTML('<i class="fa fa fa-circle" aria-hidden="true"></i> <font size="4" color="red"><b>Plot width</b></font>'), value = 1300)
+            numericInput("goanheight", h4(HTML('<i class="fa fa-play" aria-hidden="true"></i> <font size="4" color="red"><b>Plot height</b></font>')), value = 800),
+            numericInput("goanwidth", h4(HTML('<i class="fa fa-play" aria-hidden="true"></i> <font size="4" color="red"><b>Plot width</b></font>')), value = 1300)
           ),
           
           mainPanel(
@@ -1405,15 +1909,15 @@ shinyUI(
           sidebarPanel(
             width = 3,
             tags$style("#GOGENEgePaste {font-size:15px;font-family:sans-serif;}"),
-            h4(HTML('<i class="fas fa-dot-circle" aria-hidden="true"></i> <font size="5" color="red"><b>GO enrichment analysis</b></font>'),
+            h4(HTML('<i class="fa fa-circle" aria-hidden="true"></i> <font size="4" color="red"><b>GO enrichment analysis</b></font>'),
                bsButton("qGOge0", label="", icon=icon("question"), style="info", size="small")),
             bsPopover("qGOge0", "Perform GO enrichment analysis for input gene sets.", trigger = "focus"),
             
             tags$style(type='text/css', ".selectize-dropdown-content {max-height: 600px; }"),
-            selectInput("GOge_variety_ID", label = h4(HTML('<i class="fa fa fa-circle" aria-hidden="true"></i> <font size="4" color="red"><b>Select a genome</b></font>'),
+            selectInput("GOge_variety_ID", label = h4(HTML('<i class="fa fa-play" aria-hidden="true"></i> <font size="4" color="red"><b>Select a genome</b></font>'),
                                                       bsButton("qGOge1", label="", icon=icon("question"), style="info", size="small")), 
-                        list(`G.soja` = list("PI 562565", "PI 549046", "PI 578357", "W05"),
-                             `Improved cultivar` = list("Zhonghuang 13", "Williams 82", "Xu Dou No.1", "Tie Feng No.18", "Ju Xuan No.23", "Wan Dou No.28", "Amsoy",
+                        list(`G.soja` = list("PI 483463", "PI 562565", "PI 549046", "PI 578357", "W05"),
+                             `Improved cultivar` = list("Zhonghuang 13", "Williams 82", "Lee", "Xu Dou No.1", "Tie Feng No.18", "Ju Xuan No.23", "Wan Dou No.28", "Amsoy",
                                                         "Yu Dou No.22", "Jin Dou No.23", "Qi Huang No.34", "Han Dou No.5", "PI 548362",
                                                         "Ji Dou No.17", "Dong Nong No.50", "Hei He No.43", "Ke Shan No.1"),
                              `Landrace` = list("Zhutwinning2", "Zi Hua No.4", "Tong Shan Tian E Dan", "58-161", "PI 398296",
@@ -1422,35 +1926,35 @@ shinyUI(
             ),
             bsPopover("qGOge1", "Select a genome for the input gene set.", trigger = "focus"),
             
-            selectInput("In_GOge", label = tags$div(HTML('<i class="fa fa-play" aria-hidden="true"></i> <font size="4" color="red">Paste or upload input data?</font>'),
+            selectInput("In_GOge", label = h4(HTML('<i class="fa fa-play" aria-hidden="true"></i> <font size="4" color="red"><b>Paste or upload input data?</b></font>'),
                                                     bsButton("qGOge2", label="", icon=icon("question"), style="info", size="small")
             ), choices = list("Paste input data" = "paste3", 
                               "Upload input data" = "upload3"), selected = "paste"),
             bsPopover("qGOge2", "The input data must be multiple gene model names.", trigger = "focus"),
             
             conditionalPanel(condition="input.In_GOge == 'paste3'", 
-                             textAreaInput("GOGENEgePaste", label = HTML('<i class="fa fa-play" aria-hidden="true"></i> <font size="4" color="red">Input a list of gene model names</font>'),
+                             textAreaInput("GOGENEgePaste", label = h4(HTML('<i class="fa fa-play" aria-hidden="true"></i> <font size="4" color="red"><b>Input a list of gene model names</b></font>')),
                                            value = "", resize = "vertical", height='200px', width = '200%',
                                            placeholder = "One gene ID in one row.")
             ),
             conditionalPanel(condition="input.In_GOge == 'upload3'", 
                              fileInput("GOGENEgeUpload",
-                                       label = h4("Upload file"), multiple = FALSE, width = "100%"),
+                                       label = h4(HTML('<i class="fa fa-play" aria-hidden="true"></i> <font size="4" color="red"><b>Upload file</b></font>')), multiple = FALSE, width = "100%"),
                              downloadButton("GOge_Input.txt", "Example input gene set", style = "width:100%;", class = "buttDown")
             ),
             
-            sliderInput("GOgenrow", h4(HTML('<i class="fa fa fa-circle" aria-hidden="true"></i> <font size="4" color="red"><b>Maximum number of GO terms</b></font>'),
+            sliderInput("GOgenrow", h4(HTML('<i class="fa fa-play" aria-hidden="true"></i> <font size="4" color="red"><b>Maximum number of GO terms</b></font>'),
                                        bsButton("qGOge3", label="", icon=icon("question"), style="info", size="small")
             ), min = 1, max = 50, value = 30, ticks = FALSE),
             bsPopover("qGOge3", "Maximum number of GO terms to display", trigger = "focus"),
             
-            sliderInput("GOp", h4(HTML('<i class="fa fa fa-circle" aria-hidden="true"></i> <font size="4" color="red"><b>P-adjust</b></font>'),
+            sliderInput("GOp", h4(HTML('<i class="fa fa-play" aria-hidden="true"></i> <font size="4" color="red"><b>P-adjust</b></font>'),
                                   bsButton("qGOid5", label="", icon=icon("question"), style="info", size="small")
             ), min = 0.01, max = 1, value = 0.05, ticks = FALSE),
             bsPopover("qGOid5", "Maximum adjusted p value allowed.",
                       trigger = "focus"),
             
-            sliderInput("GOq", h4(HTML('<i class="fa fa fa-circle" aria-hidden="true"></i> <font size="4" color="red"><b>Q-value</b></font>'),
+            sliderInput("GOq", h4(HTML('<i class="fa fa-play" aria-hidden="true"></i> <font size="4" color="red"><b>Q-value</b></font>'),
                                   bsButton("qGOid6", label="", icon=icon("question"), style="info", size="small")
             ), min = 0.01, max = 1, value = 0.05, ticks = FALSE),
             bsPopover("qGOid6", "Maximum Q value allowed.",
@@ -1461,22 +1965,22 @@ shinyUI(
             shinysky::actionButton("clearGOge", strong("Reset"), styleclass = "warning"),
             shinysky::actionButton("GOgeExam", strong("Load example"), styleclass = "info"),
             conditionalPanel(condition="GOge_sbumit != '0'", shinysky::busyIndicator(HTML("<div style='color:red;font-size:30px'>Calculation In progress...</div>"), wait = 0)),
-            bsPopover("qge4", "Click this button to start the analysis!",
-                      trigger = "focus"),
+            bsPopover("qge4", "Click this button to start the analysis!", trigger = "focus"),
+            
             fluidRow(
-              h5(HTML('<i class="fa fa-cog"></i> <font size="5" color="red"><b>Molecular Function</b></font>')),
-              column(6,numericInput("goheight1", HTML('<i class="fa fa fa-circle" aria-hidden="true"></i> <font size="4" color="red"><b>Plot height</b></font>'), value = 400)),
-              column(6,numericInput("gowidth1", HTML('<i class="fa fa fa-circle" aria-hidden="true"></i> <font size="4" color="red"><b>Plot width</b></font>'), value = 1300))
+              column(12,h5(HTML('<i class="fa fa-cog"></i> <font size="5" color="red"><b>Molecular Function</b></font>'))),
+              column(6,numericInput("goheight1", h4(HTML('<i class="fa fa-play" aria-hidden="true"></i> <font size="4" color="red"><b>Plot height</b></font>')), value = 400)),
+              column(6,numericInput("gowidth1", h4(HTML('<i class="fa fa-play" aria-hidden="true"></i> <font size="4" color="red"><b>Plot width</b></font>')), value = 1300))
             ),
             fluidRow(
-              h5(HTML('<i class="fa fa-cog"></i> <font size="5" color="red"><b>Biological Process</b></font>')),
-              column(6,numericInput("goheight2", HTML('<i class="fa fa fa-circle" aria-hidden="true"></i> <font size="4" color="red"><b>Plot height</b></font>'), value = 400)),
-              column(6,numericInput("gowidth2", HTML('<i class="fa fa fa-circle" aria-hidden="true"></i> <font size="4" color="red"><b>Plot width</b></font>'), value = 1300))
+              column(12,h5(HTML('<i class="fa fa-cog"></i> <font size="5" color="red"><b>Biological Process</b></font>'))),
+              column(6,numericInput("goheight2", h4(HTML('<i class="fa fa-play" aria-hidden="true"></i> <font size="4" color="red"><b>Plot height</b></font>')), value = 400)),
+              column(6,numericInput("gowidth2", h4(HTML('<i class="fa fa-play" aria-hidden="true"></i> <font size="4" color="red"><b>Plot width</b></font>')), value = 1300))
             ),
             fluidRow(
-              h5(HTML('<i class="fa fa-cog"></i> <font size="5" color="red"><b>Cellular Component</b></font>')),
-              column(6,numericInput("goheight3", HTML('<i class="fa fa fa-circle" aria-hidden="true"></i> <font size="4" color="red"><b>Plot height</b></font>'), value = 300)),
-              column(6,numericInput("gowidth3", HTML('<i class="fa fa fa-circle" aria-hidden="true"></i> <font size="4" color="red"><b>Plot width</b></font>'), value = 1300))
+              column(12,h5(HTML('<i class="fa fa-cog"></i> <font size="5" color="red"><b>Cellular Component</b></font>'))),
+              column(6,numericInput("goheight3", h4(HTML('<i class="fa fa-play" aria-hidden="true"></i> <font size="4" color="red"><b>Plot height</b></font>')), value = 300)),
+              column(6,numericInput("gowidth3", h4(HTML('<i class="fa fa-play" aria-hidden="true"></i> <font size="4" color="red"><b>Plot width</b></font>')), value = 1300))
             )
           ),
           
@@ -1505,25 +2009,24 @@ shinyUI(
           sidebarPanel(
             width = 3,
             tags$style("#KEGG_GENErePaste {font-size:15px;font-family:sans-serif;}"),
-            h4(HTML('<i class="fas fa-dot-circle" aria-hidden="true"></i> <font size="5" color="red"><b>KEGG Annotation</b></font>'),
+            h4(HTML('<i class="fa fa-circle" aria-hidden="true"></i> <font size="4" color="red"><b>KEGG Annotation</b></font>'),
                bsButton("qKEre0", label="", icon=icon("question"), style="info", size="small")),
             bsPopover("qKEre0", "Perform KEGG annotation for input gene sets.", trigger = "focus"),
             
             tags$style(type='text/css', ".selectize-dropdown-content {max-height: 600px; }"),
-            selectInput("KE_variety_ID", label = h4(HTML('<i class="fa fa fa-circle" aria-hidden="true"></i> <font size="4" color="red"><b>Select a genome</b></font>'),
+            selectInput("KE_variety_ID", label = h4(HTML('<i class="fa fa-play" aria-hidden="true"></i> <font size="4" color="red"><b>Select a genome</b></font>'),
                                                     bsButton("qKEre1", label="", icon=icon("question"), style="info", size="small")), 
-                        list(`G.soja` = list("PI 562565", "PI 549046", "PI 578357", "W05"),
-                             `Improved cultivar` = list("Zhonghuang 13", "Williams 82", "Xu Dou No.1", "Tie Feng No.18", "Ju Xuan No.23", "Wan Dou No.28", "Amsoy",
+                        list(`G.soja` = list("PI 483463", "PI 562565", "PI 549046", "PI 578357", "W05"),
+                             `Improved cultivar` = list("Zhonghuang 13", "Williams 82", "Lee", "Xu Dou No.1", "Tie Feng No.18", "Ju Xuan No.23", "Wan Dou No.28", "Amsoy",
                                                         "Yu Dou No.22", "Jin Dou No.23", "Qi Huang No.34", "Han Dou No.5", "PI 548362",
                                                         "Ji Dou No.17", "Dong Nong No.50", "Hei He No.43", "Ke Shan No.1"),
                              `Landrace` = list("Zhutwinning2", "Zi Hua No.4", "Tong Shan Tian E Dan", "58-161", "PI 398296",
                                                "Zhang Chun Man Cang Jin", "Feng Di Huang", "Tie Jia Si Li Huang", "Shi Sheng Chang Ye")) ,
                         selected = "Zhonghuang 13"
             ),
-            bsPopover("qKEre1", "Select a genome for the input gene set.",
-                      trigger = "focus"),
+            bsPopover("qKEre1", "Select a genome for the input gene set.", trigger = "focus"),
             
-            selectInput("In_KEre", label = tags$div(HTML('<i class="fa fa-play" aria-hidden="true"></i> <font size="4" color="red">Paste or upload input data?</font>'),
+            selectInput("In_KEre", label = h4(HTML('<i class="fa fa-play" aria-hidden="true"></i> <font size="4" color="red"><b>Paste or upload input data?</b></font>'),
                                                     bsButton("qKEre2", label="", icon=icon("question"), style="info", size="small")
             ), choices = list("Paste input data" = "paste2", 
                               "Upload input data" = "upload2"), 
@@ -1531,21 +2034,20 @@ shinyUI(
             bsPopover("qKEre2", "The input data must be multiple gene model names.", trigger = "focus"),
             
             conditionalPanel(condition="input.In_KEre == 'paste2'", 
-                             textAreaInput("KEGG_GENErePaste", label = HTML('<i class="fa fa-play" aria-hidden="true"></i> <font size="4" color="red">Input a list of gene model names</font>'),
+                             textAreaInput("KEGG_GENErePaste", label = h4(HTML('<i class="fa fa-play" aria-hidden="true"></i> <font size="4" color="red"><b>Input a list of gene model names</b></font>')),
                                            value = "", resize = "vertical", height='200px', width = '200%',
                                            placeholder = "One gene ID in one row.")
             ),
             conditionalPanel(condition="input.In_KEre == 'upload2'", 
                              fileInput("KEGG_GENEreUpload",
-                                       label = h4("Upload file"), multiple = FALSE, width = "100%"),
+                                       label = h4(HTML('<i class="fa fa-play" aria-hidden="true"></i> <font size="4" color="red"><b>Upload file</b></font>')), multiple = FALSE, width = "100%"),
                              downloadButton("KOre_Input.txt", "Example input gene set", style = "width:100%;", class = "buttDown")
             ),
-            sliderInput("KOnrow", h4(HTML('<i class="fa fa fa-circle" aria-hidden="true"></i> <font size="4" color="red"><b>Maximum number of KEGG pathways</b></font>'),
+            sliderInput("KOnrow", h4(HTML('<i class="fa fa-play" aria-hidden="true"></i> <font size="4" color="red"><b>Maximum number of KEGG pathways</b></font>'),
                                      bsButton("qKEid4", label="", icon=icon("question"), style="info", size="small")
             ), min = 1, max = 50, value = 30, ticks = FALSE),
             bsPopover("qKEid4", "Maximum number of KEGG pathways to display",
                       trigger = "focus"),
-            
             
             shinysky::actionButton("KEGGre_sbumit", strong("Submit!",
                                                            bsButton("qKO3", label="", icon=icon("question"), style="info", size="small")
@@ -1555,10 +2057,10 @@ shinyUI(
             conditionalPanel(condition="ORT_sbumit != '0'", shinysky::busyIndicator(HTML("<div style='color:red;font-size:30px'>Calculation In progress...</div>"), wait = 0)),
             bsPopover("qKO3", "Click this button to start the annotation!",
                       trigger = "focus"),
-            numericInput("kegganheight", HTML('<i class="fa fa fa-circle" aria-hidden="true"></i> <font size="4" color="red"><b>Plot height</b></font>'), value = 800),
-            numericInput("kegganwidth", HTML('<i class="fa fa fa-circle" aria-hidden="true"></i> <font size="4" color="red"><b>Plot width</b></font>'), value = 1300),
-            
+            numericInput("kegganheight", h4(HTML('<i class="fa fa-play" aria-hidden="true"></i> <font size="4" color="red"><b>Plot height</b></font>')), value = 800),
+            numericInput("kegganwidth", h4(HTML('<i class="fa fa-play" aria-hidden="true"></i> <font size="4" color="red"><b>Plot width</b></font>')), value = 1300)
           ),
+          
           mainPanel(
             width = 9,
             htmlOutput("KOidout_title"),
@@ -1577,25 +2079,24 @@ shinyUI(
           sidebarPanel(
             width = 3,
             tags$style("#KEGG_GENErePaste1 {font-size:15px;font-family:sans-serif;}"),
-            h4(HTML('<i class="fas fa-dot-circle" aria-hidden="true"></i> <font size="5" color="red"><b>KEGG enrichment analysis</b></font>'),
+            h4(HTML('<i class="fa fa-circle" aria-hidden="true"></i> <font size="4" color="red"><b>KEGG enrichment analysis</b></font>'),
                bsButton("qKE0", label="", icon=icon("question"), style="info", size="small")),
             bsPopover("qKE0", "Perform enrichment analysis on gene sets.", trigger = "focus"),
             
             tags$style(type='text/css', ".selectize-dropdown-content {max-height: 600px; }"),
-            selectInput("KEGG_variety_ID", label = h4(HTML('<i class="fa fa fa-circle" aria-hidden="true"></i> <font size="4" color="red"><b>Select a genome</b></font>'),
+            selectInput("KEGG_variety_ID", label = h4(HTML('<i class="fa fa-play" aria-hidden="true"></i> <font size="4" color="red"><b>Select a genome</b></font>'),
                                                       bsButton("qKE1", label="", icon=icon("question"), style="info", size="small")), 
-                        list(`G.soja` = list("PI 562565", "PI 549046", "PI 578357", "W05"),
-                             `Improved cultivar` = list("Zhonghuang 13", "Williams 82", "Xu Dou No.1", "Tie Feng No.18", "Ju Xuan No.23", "Wan Dou No.28", "Amsoy",
+                        list(`G.soja` = list("PI 483463", "PI 562565", "PI 549046", "PI 578357", "W05"),
+                             `Improved cultivar` = list("Zhonghuang 13", "Williams 82", "Lee", "Xu Dou No.1", "Tie Feng No.18", "Ju Xuan No.23", "Wan Dou No.28", "Amsoy",
                                                         "Yu Dou No.22", "Jin Dou No.23", "Qi Huang No.34", "Han Dou No.5", "PI 548362",
                                                         "Ji Dou No.17", "Dong Nong No.50", "Hei He No.43", "Ke Shan No.1"),
                              `Landrace` = list("Zhutwinning2", "Zi Hua No.4", "Tong Shan Tian E Dan", "58-161", "PI 398296",
                                                "Zhang Chun Man Cang Jin", "Feng Di Huang", "Tie Jia Si Li Huang", "Shi Sheng Chang Ye")) ,
                         selected = "Zhonghuang 13"
             ),
-            bsPopover("qKE1", "Select a genome for the input gene set.",
-                      trigger = "focus"),
+            bsPopover("qKE1", "Select a genome for the input gene set.", trigger = "focus"),
             
-            selectInput("In_KE", label = tags$div(HTML('<i class="fa fa-play" aria-hidden="true"></i> <font size="4" color="red">Paste or upload input data?</font>'),
+            selectInput("In_KE", label = h4(HTML('<i class="fa fa-play" aria-hidden="true"></i> <font size="4" color="red"><b>Paste or upload input data?</b></font>'),
                                                   bsButton("qKE2", label="", icon=icon("question"), style="info", size="small")
             ), choices = list("Paste input data" = "paste4", 
                               "Upload input data" = "upload4"), 
@@ -1603,29 +2104,29 @@ shinyUI(
             bsPopover("qKE2", "The input data must be multiple gene model names.", trigger = "focus"),
             
             conditionalPanel(condition="input.In_KE == 'paste4'", 
-                             textAreaInput("KEGG_GENErePaste1", label = HTML('<i class="fa fa-play" aria-hidden="true"></i> <font size="4" color="red">Input a list of gene model names</font>'),
+                             textAreaInput("KEGG_GENErePaste1", label = h4(HTML('<i class="fa fa-play" aria-hidden="true"></i> <font size="4" color="red"><b>Input a list of gene model names</b></font>')),
                                            value = "", resize = "vertical", height='200px', width = '200%',
                                            placeholder = "One gene ID in one row.")
             ),
             conditionalPanel(condition="input.In_KE == 'upload4'", 
                              fileInput("KEGG_GENEreUpload1",
-                                       label = h4("Upload file"), multiple = FALSE, width = "100%"),
+                                       label = h4(HTML('<i class="fa fa-play" aria-hidden="true"></i> <font size="4" color="red"><b>Upload file</b></font>')), multiple = FALSE, width = "100%"),
                              downloadButton("KO_Input.txt", "Example input gene set", style = "width:100%;", class = "buttDown")
             ),
             
-            sliderInput("KEnrow", h4(HTML('<i class="fa fa fa-circle" aria-hidden="true"></i> <font size="4" color="red"><b>Maximum number of KEGG pathways</b></font>'),
+            sliderInput("KEnrow", h4(HTML('<i class="fa fa-play" aria-hidden="true"></i> <font size="4" color="red"><b>Maximum number of KEGG pathways</b></font>'),
                                      bsButton("qKEid3", label="", icon=icon("question"), style="info", size="small")
             ), min = 1, max = 50, value = 30, ticks = FALSE),
             bsPopover("qKEid3", "Maximum number of KEGG pathways to display",
                       trigger = "focus"),
             
-            sliderInput("KEp", h4(HTML('<i class="fa fa fa-circle" aria-hidden="true"></i> <font size="4" color="red"><b>P-adjust</b></font>'),
+            sliderInput("KEp", h4(HTML('<i class="fa fa-play" aria-hidden="true"></i> <font size="4" color="red"><b>P-adjust</b></font>'),
                                   bsButton("qKEid5", label="", icon=icon("question"), style="info", size="small")
             ), min = 0.01, max = 1, value = 0.05, ticks = FALSE),
             bsPopover("qKEid5", "Maximum adjusted p value allowed.",
                       trigger = "focus"),
             
-            sliderInput("KEq", h4(HTML('<i class="fa fa fa-circle" aria-hidden="true"></i> <font size="4" color="red"><b>Q-value</b></font>'),
+            sliderInput("KEq", h4(HTML('<i class="fa fa-play" aria-hidden="true"></i> <font size="4" color="red"><b>Q-value</b></font>'),
                                   bsButton("qKEid6", label="", icon=icon("question"), style="info", size="small")
             ), min = 0.01, max = 1, value = 0.05, ticks = FALSE),
             bsPopover("qKEid6", "Maximum Q value allowed.",
@@ -1638,8 +2139,8 @@ shinyUI(
             conditionalPanel(condition="ORT_sbumit != '0'", shinysky::busyIndicator(HTML("<div style='color:red;font-size:30px'>Calculation In progress...</div>"), wait = 0)),
             bsPopover("qKE3", "Click this button to start the analysis!",
                       trigger = "focus"),
-            numericInput("keggheight", HTML('<i class="fa fa fa-circle" aria-hidden="true"></i> <font size="4" color="red"><b>Plot height</b></font>'), value = 800),
-            numericInput("keggwidth", HTML('<i class="fa fa fa-circle" aria-hidden="true"></i> <font size="4" color="red"><b>Plot width</b></font>'), value = 1300)
+            numericInput("keggheight", h4(HTML('<i class="fa fa-play" aria-hidden="true"></i> <font size="4" color="red"><b>Plot height</b></font>')), value = 800),
+            numericInput("keggwidth", h4(HTML('<i class="fa fa-play" aria-hidden="true"></i> <font size="4" color="red"><b>Plot width</b></font>')), value = 1300)
           ),
           
           mainPanel(
@@ -1654,174 +2155,58 @@ shinyUI(
         )
       ),
       
-      
-      # JBrowse
+      # Accession
       tabPanel(
-        title = HTML("<strong style='font-size:20px'>JBrowse</strong>"), icon = icon("list"),
-        h4(HTML('<i class="fas fa-dot-circle"></i> <font size="5" color="red"><b>JBrowse of 29 soybean genomes</b></font>'),
-           bsButton("qjb1", label="", icon=icon("question"), style="info", size="small")),
-        bsPopover("qjb1", "Click the name of a soybean genome to view in JBrowse", trigger = "focus"),
-        DT::dataTableOutput('JBrowsetable'),
-        br()
-      ),
-      
-      
-      #Expression
-      navbarMenu(
-        title = HTML("<strong style='font-size:20px'>Expression</strong>"),
-        #Gene expression
-        tabPanel(
-          title = HTML("<strong style='font-size:20px'>Gene expression analysis</strong>"),
-          sidebarPanel(
-            #Expression pattern of protein coding genes in 27 different soybean samples
-            tags$style("#gtsgeneid {font-size:15px;font-family:sans-serif;}"),
-            width = 3,
-            textInput("gtsgeneid", label = h4(HTML('<i class="fa fa fa-circle" aria-hidden="true"></i> <font size="4" color="red"><b>Input gene ID</b></font>'), 
-                                              bsButton("qsgts1", label="", icon=icon("question"), style="info", size="small")),
-                      value = "SoyZH13_05G201900"),
-            bsPopover("qsgts1", "Input a gene ID of the Zhonghuang 13 genome!",
-                      trigger = "focus"),
-            shinyWidgets::multiInput("Gexp_mut_group", h4(HTML('<i class="fa fa fa-circle" aria-hidden="true"></i> <font size="4" color="red"><b>Choose tissues/stages</b></font>'),
-                                                          bsButton("qsgex", label="", icon=icon("question"), style="info", size="small")),
-                                     choices = c("cotyledon-1", "root", "stem", "leafbud-1", "leafbud-2", "leaf-1", "cotyledon-2", "stem-2", "leafbud-3", "leaf-2", "flo-1", "shoot_meristem", "flo-2", "flo-3", "flo-4", "flo-5", "pod&seed-1", "pod&seed-2", "pod&seed-3", "pod-1", "pod-2", "pod-3", "seed-1", "seed-2", "seed-3", "seed-4", "seed-5"),
-                                     selected = c("cotyledon-1", "root", "stem", "leafbud-1", "leafbud-2", "leaf-1", "cotyledon-2", "stem-2", "leafbud-3", "leaf-2", "flo-1", "shoot_meristem", "flo-2", "flo-3", "flo-4", "flo-5", "pod&seed-1", "pod&seed-2", "pod&seed-3", "pod-1", "pod-2", "pod-3", "seed-1", "seed-2", "seed-3", "seed-4", "seed-5"),
-                                     width = 800,
-                                     options = list(
-                                       enable_search = TRUE,
-                                       non_selected_header = "Choose from:",
-                                       selected_header = "You have selected:"
-                                     )
-            ),
-            
-            fluidRow(
-              column(6, actionButton("accessiongexnone", strong("Deselect all"), width = "100%", style="color: #fff; background-color: #337ab7; border-color: #2e6da4")),
-              column(6, actionButton("accessiongexall", strong("Select all"), width = "100%", style="color: #fff; background-color: #337ab7; border-color: #2e6da4"))
-            ),
-            br(),
-            
-            shinyWidgets::actionBttn("Searchname_description", "Information of 27 collected samples", 
-                                     block = TRUE, size = "sm", style="unite", color="default")
-            ,
-            bsModal("name-description", "Information of 27 collected samples", "Searchname_description", size = "large", 
-                   DT::dataTableOutput("expressionname1", width = "100%")
-            ),
-            
-            br(),
-            
-            bsPopover("qsgex", "Choose one or multiple tissues and development stages.",
-                      trigger = "focus"),
-            shinysky::actionButton("submit_GSgst", strong("Submit!",
-                                                          bsButton("qsgts2", label="", icon=icon("question"), style="info", size="small")
-            ), styleclass = "success"),
-            
-            shinysky::actionButton("cleargst", strong("Reset"), styleclass = "warning"),
-            shinysky::actionButton("gstExamID", strong("Load example"), styleclass = "info"),
-            conditionalPanel(condition="submit_GSgst != '0'", shinysky::busyIndicator(HTML("<div style='color:red;font-size:30px'>Calculation In progress...</div>"), wait = 0)),
-            bsPopover("qsgts2", "Click this button to start the analysis!",
-                      trigger = "focus"),
-            br(),
-            numericInput("gstheight", HTML('<i class="fa fa fa-circle" aria-hidden="true"></i> <font size="4" color="red"><b>Plot height</b></font>'), value = 800),
-            numericInput("gstwidth", HTML('<i class="fa fa fa-circle" aria-hidden="true"></i> <font size="4" color="red"><b>Plot width</b></font>'), value = 1300)
-            
+        title = HTML("<strong style='font-size:20px'>Accessions</strong>"),
+        
+        sidebarPanel(
+          width = 3,
+          shinyWidgets::multiInput("mychooserA", h4(HTML('<i class="fa fa-play" aria-hidden="true"></i> <font size="4" color="red"><b>Select soybean accessions</b></font>'),
+                                                    bsButton("qa1", label="", icon=icon("question"), style="info", size="small")),
+                                   choices = all.soya.cho,
+                                   selected = c("Landrace"),
+                                   width = 800,
+                                   options = list(
+                                     enable_search = TRUE,
+                                     non_selected_header = "Choose from:",
+                                     selected_header = "You have selected:"
+                                   )
           ),
           
-          mainPanel(
-            width = 9,
-            htmlOutput("gstout_title"),
-            DT::dataTableOutput("gstoutresult", width = "100%"),
-            uiOutput("gstbarplotif")
-            #plotOutput("gstbarplot", height = "800px", width = "100%")
+          bsPopover("qa1", "Only the chosen soybean accessions will be displayed.",
+                    trigger = "focus"),
+          fluidRow(
+            column(6, actionButton("accessionnone1", strong("Deselect all"), width = "100%", style="color: #fff; background-color: #337ab7; border-color: #2e6da4")),
+            column(6, actionButton("accessionall1", strong("Select all"), width = "100%", style="color: #fff; background-color: #337ab7; border-color: #2e6da4"))
           )
         ),
         
-        #Gene co-correlation
-        tabPanel(
-          title = HTML("<strong style='font-size:20px'>Gene co-expression analysis</strong>"),
-          sidebarPanel(
-            #Expression pattern of protein coding genes in 27 different soybean samples
-            width = 3,
-            tags$style("#genecorPaste {font-size:15px;font-family:sans-serif;}"),
-            textAreaInput("genecorPaste", label = h4(HTML('<i class="fa fa fa-circle" aria-hidden="true"></i> <font size="4" color="red"><b>Input a list of gene model names</b></font>'), 
-                                                     bsButton("qsgcor1", label="", icon=icon("question"), style="info", size="small")),
-                          value = "", resize = "vertical", height='200px', width = '200%',
-                          placeholder = "One Gene ID in one row"),
-            bsPopover("qsgcor1", "Input at least two Gene IDs of the Zhonghuang 13 genome!", trigger = "focus"),
-            shinysky::actionButton("submit_GSgcor", strong("Submit!",
-                                                           bsButton("qsgcor2", label="", icon=icon("question"), style="info", size="small")), styleclass = "success"),
-            shinysky::actionButton("cleargcor", strong("Reset"), styleclass = "warning"),
-            shinysky::actionButton("gcorExamID", strong("Load example"), styleclass = "info"),
-            conditionalPanel(condition="submit_GSgcor != '0'", shinysky::busyIndicator(HTML("<div style='color:red;font-size:30px'>Calculation In progress...</div>"), wait = 0)),
-            bsPopover("qsgcor2", "Click this button to start the analysis!",
-                      trigger = "focus"),
-            numericInput("genecorheight", HTML('<i class="fa fa fa-circle" aria-hidden="true"></i> <font size="4" color="red"><b>Plot height</b></font>'), value = 1000),
-            numericInput("genecorwidth", HTML('<i class="fa fa fa-circle" aria-hidden="true"></i> <font size="4" color="red"><b>Plot width</b></font>'), value = 1000),
-          ),
-          
-          mainPanel(
-            width = 9,
-            htmlOutput("gcorout_title"),
-            DT::dataTableOutput("gcordata", width = "100%"),
-            uiOutput("genecorplotif"),
-            br(),
-            br()
-            #plotOutput("genecorplot", height = "800px", width = "100%"),
-          )
+        mainPanel(
+          width = 9,
+          HTML('<i class="fa fa-circle" aria-hidden="true" style="color:red"></i> <font size="5" color="red"><b>Information of selected soybean accessions</b></font>'),
+          DT::dataTableOutput("mytable1"),
+          br(),
+          br()
         )
       ),
       
       
       navbarMenu(
         title = HTML("<strong style='font-size:20px'>Help</strong>"), icon = icon("book"),
-        
-        # Accession
-        tabPanel(
-          title = HTML("<strong style='font-size:20px'>Accessions</strong>"),
-          
-          sidebarPanel(
-            width = 3,
-            shinyWidgets::multiInput("mychooserA", h4(HTML('<i class="fa fa fa-circle" aria-hidden="true"></i> <font size="4" color="red"><b>Select soybean accessions</b></font>'),
-                                                      bsButton("qa1", label="", icon=icon("question"), style="info", size="small")),
-                                     choices = all.soya.cho,
-                                     selected = c("Landrace"),
-                                     width = 800,
-                                     options = list(
-                                       enable_search = TRUE,
-                                       non_selected_header = "Choose from:",
-                                       selected_header = "You have selected:"
-                                     )
-            ),
-            
-            bsPopover("qa1", "Only the chosen soybean accessions will be displayed.",
-                      trigger = "focus"),
-            fluidRow(
-              column(6, actionButton("accessionnone1", strong("Deselect all"), width = "100%", style="color: #fff; background-color: #337ab7; border-color: #2e6da4")),
-              column(6, actionButton("accessionall1", strong("Select all"), width = "100%", style="color: #fff; background-color: #337ab7; border-color: #2e6da4"))
-            )
-          ),
-          
-          mainPanel(
-            width = 9,
-            HTML('<i class="fa fa-circle" aria-hidden="true" style="color:red"></i> <font size="5" color="red"><b>Information of selected soybean accessions</b></font>'),
-            DT::dataTableOutput("mytable1"),
-            br(),
-            br()
-          )
-        ),
-        
         # Data source
         tabPanel(
           title = HTML("<strong style='font-size:20px'>Data source</strong>"),
           column(2),
           column(8,
-                 h4(HTML('<i class="fas fa-dot-circle"></i> <font size="5" color="red"><b>29 soybean genomes</b></font>')),
+                 h4(HTML('<i class="fa fa-circle" aria-hidden="true"></i> <font size="4" color="red"><b>31 soybean genomes</b></font>')),
                  DT::dataTableOutput('Downloadtable', width = "100%"),
                  br(),
                  
-                 h4(HTML('<i class="fas fa-dot-circle"></i> <font size="5" color="red"><b>SNPs & INDELs of 2898 soybean accessions</b></font>')),
+                 h4(HTML('<i class="fa fa-circle" aria-hidden="true"></i> <font size="4" color="red"><b>SNPs & INDELs among 2898 soybean accessions</b></font>')),
                  h4(a("https://ngdc.cncb.ac.cn/gvm/getProjectDetail?project=GVM000063", href="https://ngdc.cncb.ac.cn/gvm/getProjectDetail?project=GVM000063", target="_blank")),
                  br(),
                  
-                 h4(HTML('<i class="fas fa-dot-circle"></i> <font size="5" color="red"><b>Expression level of protein-coding genes in the genome of Zhonghuang 13</b></font>')),
+                 h4(HTML('<i class="fa fa-circle" aria-hidden="true"></i> <font size="4" color="red"><b>Expression profile of protein-coding genes in the genome of Zhonghuang 13</b></font>')),
                  h4(a("https://link.springer.com/article/10.1007/s11427-019-9822-2", href="https://link.springer.com/article/10.1007/s11427-019-9822-2", target="_blank")),
                  
                  br(),

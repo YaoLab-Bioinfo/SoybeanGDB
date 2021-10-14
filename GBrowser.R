@@ -22,7 +22,7 @@ GBrowser <- function(chr="chr1", start=29765419, end=29793053, accession=NULL, m
   
   accession <- gsub(",.+", "", accession)
   accession <- sapply(accession, function(x){
-    if (x %in% c("Improved cultivar", "Landrace", "G. Soja")) {
+    if (x %in% c("Improved cultivar", "Landrace", "Glycine soja")) {
       x.dat <- readLines(paste0("./data/", x, ".soya.txt"))
       return(x.dat)
     } else {
