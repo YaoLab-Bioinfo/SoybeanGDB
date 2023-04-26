@@ -71,6 +71,8 @@ nucDiv <- function(chr="chr12", nuc.start=5609599, nuc.end=5630626, step=20,
                                  nuc.gene.info$start>=as.numeric(nuc.start) &
                                  nuc.gene.info$end<=as.numeric(nuc.end), ]
   
+  ###order c("Glycine soja", "Landrace", "Improved cultivar")
+  div.group.df.1.long$group <- factor(div.group.df.1.long$group, levels = c("Glycine soja", "Landrace", "Improved cultivar")[c("Glycine soja", "Landrace", "Improved cultivar") %in% unique(div.group.df.1.long$group)] )
   p1 <- ggplot2::ggplot(div.group.df.1.long) + ggplot2::geom_line(ggplot2::aes(x=pos, y=diversity, color=group))
   p1 <- p1 + ggplot2::xlab("") + ggplot2::ylab("Nucleotide diversity")
   p1 <- p1 + ggplot2::theme_classic() + ggplot2::ylim(-0.14, NA)
@@ -80,11 +82,11 @@ nucDiv <- function(chr="chr12", nuc.start=5609599, nuc.end=5630626, step=20,
   
   if (nrow(nuc.gene.info)>=1) {
     p1 <- p1 + ggplot2::geom_rect(ggplot2::aes(xmin=start, xmax=end, ymin=-0.05, ymax=-0.07), color="grey40", data = nuc.gene.info)
-    p1 <- p1 + ggplot2::geom_text(ggplot2::aes(x=(start+end)/2, y=-0.1, label=id), angle=40, size=4, data = nuc.gene.info)
+    p1 <- p1 + ggplot2::geom_text(ggplot2::aes(x=(start+end)/2, y=-0.12, label=id), angle=40, size=4, data = nuc.gene.info)
   }
   
   p1 <- p1 + ggplot2::theme(axis.ticks.x = ggplot2::element_blank(), axis.text.x = ggplot2::element_blank(),
-                   axis.line.x = ggplot2::element_blank())
+                   axis.line.x = ggplot2::element_blank()) + ggplot2::guides(colour = ggplot2::guide_legend(override.aes = list(size=2)))
   
   div.group.df.2$value <- div.group.df.2[,numerator]/div.group.df.2[,denominator]
   

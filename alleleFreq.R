@@ -8,7 +8,7 @@
 # For more info, please check the AlleleFreq menu of the ECOGEMS database.
 
 alleleFreq <- function(snpSite = c("0133024709", "1403584545", "1403584761"),
-                       accGroup = c("Improved cultivar", "Landrace", "Glycine soja"),
+                       accGroup = c("Glycine soja", "Landrace", "Improved cultivar"),
                        pieCols = c("cornflowerblue", "forestgreen") ) {
   if ( exists("snpInfo") ){
   }else{
@@ -74,15 +74,19 @@ alleleFreq <- function(snpSite = c("0133024709", "1403584545", "1403584761"),
   
   freqsall <- rbind(data.frame(site.allele.freq, check.names = F), rep(yrowname, each = 2))
   freqsall <- rbind(freqsall, colnames(freqsall))
-  rownames(freqsall)[4] <- "Position"
-  rownames(freqsall)[5] <- "Nucleotide"
-  freqsall <- freqsall[c(4,5,1:3),]
+  # rownames(freqsall)[4] <- "Position"
+  # rownames(freqsall)[5] <- "Nucleotide"
+  nrowfreqsall <- nrow(freqsall)
+  rownames(freqsall)[nrowfreqsall - 1] <- "Position"
+  rownames(freqsall)[nrowfreqsall] <- "Nucleotide"
+  
+  freqsall <- freqsall[c(nrowfreqsall - 1, nrowfreqsall, 1:(nrowfreqsall-2) ), ]
   freqsall <- data.frame(t(freqsall), row.names = NULL, stringsAsFactors = F)
   freqsalls <- plyr::ddply(freqsall, plyr::.(Position), function(x){
            d <- paste0(x[1,], ":", x[2,])
         })
   freqsalls <- freqsalls[, -2]
-  colnames(freqsalls) <- c("ID", "Allele", "Improved cultivar", "Landrace", "Glycine soja")
+  colnames(freqsalls) <- c("ID", "Allele", acc.group)
   
   freqsallwrite <<- freqsalls
   
@@ -92,7 +96,12 @@ alleleFreq <- function(snpSite = c("0133024709", "1403584545", "1403584761"),
     pie.cols <- pieCols
     
   if ( length(accGroup) == 1){
-    op <- par(mfrow=c(3,2),
+    # op <- par(mfrow=c(3,2),
+    #           oma = c(0, 0, 0, 0),
+    #           mar = c(0, 2, 1, 0),
+    #           mgp = c(0, 0, 0),
+    #           xpd = NA)
+    op <- par(mfrow=c(length(site.allele.freq), length(acc.group) + 1 ),
               oma = c(0, 0, 0, 0),
               mar = c(0, 2, 1, 0),
               mgp = c(0, 0, 0),
@@ -146,14 +155,14 @@ alleleFreq <- function(snpSite = c("0133024709", "1403584545", "1403584761"),
       if (i == 1) {
         if (j == 1) {
           pie(site.allele.freq[[i]][j, ], col=pie.cols, label=NA, radius=1) + 
-            title(acc.group[j], line = -0.5, cex.main = 2) + title(ylab = yrowname[i], line = -0.4, cex.lab = 2)
+            title(acc.group[j], line = -0.3, cex.main = 2) + title(ylab = yrowname[i], line = -0.4, cex.lab = 2)
         } else if (j == length(acc.group)) {
-          pie(site.allele.freq[[i]][j, ], col=pie.cols, label=NA, radius=1) + title(acc.group[j], line = -0.5, cex.main = 2)
+          pie(site.allele.freq[[i]][j, ], col=pie.cols, label=NA, radius=1) + title(acc.group[j], line = -0.3, cex.main = 2)
           plot(0, type = "n", axes = F, xlab="", ylab="")
           legend("center", legend = names(site.allele.freq[[i]][j, ]), 
                  fill = pie.cols, border = pie.cols, bty="n", cex = 2)
         } else {
-          pie(site.allele.freq[[i]][j, ], col=pie.cols, label=NA, radius=1) + title(acc.group[j], line = -0.5, cex.main = 2)
+          pie(site.allele.freq[[i]][j, ], col=pie.cols, label=NA, radius=1) + title(acc.group[j], line = -0.3, cex.main = 2)
         }
       } else {
         if (j == 1) {

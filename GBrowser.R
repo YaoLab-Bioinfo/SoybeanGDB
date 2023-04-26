@@ -34,11 +34,35 @@ GBrowser <- function(chr="chr1", start=29765419, end=29793053, accession=NULL, m
   snp.res <- fetchSnp(chr=chr, start=start, end=end, accession=accession, filter = FALSE)
   #filter SNPs without polymorphism
   nn <- apply(snp.res[[1]], 1, function(x){
-         freq <- table(x)
-         return(length(freq))
-     })
-
+    freq <- table(x)
+    return(length(freq))
+  })
+  
   snp.reg <- snp.res[[1]][nn != 1 ]
+  snp.table <- snp.res[[1]]
+  snp.table <- snp.table[rownames(snp.table) %in% rownames(snp.res[[1]])[nn != 1 ], , drop=FALSE]
+  snp.data.allele <- apply(snp.table, 1, function(x){
+    numbersum <- sort(table(x), decreasing=TRUE)
+    if (length(table(x) == 2)){
+      majornum <- as.numeric(numbersum[1] * 2)
+    }else{
+      majornum <- as.numeric(numbersum[1] * 2 + numbersum["H"]) 
+    }
+    mainornum <- as.numeric(sum(numbersum) * 2  - majornum)
+    summjmi <- sum(majornum, mainornum)
+    majornum <- round(majornum/summjmi * 100, 1)
+    mainornum <- round(mainornum/summjmi * 100, 1)
+    x <- x[!x %in% c("H", "N")]
+    y <- sort(table(x), decreasing=TRUE)
+    major <- names(y)[1]
+    minor <- names(y)[2]
+    return(c(major, minor, majornum, mainornum))
+  })
+  
+  snp.data.allele <- t(snp.data.allele)
+  colnames(snp.data.allele) <- c("major", "minor", "majornum", "mainornum")
+  
+  
   snpeff <- snp.res[[3]]
   
   snpeff.reg <- snpeff[snpeff[,1] %in% rownames(snp.res[[1]])[nn != 1 ], , drop=FALSE]
@@ -94,11 +118,20 @@ GBrowser <- function(chr="chr1", start=29765419, end=29793053, accession=NULL, m
   eff.tags <- eff.tags[c(7,8,4,29,28,1,3,2,9,18,13,12,20,10,11,16,17,19,15,14,6,5,27,21,22,23,24,25,26)]
   names(eff.tags) <- 1:29
   snpeff.reg.3$tag <- eff.tags[snpeff.reg.3$tag]
+  snpeff.reg.3$major <- snp.data.allele[,1][snpeff.reg.3$id]
+  snpeff.reg.3$minor <- snp.data.allele[,2][snpeff.reg.3$id]
+  snpeff.reg.3$minor[is.na(snpeff.reg.3$minor)] <- unlist(snpeff.reg.3[is.na(snpeff.reg.3$minor), ][, c(4,5)][!snpeff.reg.3[is.na(snpeff.reg.3$minor), ][, c(4,5)] %in% snpeff.reg.3[is.na(snpeff.reg.3$minor), ][, c(9, 10)]])
+  snpeff.reg.3$major <- paste0(snpeff.reg.3$major, ' (', snp.data.allele[,3][snpeff.reg.3$id], '%)')
+  snpeff.reg.3$minor <- paste0(snpeff.reg.3$minor, ' (', snp.data.allele[,4][snpeff.reg.3$id], '%)')
+  snpeff.reg.3$info <- paste0("Effect: ", snpeff.reg.3$info)
+  
   if (!is.null(mutType)) {
     snpeff.reg.3 <- snpeff.reg.3[snpeff.reg.3$tag %in% mutType, , drop=FALSE]
   }
+  colnames(snpeff.reg.3)[c(3, 6, 4, 5, 9, 10)] <- c("Position", "Effect", "Reference allele", "Alternative allele","Major allele", "Minor allele")
   
-  p1 <- ggplot2::ggplot(data=snpeff.reg.3) + ggplot2::geom_point(ggplot2::aes(x=pos, y=yr, color=tag, text=info, fill=tag), size=0.8, pch=25)
+  p1 <- ggplot2::ggplot(data=snpeff.reg.3) + 
+    ggplot2::geom_point(ggplot2::aes(x=Position, y=yr, color=tag, text=Effect, fill=tag, ref = `Reference allele`, alt = `Alternative allele`, major = `Major allele`, minor = `Minor allele`), size=0.8, pch=25)
   
   if ( exists("gff") && gff[1,1]  == "SoyZH13_01G000001.m1" ){
   }else {
@@ -143,7 +176,7 @@ GBrowser <- function(chr="chr1", start=29765419, end=29793053, accession=NULL, m
   plot.nm <- do.call(rbind, plot.nm.lst)
   if (!is.null(plot.nm) && nrow(plot.nm)>0) {
     p1 <- p1 + ggplot2::geom_rect(ggplot2::aes(xmin=start, xmax=end, ymin=ymin, ymax=ymax), 
-                         color="grey30", fill="grey30", data=plot.nm)
+                                  color="grey30", fill="grey30", data=plot.nm)
   }
   
   plot.mrna.lst <- lapply(unique(gff.reg$id), function(i){
@@ -160,7 +193,7 @@ GBrowser <- function(chr="chr1", start=29765419, end=29793053, accession=NULL, m
   plot.mrna <- do.call(rbind, plot.mrna.lst)
   if (!is.null(plot.mrna) && nrow(plot.mrna)>0) {
     p1 <- p1 + ggplot2::geom_rect(ggplot2::aes(xmin=start, xmax=end, ymin=y+0.118, ymax=y+0.122), 
-                         color="grey30", fill="grey30", data=plot.mrna)
+                                  color="grey30", fill="grey30", data=plot.mrna)
   }
   
   plot.tail.lst <- lapply(unique(gff.reg$id), function(i){
@@ -208,7 +241,7 @@ GBrowser <- function(chr="chr1", start=29765419, end=29793053, accession=NULL, m
   plot.tail <- do.call(rbind, plot.tail.lst)
   if (!is.null(plot.tail) && nrow(plot.tail)>0) {
     p1 <- p1 + ggplot2::geom_polygon(ggplot2::aes(x=xx, y=yy, group=id), color="grey30", fill="grey30", 
-                            data=plot.tail)
+                                     data=plot.tail)
   }
   
   p1 <- p1 + ggplot2::scale_y_continuous("", breaks=NULL)
@@ -218,12 +251,12 @@ GBrowser <- function(chr="chr1", start=29765419, end=29793053, accession=NULL, m
   
   p1 <- p1 + ggplot2::guides(color = ggplot2::guide_legend(title=NULL) )
   p1 <- p1 + ggplot2::theme(axis.ticks.y = ggplot2::element_blank(), axis.text.y = ggplot2::element_blank(),
-                   axis.line.y = ggplot2::element_blank())
+                            axis.line.y = ggplot2::element_blank())
   p1 <- p1 + ggplot2::guides(fill=FALSE)
   
   p3 <- p1 + ggplot2::theme(axis.ticks.y = ggplot2::element_blank(), axis.text.y = ggplot2::element_blank(),
-                   axis.line.y = ggplot2::element_blank())
-  p3 <- plotly::ggplotly(p3, tooltip = c("pos", "info"))
+                            axis.line.y = ggplot2::element_blank())
+  p3 <- plotly::ggplotly(p3, tooltip = c("Position", "Effect", "ref", "alt", "major", "minor"))
   
   p3 <- p3 %>% plotly::layout(
     title = "",
@@ -231,7 +264,7 @@ GBrowser <- function(chr="chr1", start=29765419, end=29793053, accession=NULL, m
       rangeselector = list(),
       
       rangeslider = list(type = "category")
-      ),
+    ),
     
     yaxis = list(title = "")
   )

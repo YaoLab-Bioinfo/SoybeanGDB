@@ -1,0 +1,4 @@
+Sample_name	Sample_description
+Trifoliate	trifoliate
+Leaves	primary leaves
+Roots	roots of young W05 seedlings

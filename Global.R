@@ -1,6 +1,7 @@
 
 options(warn=-1)
 options(scipen = 19)
+par(family="Times")
 
 library(shiny)
 #library(IRanges)#IRanges
@@ -14,7 +15,7 @@ library(shiny)
 #library(dplyr)
 #library(tidyr)
 #library(gridExtra)
-#library(ggtree)
+##library(ggtree)
 #library(grid)
 ##library(snpStats)
 ##library(genetics)
@@ -29,6 +30,14 @@ library(shinycssloaders)
 library(shinydashboard)
 #library(stringr)
 #library(RLumShiny)
+#library(ggplot2)
+#library(clusterProfiler)
+#library(DT)
+#library(enrichplot)
+#library(S4Vectors)
+#library(circlize)
+#library(shinyjqui)
+#library(cowplot)
 `%>%` <- magrittr::`%>%`
 `%dopar%` <- foreach::`%dopar%`
 
@@ -52,6 +61,8 @@ source("Homepage.R")
 load("./data/gene.info.RData")
 
 soya.info <- read.table("./data/all.soya.txt", head=T, as.is=T, sep="\t", quote="")
+soynm <- read.table("./info/Williams82SNP/Wm82nm.txt", sep = "\t", as.is = T, header = F)
+soynm <- as.character(soynm)
 all.soya.cho <- paste(soya.info$ID, soya.info$Species, soya.info$Category, sep=", ")
 
 all.soya.cho <- paste0(gsub(",.+", "", all.soya.cho) , ", ", soya.info$Names, ", ", gsub(".+,", "", all.soya.cho))
@@ -97,4 +108,6 @@ footerTagList <- list(
 )
 
 expression_name_description <- read.table("./data/expression_name_description.txt", sep = "\t", header = T)
-
+expression_name_description2 <- read.table("./data/expression_name_description481.txt", sep = "\t", header = T)
+expression_name_description3 <- read.table("./data/expression_name_descriptionw05.txt", sep = "\t", header = T)
+#expression_name_description3 <- read.table("./data/expression_name_descriptionwilliams83.txt", sep = "\t", header = T)

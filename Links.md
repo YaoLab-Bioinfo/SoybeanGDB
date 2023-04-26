@@ -30,4 +30,9 @@
 - <font size=4><a href="https://academic.oup.com/nar/article/47/D1/D309/5173662" target="_blank">eggNOG 5.0: a hierarchical, functionally and phylogenetically annotated orthology resource based on 5090 organisms and 2502 viruses</a></font>
 - <font size=4><a href="https://academic.oup.com/bioinformatics/article/27/5/718/262743" target="_blank">Tabix: fast retrieval of sequence features from generic TAB-delimited files</a></font>
 - <font size=4><a href="https://genomebiology.biomedcentral.com/articles/10.1186/s13059-019-1911-0" target="_blank">SyRI: finding genomic rearrangements and local sequence differences from whole-genome assemblies</a></font>
+- <font size=4><a href="https://academic.oup.com/plcell/article/32/12/3662/6118589#233844135" target="_blank">Soybean DICER-LIKE2 Regulates Seed Coat Color via Production of Primary 22-Nucleotide Small Interfering RNAs from Long Inverted Repeats</a></font>
+- <font size=4><a href="https://www.nature.com/articles/s41477-022-01102-4" target="_blank">Phylogenomics of the genus <em>Glycine</em> sheds light on polyploid evolution and life-strategy transition</a></font>
+- <font size=4><a href="https://doi.org/10.1093/g3journal/jkab272" target="_blank">Genome assembly of the popular Korean soybean cultivar Hwangkeum</a></font>
+- <font size=4><a href="https://doi.org/10.1186/1471-2229-10-160" target="_blank">Genetic variation among 481 diverse soybean accessions, inferred from genomic re-sequencing</a></font>
+- <font size=4><a href="https://doi.org/10.1186/1471-2229-10-160" target="_blank">RNA-Seq Atlas of Glycine max: A guide to the soybean transcriptome</a></font>
 

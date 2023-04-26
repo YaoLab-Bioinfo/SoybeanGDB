@@ -1,4 +1,4 @@
-
+# The update file max size 200MB
 # options(shiny.maxRequestSize = 200*1024^2)
 
 shinyServer(function(input, output, session) {
@@ -28,9 +28,9 @@ shinyServer(function(input, output, session) {
     updateNavbarPage(session, "The_page", selected =HTML("<strong style='font-size:20px'>Search by genome location</strong>"))
   })
   
-  #Home-Transcription factors
+  #Home-Transcription factors/regulators
   observeEvent(input$Link_Genetrf, {
-    updateNavbarPage(session, "The_page", selected = HTML("<strong style='font-size:20px'>Transcription factors</strong>"))
+    updateNavbarPage(session, "The_page", selected = HTML("<strong style='font-size:20px'>Transcription factors/regulators</strong>"))
   })
   
   #Home-Genome synteny
@@ -135,7 +135,19 @@ shinyServer(function(input, output, session) {
     #library(GenomicRanges)
     #library(IRanges)
     #library(Biostrings)
-    genomenames <- gsub(" ", "_", input$variety_BDG)
+    if (input$variety_BDG == "All genomes"){
+      load("./data/genewithaccession.RDate")
+      print(input$variety_BDG)
+      
+      genomenames <- genewithaccession$accession[genewithaccession$id == input$BDG_Paste1]
+      gene_list <- unlist(strsplit(input$BDG_Paste1, split="\\n"))
+      gene_list <- trimws(gene_list, which = c("both"), whitespace = "[ \t\r\n]")
+    }else{
+      genomenames <- gsub(" ", "_", input$variety_BDG) 
+      gene_list <- unlist(strsplit(input$BDG_Paste, split="\\n"))
+      gene_list <- trimws(gene_list, which = c("both"), whitespace = "[ \t\r\n]")
+    }
+    print(genomenames)
     load(paste0("./info/", genomenames, "/", genomenames, ".gene.info.RData"))
     
     #cds protein cdna信息读取
@@ -145,13 +157,10 @@ shinyServer(function(input, output, session) {
     proteinid <- protein
     load(paste0("./info/", genomenames, "/", genomenames, ".cdna.fasta.RData"))
     cdna.infoid <- cdna.info
-    
-    gene_list <- unlist(strsplit(input$BDG_Paste, split="\\n"))
-    gene_list <- trimws(gene_list, which = c("both"), whitespace = "[ \t\r\n]")
     gene_list <- gene_list[gene_list %in% gene_info_s$id]
+
     #geneinfo
     geneinfo_id <- gene_info_s[gene_info_s$id %in% gene_list, ]
-    
     #geneinfo
     output$geneinfoid <- DT::renderDT({
       if( length(geneinfo_id[, 1]) != 0 ){
@@ -350,6 +359,7 @@ shinyServer(function(input, output, session) {
         }
       }
     })
+
     
     #gene sequence
     if( length(geneinfo_id[, 1]) != 0 ) {
@@ -422,7 +432,7 @@ shinyServer(function(input, output, session) {
         } else {}
       })
       
-      #proteion
+      #protein
       output$pro_id <- shiny::renderText({
         if (is.null(input$geneinfoid_rows_selected)) {
         } else {
@@ -442,6 +452,60 @@ shinyServer(function(input, output, session) {
         } else if ( length(grep(geneid, names(proteinid))) != 0 ){
           HTML("<i class='fa fa-circle' aria-hidden='true'></i> <font size='5' color='red'><b>protein sequence</b></font>")
         } else {}
+      })
+      
+      
+      ##Functional annotation
+      output$Functional_id <- DT::renderDT({
+        DT::datatable(
+          if (is.null(input$geneinfoid_rows_selected)){
+          } else {
+            clickedid <- input$geneinfoid_rows_selected
+            geneid <- data.frame(geneinfo_id[clickedid,])[1,1]
+            chr <- data.frame(geneinfo_id[clickedid,])[1,2]
+            Functionalfile <- paste0("./info/", genomenames, "/", genomenames, ".interproscan")
+            gf <- data.table::fread(Functionalfile, sep = "\t", data.table = FALSE, header = F)
+            gfinfo <- gf[grep(geneid, gf$V1), ]
+            if( nrow(gfinfo) == 0){
+              
+            }else{
+            
+            colnames(gfinfo)[1] <- "Gene"
+            colnames(gfinfo)[2] <- "Functional"
+            gfinfo}
+          }, extensions = "Buttons", 
+          rownames = F, selection = "none",
+          options = list( 
+                         scrollX = TRUE, dom = 'Bfrtip', bSort = FALSE,  
+                         buttons = list('pageLength', 'copy', 
+                                        list(extend = 'csv',   filename =  paste("Functional", sep = "-")),
+                                        list(extend = 'excel', filename =  paste("Functional", sep = "-")),
+                                        'print'),
+                         initComplete = DT::JS(
+                           "function(settings, json) {",
+                           "$(this.api().table().header()).css({'background-color': '#676464', 'color': '#fff'});",
+                           "}")
+                         
+          )
+          
+        )}, server = FALSE)
+      
+      output$Functionaltitle_id <- renderText({
+        clickedid <- input$geneinfoid_rows_selected
+        geneid <- data.frame(geneinfo_id[clickedid,])[1,1]
+        clickedid <- input$geneinfoid_rows_selected
+        geneid <- data.frame(geneinfo_id[clickedid,])[1,1]
+        chr <- data.frame(geneinfo_id[clickedid,])[1,2]
+        Functionalfile <- paste0("./info/", genomenames, "/", genomenames, ".interproscan")
+        gf <- data.table::fread(Functionalfile, sep = "\t", data.table = FALSE, header = F)
+        gfinfo <- gf[grep(geneid, gf$V1), ]
+
+        if(is.null(input$geneinfoid_rows_selected) | nrow(gfinfo) == 0) {
+          
+        } else {
+          
+          HTML("<i class='fa fa-circle' aria-hidden='true'></i> <font size='5' color='red'><b>Functional annotation</b></font>")
+        }
       })
       
       #click gff
@@ -587,6 +651,8 @@ shinyServer(function(input, output, session) {
     if (input$clearSERID >0) {
       isolate({
         updateTextAreaInput(session, "BDG_Paste", value="")
+        updateTextAreaInput(session, "BDG_Paste1", value="")
+        updateSelectInput(session, "variety_BDG", selected = "Zhonghuang 13")
       })
     } else {NULL}
   })
@@ -595,7 +661,7 @@ shinyServer(function(input, output, session) {
   observe({
     if (input$SERExamID >0) {
       isolate({
-        updateTextAreaInput(session, "BDG_Paste", value = "SoyZH13_03G069002\nSoyZH13_03G069001\nSoyZH13_03G069100\nSoyZH13_01G071100" )
+        updateTextAreaInput(session, "BDG_Paste", value = "SoyZH13_03G069003\nSoyZH13_03G069001\nSoyZH13_03G069100\nSoyZH13_01G071100" )
         updateSelectInput(session, "variety_BDG", selected = "Zhonghuang 13")
       })
     } else {NULL}
@@ -639,7 +705,7 @@ shinyServer(function(input, output, session) {
         text = NULL
       )
     } else {
-      if( !(chr %in% paste0("chr", 1:20)) ) {
+      if( !(chr %in% paste0("chr", 1:20)) & gsub(" ", "_", input$variety_IT) != "Glycine_dolichocarpa" )  {
         shinyWidgets::sendSweetAlert(
           session = session,
           title = "Wrong chromosome ID!", type = "error",
@@ -670,18 +736,22 @@ shinyServer(function(input, output, session) {
           gffile <- paste0("./info/", gsub(" ", "_", input$variety_IT), "/", gsub(" ", "_", input$variety_IT), ".",chr ,".gff.txt.gz")
           repeatdata <- read.table(paste0("./info/repeat/", gsub(" ", "_", input$variety_IT), ".",chr, ".repeat.gz"), sep = "\t", header = T)
           gf <- data.table::fread(gffile, sep = "\t", data.table = FALSE)
+          Functionalfile <- paste0("./info/", gsub(" ", "_", input$variety_IT), "/", gsub(" ", "_", input$variety_IT), ".interproscan")
+          functionaldata <- data.table::fread(Functionalfile, sep = "\t", data.table = FALSE, header = F)
           
           #geneinfo
           output$geneinfo <- DT::renderDT({
             DT::datatable(
               if( length(geneinfo[, 1]) != 0 ){
+                sect <- "single"
                 colnames(geneinfo) <- c("ID", "Chromosome", "Start", "End", "Strand")
                 geneinfo
               } else {
+                sect <- "none"
                 geneinfo <- data.frame("V1"="No genes found in the input region!")
                 colnames(geneinfo) <- ""
                 geneinfo
-              }, escape = FALSE, rownames= FALSE, selection="single", 
+              }, escape = FALSE, rownames= FALSE, selection=sect, 
               options = list(pageLength = 10, autoWidth = FALSE, bSort = FALSE,
                              buttons = list('pageLength', 'copy', 
                                             list(extend = 'csv',   filename =  paste("searchlocation", sep = "-")),
@@ -925,7 +995,8 @@ shinyServer(function(input, output, session) {
               } else {
                 clicked <- input$geneinfo_rows_selected
                 geneid <- data.frame(geneinfo[clicked,])[1,1]
-                if (grepl(geneid, names(cds.info))){
+                
+                if (length(grepl(geneid, names(cds.info))) == 0 ){
                 } else { 
                   ditcs <- cds.info[grep(geneid, names(cds.info))]
                   tmp.f6 <- file.path(tempdir(), "t6.fa")
@@ -1024,6 +1095,51 @@ shinyServer(function(input, output, session) {
                 HTML("<i class='fa fa-circle' aria-hidden='true'></i> <font size='5' color='red'><b>Gene structure annotation</b></font>")
               } else {}
             })
+            
+            output$Functional_it_id <- DT::renderDT({
+              DT::datatable(
+                if (is.null(input$geneinfo_rows_selected)){
+                } else {
+                  clicked <- input$geneinfo_rows_selected
+                  geneid <- data.frame(geneinfo[clicked,])[1,1]
+                  print(geneid)
+                  funcinfo <- functionaldata[grep(geneid, functionaldata$V1), ]
+                  if( nrow(funcinfo) == 0){
+                  }else{
+                    colnames(funcinfo)[1] <- "Gene"
+                    colnames(funcinfo)[2] <- "Functional"
+                    funcinfo
+                  }
+                }, extensions = "Buttons",
+                rownames = F, selection = "none",
+                options = list(
+                  scrollX = TRUE, dom = 'Bfrtip', bSort = FALSE,
+                  buttons = list('pageLength', 'copy',
+                                 list(extend = 'csv',   filename =  paste("Functional_gene", sep = "-")),
+                                 list(extend = 'excel', filename =  paste("Functional_gene", sep = "-")),
+                                 'print'),
+                  initComplete = DT::JS(
+                    "function(settings, json) {",
+                    "$(this.api().table().header()).css({'background-color': '#676464', 'color': '#fff'});",
+                    "}")
+                  
+                )
+                
+              )}, server = FALSE)
+            
+            output$Functional_it_title <- renderText({
+              if (is.null(input$geneinfo_rows_selected)){
+              } else {
+                clicked <- input$geneinfo_rows_selected
+                geneid <- data.frame(geneinfo[clicked,])[1,1]
+                funcinfo <- functionaldata[grep(geneid, functionaldata$V1), ]
+                if( nrow(funcinfo) == 0){
+                }else{
+                  HTML("<i class='fa fa-circle' aria-hidden='true'></i> <font size='5' color='red'><b>Functional annotation</b></font>")
+                }
+              }
+            })
+            
             
             output$sequence_IT.txt <- downloadHandler(
               filename <- function() { paste('Region_sequence.txt') },
@@ -1169,6 +1285,8 @@ shinyServer(function(input, output, session) {
                      tags$style(".buttDown{background-color:black; color: white; font-size: 16px;}")
               )
             })
+            
+            
           }
         }
       }
@@ -1225,31 +1343,63 @@ shinyServer(function(input, output, session) {
     
     #gene sequence
     if( length(gene_list) != 0 ) {
-      chrsize <- read.table(paste0("./info/", gsub(" ", "_", input$variety_GL), "/", "chrsize.txt"), sep = "\t", header = T)
-      chrsize$chr <- factor(chrsize$chr, levels = paste0("chr", 1:20) )
-      
-      output$genelocplotif <- renderUI({
-        if (input$genelocwidth >= 400 & input$genelocheight >= 400 ){
-          plotOutput("GLplot", width = paste0(input$genelocwidth, "px"), height = paste0(input$genelocheight, "px"))
-        } else {
-          shinyWidgets::sendSweetAlert(
-            session = session,
-            title = "Error input!", type = "error",
-            text = "Width or height must be greater than 400px!"
-          )
-          NULL
-        }
-      })
-      
-      output$GLplot <- renderPlot({
-        op <- par(family = "serif")
-        circlize::circos.par("track.height" = 0.1, track.margin=c(0,0))
-        circlize::circos.genomicInitialize(chrsize, labels.cex = 1.5, axis.labels.cex = 1, major.by = 50000000)
-        circlize::circos.genomicTrackPlotRegion(ylim = c(0, 1),bg.col = rep(c("#2DA1D0FF", "#6F51FFFF"), 10), bg.border = NA, track.height = 0.1)	
-        circlize::circos.genomicLabels(geneinfo[, c(2, 3, 4, 1)], labels.column = 4, side = "inside", cex = 1)
-        circlize::circos.clear()
-        par(op)
-      })
+      if(gsub(" ", "_", input$variety_GL) == "Glycine_dolichocarpa"){
+        
+        chrsize <- read.table(paste0("./info/", gsub(" ", "_", input$variety_GL), "/", "chrsize.txt"), sep = "\t", header = T)
+        chrsize$chr <- factor(chrsize$chr, levels = paste0("chr", 1:40) )
+        
+        output$genelocplotif <- renderUI({
+          if (input$genelocwidth >= 400 & input$genelocheight >= 400 ){
+            plotOutput("GLplot", width = paste0(input$genelocwidth, "px"), height = paste0(input$genelocheight, "px"))
+          } else {
+            shinyWidgets::sendSweetAlert(
+              session = session,
+              title = "Error input!", type = "error",
+              text = "Width or height must be greater than 400px!"
+            )
+            NULL
+          }
+        })
+        
+        output$GLplot <- renderPlot({
+          op <- par(family = "serif")
+          circlize::circos.par("track.height" = 0.1, track.margin=c(0,0))
+          circlize::circos.genomicInitialize(chrsize, labels.cex = 1.5, axis.labels.cex = 1, major.by = 50000000)
+          circlize::circos.genomicTrackPlotRegion(ylim = c(0, 1),bg.col = rep(c("#2DA1D0FF", "#6F51FFFF"), 20), bg.border = NA, track.height = 0.1)	
+          circlize::circos.genomicLabels(geneinfo[, c(2, 3, 4, 1)], labels.column = 4, side = "inside", cex = 1)
+          circlize::circos.clear()
+          par(op)
+        })
+        
+      }else{
+        
+        chrsize <- read.table(paste0("./info/", gsub(" ", "_", input$variety_GL), "/", "chrsize.txt"), sep = "\t", header = T)
+        chrsize$chr <- factor(chrsize$chr, levels = paste0("chr", 1:20) )
+        
+        output$genelocplotif <- renderUI({
+          if (input$genelocwidth >= 400 & input$genelocheight >= 400 ){
+            plotOutput("GLplot", width = paste0(input$genelocwidth, "px"), height = paste0(input$genelocheight, "px"))
+          } else {
+            shinyWidgets::sendSweetAlert(
+              session = session,
+              title = "Error input!", type = "error",
+              text = "Width or height must be greater than 400px!"
+            )
+            NULL
+          }
+        })
+        
+        output$GLplot <- renderPlot({
+          op <- par(family = "serif")
+          circlize::circos.par("track.height" = 0.1, track.margin=c(0,0))
+          circlize::circos.genomicInitialize(chrsize, labels.cex = 1.5, axis.labels.cex = 1, major.by = 50000000)
+          circlize::circos.genomicTrackPlotRegion(ylim = c(0, 1),bg.col = rep(c("#2DA1D0FF", "#6F51FFFF"), 10), bg.border = NA, track.height = 0.1)	
+          circlize::circos.genomicLabels(geneinfo[, c(2, 3, 4, 1)], labels.column = 4, side = "inside", cex = 1)
+          circlize::circos.clear()
+          par(op)
+        })
+        
+      }
     } else {      
       shinyWidgets::sendSweetAlert(
         session = session,
@@ -1277,13 +1427,22 @@ shinyServer(function(input, output, session) {
       #geneinfo
       geneinfo <- gene_info_s[gene_info_s$id %in% gene_list, ]
       chrsize <- read.table(paste0("./info/", gsub(" ", "_", input$variety_GL), "/", "chrsize.txt"), sep = "\t", header = T)
-      chrsize$chr <- factor(chrsize$chr, levels = paste0("chr", 1:20) )
+      if(gsub(" ", "_", input$variety_GL) == "Glycine_dolichocarpa"){
+        chrsize$chr <- factor(chrsize$chr, levels = paste0("chr", 1:40) )
+      }else{
+        chrsize$chr <- factor(chrsize$chr, levels = paste0("chr", 1:20) ) 
+      }
+      
       
       pdf(file, width = 900/72, height = 900/72)
       op <- par(family = "serif")
       circlize::circos.par("track.height" = 0.1, track.margin=c(0,0))
       circlize::circos.genomicInitialize(chrsize, labels.cex = 1.5, axis.labels.cex = 1, major.by = 50000000)
+      if(gsub(" ", "_", input$variety_GL) == "Glycine_dolichocarpa"){
+      circlize::circos.genomicTrackPlotRegion(ylim = c(0, 1),bg.col = rep(c("#2DA1D0FF", "#6F51FFFF"), 20), bg.border = NA, track.height = 0.1)	
+      }else{
       circlize::circos.genomicTrackPlotRegion(ylim = c(0, 1),bg.col = rep(c("#2DA1D0FF", "#6F51FFFF"), 10), bg.border = NA, track.height = 0.1)	
+      }
       circlize::circos.genomicLabels(geneinfo[, c(2, 3, 4, 1)], labels.column = 4, side = "inside", cex = 1)
       circlize::circos.clear()
       par(op)
@@ -1309,12 +1468,20 @@ shinyServer(function(input, output, session) {
       #geneinfo
       geneinfo <- gene_info_s[gene_info_s$id %in% gene_list, ]
       chrsize <- read.table(paste0("./info/", gsub(" ", "_", input$variety_GL), "/", "chrsize.txt"), sep = "\t", header = T)
-      chrsize$chr <- factor(chrsize$chr, levels = paste0("chr", 1:20) )
+      if(gsub(" ", "_", input$variety_GL) == "Glycine_dolichocarpa"){
+        chrsize$chr <- factor(chrsize$chr, levels = paste0("chr", 1:40) )
+      }else{
+        chrsize$chr <- factor(chrsize$chr, levels = paste0("chr", 1:20) ) 
+      }
       svg(file, width = 900/72, height = 900/72)
       op <- par(family = "serif")
       circlize::circos.par("track.height" = 0.1, track.margin=c(0,0))
       circlize::circos.genomicInitialize(chrsize, labels.cex = 1.5, axis.labels.cex = 1, major.by = 50000000)
-      circlize::circos.genomicTrackPlotRegion(ylim = c(0, 1),bg.col = rep(c("#2DA1D0FF", "#6F51FFFF"), 10), bg.border = NA, track.height = 0.1)	
+      if(gsub(" ", "_", input$variety_GL) == "Glycine_dolichocarpa"){
+        circlize::circos.genomicTrackPlotRegion(ylim = c(0, 1),bg.col = rep(c("#2DA1D0FF", "#6F51FFFF"), 20), bg.border = NA, track.height = 0.1)	
+      }else{
+        circlize::circos.genomicTrackPlotRegion(ylim = c(0, 1),bg.col = rep(c("#2DA1D0FF", "#6F51FFFF"), 10), bg.border = NA, track.height = 0.1)	
+      }
       circlize::circos.genomicLabels(geneinfo[, c(2, 3, 4, 1)], labels.column = 4, side = "inside", cex = 1)
       circlize::circos.clear()
       par(op)
@@ -1354,7 +1521,7 @@ shinyServer(function(input, output, session) {
   })
   
   
-  #Transcription factors
+  #Transcription factors/regulators
   observe({
     #library(GenomicRanges)
     #library(IRanges)
@@ -1378,7 +1545,7 @@ shinyServer(function(input, output, session) {
     })
     
     output$trfaccessions_title <- renderText({
-      HTML("<i class='fa fa-circle' aria-hidden='true'></i> <font size='5' color='red'><b>Annotated transcription factors</b></font>")
+      HTML("<i class='fa fa-circle' aria-hidden='true'></i> <font size='5' color='red'><b>Annotated transcription factors/regulators</b></font>")
     })
     
     output$trftitle_BDG <- renderText({
@@ -1602,6 +1769,30 @@ shinyServer(function(input, output, session) {
         title = "Error input!", type = "error",
         text = "No Genome synteny!"
       )
+      output$gsy_BDG <- DT::renderDT({
+        DT::datatable(
+          gsytable, 
+          extensions = c("Buttons"), 
+          escape = FALSE, rownames= FALSE, selection="single", 
+          options = list(pageLength = 10, autoWidth = FALSE, bSort = FALSE, dom = 'Bfrtip',
+                         columnDefs=list(list(targets="_all", class="dt-center", 
+                                              render = DT::JS(
+                                                "function(data, type, row, meta) {",
+                                                "return type === 'display' && data.length > 30 ?",
+                                                "'<span title=\"' + data + '\">' + data.substr(0, 30) + '...</span>' : data;",
+                                                "}"))),
+                         scrollX = TRUE,
+                         buttons = list('pageLength', 'copy', 
+                                        list(extend = 'csv',   filename =  paste("Syntenic_Blocks", sep = "-")),
+                                        list(extend = 'excel', filename =  paste("Syntenic_Blocks", sep = "-")),
+                                        'print'), 
+                         initComplete = DT::JS(
+                           "function(settings, json) {",
+                           "$(this.api().table().header()).css({'background-color': '#676464', 'color': '#fff'});",
+                           "}")
+          )
+        )
+      }, server = FALSE)
     } else {
       output$gsy_BDG <- DT::renderDT({
         DT::datatable(
@@ -1681,8 +1872,8 @@ shinyServer(function(input, output, session) {
           load( paste0("./info/", gsub(" ", "_", comparisongenome), "/", gsub(" ", "_", comparisongenome), ".gene.info.RData") )
           clicked <- input$gsy_BDG_rows_selected
           chr <- chromosome
-          start <- as.numeric(gsytable[clicked, 2] )
-          end <- as.numeric( gsytable[clicked, 3] )
+          start <- as.numeric(gsytable[clicked, 5] )
+          end <- as.numeric( gsytable[clicked, 6] )
           gene <- GenomicRanges::GRanges(seqnames = gene_info_s$chr, IRanges::IRanges(start = gene_info_s$start, end = gene_info_s$end))
           thefind <- GenomicRanges::GRanges(seqnames = chr, IRanges::IRanges(start = start, end = end))
           find.f1 <- GenomicRanges::findOverlaps(gene, thefind)
@@ -1735,11 +1926,25 @@ shinyServer(function(input, output, session) {
     duptable$V4 <- gsub("_", " ", duptable$V4)
     colnames(duptable) <- c("Reference chromosome", "Reference start", "Reference end", "Query chromosome", "Query start", "Query end")
     if (nrow(duptable) == 0){
-      shinyWidgets::sendSweetAlert(
-        session = session,
-        title = "Error input!", type = "error",
-        text = "No Genome synteny!"
-      )
+      output$dupresult <- DT::renderDT({
+        DT::datatable(
+          duptable, 
+          extensions = c("Buttons"), 
+          escape = FALSE, rownames= FALSE, selection="single", 
+          options = list(pageLength = 10, autoWidth = FALSE, bSort = FALSE, dom = 'Bfrtip',
+                         columnDefs=list(list(targets="_all", class="dt-center")), scrollX = TRUE,
+                         buttons = list('pageLength', 'copy', 
+                                        list(extend = 'csv',   filename =  paste("Syntenic_Blocks", sep = "-")),
+                                        list(extend = 'excel', filename =  paste("Syntenic_Blocks", sep = "-")),
+                                        'print'), 
+                         initComplete = DT::JS(
+                           "function(settings, json) {",
+                           "$(this.api().table().header()).css({'background-color': '#676464', 'color': '#fff'});",
+                           "}")
+          )
+        )
+      }, server = FALSE)
+      
     } else {
       output$dupresult <- DT::renderDT({
         DT::datatable(
@@ -1813,8 +2018,8 @@ shinyServer(function(input, output, session) {
           load( paste0("./info/", gsub(" ", "_", comparisongenome), "/", gsub(" ", "_", comparisongenome), ".gene.info.RData") )
           clicked <- input$dupresult_rows_selected
           chr <- chromosome
-          start <- as.numeric(duptable[clicked, 2] )
-          end <- as.numeric( duptable[clicked, 3] )
+          start <- as.numeric(duptable[clicked, 5] )
+          end <- as.numeric( duptable[clicked, 6] )
           gene <- GenomicRanges::GRanges(seqnames = gene_info_s$chr, IRanges::IRanges(start = gene_info_s$start, end = gene_info_s$end))
           thefind <- GenomicRanges::GRanges(seqnames = chr, IRanges::IRanges(start = start, end = end))
           find.f1 <- GenomicRanges::findOverlaps(gene, thefind)
@@ -1849,11 +2054,25 @@ shinyServer(function(input, output, session) {
     invtable$V4 <- gsub("_", " ", invtable$V4)
     colnames(invtable) <- c("Reference chromosome", "Reference start", "Reference end", "Query chromosome", "Query start", "Query end")
     if (nrow(invtable) == 0){
-      shinyWidgets::sendSweetAlert(
-        session = session,
-        title = "Error input!", type = "error",
-        text = "No Genome synteny!"
-      )
+      output$invresult <- DT::renderDT({
+        DT::datatable(
+          invtable, 
+          extensions = c("Buttons"), 
+          escape = FALSE, rownames= FALSE, selection="single", 
+          options = list(pageLength = 10, autoWidth = FALSE, bSort = FALSE, dom = 'Bfrtip',
+                         columnDefs=list(list(targets="_all", class="dt-center")), scrollX = TRUE,
+                         buttons = list('pageLength', 'copy', 
+                                        list(extend = 'csv',   filename =  paste("Syntenic_Blocks", sep = "-")),
+                                        list(extend = 'excel', filename =  paste("Syntenic_Blocks", sep = "-")),
+                                        'print'), 
+                         initComplete = DT::JS(
+                           "function(settings, json) {",
+                           "$(this.api().table().header()).css({'background-color': '#676464', 'color': '#fff'});",
+                           "}")
+          )
+        )
+      }, server = FALSE)
+      
     } else {
       output$invresult <- DT::renderDT({
         DT::datatable(
@@ -1927,8 +2146,8 @@ shinyServer(function(input, output, session) {
           load( paste0("./info/", gsub(" ", "_", comparisongenome), "/", gsub(" ", "_", comparisongenome), ".gene.info.RData") )
           clicked <- input$invresult_rows_selected
           chr <- chromosome
-          start <- as.numeric(invtable[clicked, 2] )
-          end <- as.numeric( invtable[clicked, 3] )
+          start <- as.numeric(invtable[clicked, 5] )
+          end <- as.numeric( invtable[clicked, 6] )
           gene <- GenomicRanges::GRanges(seqnames = gene_info_s$chr, IRanges::IRanges(start = gene_info_s$start, end = gene_info_s$end))
           thefind <- GenomicRanges::GRanges(seqnames = chr, IRanges::IRanges(start = start, end = end))
           find.f1 <- GenomicRanges::findOverlaps(gene, thefind)
@@ -1963,11 +2182,25 @@ shinyServer(function(input, output, session) {
     tdmtable$V4 <- gsub("_", " ", tdmtable$V4)
     colnames(tdmtable) <- c("Reference chromosome", "Reference start", "Reference end", "Query chromosome", "Query start", "Query end")
     if (nrow(tdmtable) == 0){
-      shinyWidgets::sendSweetAlert(
-        session = session,
-        title = "Error input!", type = "error",
-        text = "No Genome synteny!"
-      )
+      output$tdmresult <- DT::renderDT({
+        DT::datatable(
+          tdmtable, 
+          extensions = c("Buttons"), 
+          escape = FALSE, rownames= FALSE, selection="single", 
+          options = list(pageLength = 10, autoWidth = FALSE, bSort = FALSE, dom = 'Bfrtip',
+                         columnDefs=list(list(targets="_all", class="dt-center")), scrollX = TRUE,
+                         buttons = list('pageLength', 'copy', 
+                                        list(extend = 'csv',   filename =  paste("Syntenic_Blocks", sep = "-")),
+                                        list(extend = 'excel', filename =  paste("Syntenic_Blocks", sep = "-")),
+                                        'print'), 
+                         initComplete = DT::JS(
+                           "function(settings, json) {",
+                           "$(this.api().table().header()).css({'background-color': '#676464', 'color': '#fff'});",
+                           "}")
+          )
+        )
+      }, server = FALSE)
+      
     } else {
       output$tdmresult <- DT::renderDT({
         DT::datatable(
@@ -2041,8 +2274,8 @@ shinyServer(function(input, output, session) {
           load( paste0("./info/", gsub(" ", "_", comparisongenome), "/", gsub(" ", "_", comparisongenome), ".gene.info.RData") )
           clicked <- input$tdmresult_rows_selected
           chr <- chromosome
-          start <- as.numeric(tdmtable[clicked, 2] )
-          end <- as.numeric( tdmtable[clicked, 3] )
+          start <- as.numeric(tdmtable[clicked, 5] )
+          end <- as.numeric( tdmtable[clicked, 6] )
           gene <- GenomicRanges::GRanges(seqnames = gene_info_s$chr, IRanges::IRanges(start = gene_info_s$start, end = gene_info_s$end))
           thefind <- GenomicRanges::GRanges(seqnames = chr, IRanges::IRanges(start = start, end = end))
           find.f1 <- GenomicRanges::findOverlaps(gene, thefind)
@@ -2077,11 +2310,25 @@ shinyServer(function(input, output, session) {
     transtable$V4 <- gsub("_", " ", transtable$V4)
     colnames(transtable) <- c("Reference chromosome", "Reference start", "Reference end", "Query chromosome", "Query start", "Query end")
     if (nrow(transtable) == 0){
-      shinyWidgets::sendSweetAlert(
-        session = session,
-        title = "Error input!", type = "error",
-        text = "No Genome synteny!"
-      )
+      output$transresult <- DT::renderDT({
+        DT::datatable(
+          transtable, 
+          extensions = c("Buttons"), 
+          escape = FALSE, rownames= FALSE, selection="single", 
+          options = list(pageLength = 10, autoWidth = FALSE, bSort = FALSE, dom = 'Bfrtip',
+                         columnDefs=list(list(targets="_all", class="dt-center")), scrollX = TRUE,
+                         buttons = list('pageLength', 'copy', 
+                                        list(extend = 'csv',   filename =  paste("Syntenic_Blocks", sep = "-")),
+                                        list(extend = 'excel', filename =  paste("Syntenic_Blocks", sep = "-")),
+                                        'print'), 
+                         initComplete = DT::JS(
+                           "function(settings, json) {",
+                           "$(this.api().table().header()).css({'background-color': '#676464', 'color': '#fff'});",
+                           "}")
+          )
+        )
+      }, server = FALSE)
+      
     } else {
       output$transresult <- DT::renderDT({
         DT::datatable(
@@ -2155,8 +2402,8 @@ shinyServer(function(input, output, session) {
           load( paste0("./info/", gsub(" ", "_", comparisongenome), "/", gsub(" ", "_", comparisongenome), ".gene.info.RData") )
           clicked <- input$transresult_rows_selected
           chr <- chromosome
-          start <- as.numeric(transtable[clicked, 2] )
-          end <- as.numeric( transtable[clicked, 3] )
+          start <- as.numeric(transtable[clicked, 5] )
+          end <- as.numeric( transtable[clicked, 6] )
           gene <- GenomicRanges::GRanges(seqnames = gene_info_s$chr, IRanges::IRanges(start = gene_info_s$start, end = gene_info_s$end))
           thefind <- GenomicRanges::GRanges(seqnames = chr, IRanges::IRanges(start = start, end = end))
           find.f1 <- GenomicRanges::findOverlaps(gene, thefind)
@@ -2191,11 +2438,32 @@ shinyServer(function(input, output, session) {
     deltable$V6 <- gsub("_", " ", deltable$V6)
     colnames(deltable) <- c("Reference chromosome", "Reference start", "Reference end", "Reference", "Alternative", "Query chromosome", "Query start", "Query end")
     if (nrow(deltable) == 0){
-      shinyWidgets::sendSweetAlert(
-        session = session,
-        title = "Error input!", type = "error",
-        text = "No Genome synteny!"
-      )
+      output$delresult <- DT::renderDT({
+        DT::datatable(
+          deltable, 
+          extensions = c("Buttons"), 
+          escape = FALSE, rownames= FALSE, selection="single", 
+          options = list(pageLength = 10, autoWidth = FALSE, bSort = FALSE, dom = 'Bfrtip',
+                         columnDefs=list(list(targets="_all", class="dt-center", 
+                                              render = DT::JS(
+                                                "function(data, type, row, meta) {",
+                                                "return type === 'display' && data.length > 30 ?",
+                                                "'<span title=\"' + data + '\">' + data.substr(0, 30) + '...</span>' : data;",
+                                                "}"))),
+                         scrollX = TRUE,
+                         buttons = list('pageLength', 'copy', 
+                                        list(extend = 'csv',   filename =  paste("Syntenic_Blocks", sep = "-")),
+                                        list(extend = 'excel', filename =  paste("Syntenic_Blocks", sep = "-")),
+                                        'print'), 
+                         initComplete = DT::JS(
+                           "function(settings, json) {",
+                           "$(this.api().table().header()).css({'background-color': '#676464', 'color': '#fff'});",
+                           "}")
+                         
+          )
+        )
+      }, server = FALSE)
+      
     } else {
       output$delresult <- DT::renderDT({
         DT::datatable(
@@ -2270,8 +2538,8 @@ shinyServer(function(input, output, session) {
           load( paste0("./info/", gsub(" ", "_", comparisongenome), "/", gsub(" ", "_", comparisongenome), ".gene.info.RData") )
           clicked <- input$delresult_rows_selected
           chr <- chromosome
-          start <- as.numeric(deltable[clicked, 2] )
-          end <- as.numeric( deltable[clicked, 3] )
+          start <- as.numeric(deltable[clicked, 7] )
+          end <- as.numeric( deltable[clicked, 8] )
           gene <- GenomicRanges::GRanges(seqnames = gene_info_s$chr, IRanges::IRanges(start = gene_info_s$start, end = gene_info_s$end))
           thefind <- GenomicRanges::GRanges(seqnames = chr, IRanges::IRanges(start = start, end = end))
           find.f1 <- GenomicRanges::findOverlaps(gene, thefind)
@@ -2306,11 +2574,31 @@ shinyServer(function(input, output, session) {
     instable$V6 <- gsub("_", " ", instable$V6)
     colnames(instable) <- c("Reference chromosome", "Reference start", "Reference end",  "Reference", "Alternative", "Query chromosome", "Query start", "Query end")
     if (nrow(instable) == 0){
-      shinyWidgets::sendSweetAlert(
-        session = session,
-        title = "Error input!", type = "error",
-        text = "No Genome synteny!"
-      )
+      output$insresult <- DT::renderDT({
+        DT::datatable(
+          instable, 
+          extensions = c("Buttons"), 
+          escape = FALSE, rownames= FALSE, selection="single", 
+          options = list(pageLength = 10, autoWidth = FALSE, bSort = FALSE, dom = 'Bfrtip',
+                         columnDefs=list(list(targets="_all", class="dt-center", 
+                                              render = DT::JS(
+                                                "function(data, type, row, meta) {",
+                                                "return type === 'display' && data.length > 30 ?",
+                                                "'<span title=\"' + data + '\">' + data.substr(0, 30) + '...</span>' : data;",
+                                                "}"))),
+                         scrollX = TRUE,
+                         buttons = list('pageLength', 'copy', 
+                                        list(extend = 'csv',   filename =  paste("Syntenic_Blocks", sep = "-")),
+                                        list(extend = 'excel', filename =  paste("Syntenic_Blocks", sep = "-")),
+                                        'print'), 
+                         initComplete = DT::JS(
+                           "function(settings, json) {",
+                           "$(this.api().table().header()).css({'background-color': '#676464', 'color': '#fff'});",
+                           "}")
+          )
+        )
+      }, server = FALSE)
+      
     } else {
       output$insresult <- DT::renderDT({
         DT::datatable(
@@ -2384,8 +2672,8 @@ shinyServer(function(input, output, session) {
           load( paste0("./info/", gsub(" ", "_", comparisongenome), "/", gsub(" ", "_", comparisongenome), ".gene.info.RData") )
           clicked <- input$insresult_rows_selected
           chr <- chromosome
-          start <- as.numeric(instable[clicked, 2] )
-          end <- as.numeric( instable[clicked, 3] )
+          start <- as.numeric(instable[clicked, 7] )
+          end <- as.numeric( instable[clicked, 8] )
           gene <- GenomicRanges::GRanges(seqnames = gene_info_s$chr, IRanges::IRanges(start = gene_info_s$start, end = gene_info_s$end))
           thefind <- GenomicRanges::GRanges(seqnames = chr, IRanges::IRanges(start = start, end = end))
           find.f1 <- GenomicRanges::findOverlaps(gene, thefind)
@@ -2408,6 +2696,103 @@ shinyServer(function(input, output, session) {
       }, server = FALSE) 
     }
   })
+  
+  output$genestructure_tab_show <- renderUI({
+    req(input$submit_gsv)
+    tabsetPanel(id = "genestructure_tab",
+                tabPanel("Duplication",
+                         fixedRow(
+                           DT::dataTableOutput("dupresult"),
+                           column(12,htmlOutput("dupdata1_title")),
+                           column(12,DT::dataTableOutput("dupdata1")),
+                           tags$head(tags$style("#trfaccessions_title{color: red;
+                                       font-style: bold;
+                                       font-size: 18px;
+                                       font-family:Times New Roman;
+                                      }"
+                           )),
+                           column(12,htmlOutput("dupdata2_title")),
+                           column(12,DT::dataTableOutput("dupdata2")))
+                         
+                ),
+                
+                tabPanel("Inversion",
+                         fixedRow(
+                           DT::dataTableOutput("invresult"),
+                           column(12,htmlOutput("invdata1_title")),
+                           column(12,DT::dataTableOutput("invdata1")),
+                           tags$head(tags$style("#trfaccessions_title{color: red;
+                                       font-style: bold;
+                                       font-size: 18px;
+                                       font-family:Times New Roman;
+                                      }"
+                           )),
+                           column(12,htmlOutput("invdata2_title")),
+                           column(12,DT::dataTableOutput("invdata2")))
+                ),
+                
+                tabPanel("Tandem repeat",
+                         fixedRow(
+                           DT::dataTableOutput("tdmresult"),
+                           column(12,htmlOutput("tdmdata1_title")),
+                           column(12,DT::dataTableOutput("tdmdata1")),
+                           tags$head(tags$style("#trfaccessions_title{color: red;
+                                       font-style: bold;
+                                       font-size: 18px;
+                                       font-family:Times New Roman;
+                                      }"
+                           )),
+                           column(12,htmlOutput("tdmdata2_title")),
+                           column(12,DT::dataTableOutput("tdmdata2")))
+                ),
+                
+                tabPanel("Translocation",
+                         fixedRow(
+                           DT::dataTableOutput("transresult"),
+                           column(12,htmlOutput("transdata1_title")),
+                           column(12,DT::dataTableOutput("transdata1")),
+                           tags$head(tags$style("#trfaccessions_title{color: red;
+                                       font-style: bold;
+                                       font-size: 18px;
+                                       font-family:Times New Roman;
+                                      }"
+                           )),
+                           column(12,htmlOutput("transdata2_title")),
+                           column(12,DT::dataTableOutput("transdata2")))
+                ),
+                
+                tabPanel("Deletion",
+                         fixedRow(
+                           DT::dataTableOutput("delresult"),
+                           column(12,htmlOutput("deldata1_title")),
+                           column(12,DT::dataTableOutput("deldata1")),
+                           tags$head(tags$style("#trfaccessions_title{color: red;
+                                       font-style: bold;
+                                       font-size: 18px;
+                                       font-family:Times New Roman;
+                                      }"
+                           )),
+                           column(12,htmlOutput("deldata2_title")),
+                           column(12,DT::dataTableOutput("deldata2")))
+                ),
+                
+                tabPanel("Insertion",
+                         fixedRow(
+                           DT::dataTableOutput("insresult"),
+                           column(12,htmlOutput("insdata1_title")),
+                           column(12,DT::dataTableOutput("insdata1")),
+                           tags$head(tags$style("#trfaccessions_title{color: red;
+                                       font-style: bold;
+                                       font-size: 18px;
+                                       font-family:Times New Roman;
+                                      }"
+                           )),
+                           column(12,htmlOutput("insdata2_title")),
+                           column(12,DT::dataTableOutput("insdata2")))
+                ),
+                br()
+    )
+   })
   
   
   # GBrowser
@@ -2516,8 +2901,9 @@ shinyServer(function(input, output, session) {
               filename = function() { "snp.info.txt" },
               content = function(file) {
                 mutType = input$GB_mut_group
-                
-                write.table(snp.info[[2]][snp.info[[2]]$effect %in% mutType, ], file, sep="\t", quote=F, row.names=F)
+                allmutType <- snp.info[[2]]$effect
+                allmutType <- gsub(".+-", "", allmutType)
+                write.table(snp.info[[2]][allmutType %in% mutType, ], file, sep="\t", quote=F, row.names=F)
               })
           }
         } else {
@@ -2610,7 +2996,6 @@ shinyServer(function(input, output, session) {
         snp.info.down <<- snpInfo(chr=myPos$chr, start=myPos$start, end=myPos$end, 
                                   accession = gsub(",.+", "", input$mychooserD), mutType = NULL)
         ddt <- data.frame(snp.info.down[[1]][[1]], stringsAsFactors = F)
-        
         accession <- sapply(gsub(",.+", "", input$mychooserD), function(x){
           if (x %in% c("Improved cultivar", "Landrace", "Glycine soja")) {
             x.dat <- readLines(paste0("./data/", x, ".soya.txt"))
@@ -2645,7 +3030,6 @@ shinyServer(function(input, output, session) {
         }
         serchSNP[is.na(serchSNP)] <- "N"
         colnames(serchSNP)[1:7] <- c("SNPID", "Major", "Minor", "Reference", "Alternative", "Effect", "Gene")
-        
         if ( nrow(serchSNP) == 0) {
           output$mytable2 <- DT::renderDT({
             nuldata <- data.frame("No SNP in this location!")
@@ -2654,7 +3038,7 @@ shinyServer(function(input, output, session) {
               nuldata,
               extensions = "Buttons", escape = FALSE,
               rownames = F, selection = "none", 
-              options = list(bSort = FALSE, pageLength = 20,  dom = 'Bfrtip', 
+              options = list(bSort = FALSE, pageLength = 20,  dom = 'Bfrtip',
                              buttons = list('pageLength', 'copy', 
                                             list(extend = 'csv',   filename =  paste("SNPs", sep = "-")),
                                             list(extend = 'excel', filename =  paste("SNPs", sep = "-"))
@@ -2668,17 +3052,29 @@ shinyServer(function(input, output, session) {
           })
         } else {
           output$mytable2 <- DT::renderDT({
+            IDNAME <- soya.info$Names
+            names(IDNAME) <- soya.info$ID
+            IDNAMEsd <- IDNAME[colnames(serchSNP)[-c(1:7)]]
+            colnames(serchSNP)[-c(1:7)] <- paste0(colnames(serchSNP)[-c(1:7)], " (", IDNAMEsd, ")")
             DT::datatable(
               serchSNP
+              # ,selection = 'none', rownames = '', filter = 'none',
+              # extensions = c('Buttons','FixedColumns'),
+              # options = list(
+              #   dom = 'Bfrtip',
+              #   buttons = c('copy', 'csv', 'excel', 'pdf', 'print'),
+              #   paging = TRUE, searching = TRUE, info = FALSE,
+              #   sort = TRUE, scrollX = TRUE, fixedColumns = list(leftColumns = 2)
+              # )
               ,selection = 'none', rownames = FALSE, escape = FALSE,
-              extensions = c("FixedColumns","Buttons"),
+              extensions = c("Buttons"), #"FixedColumns"
               options = list(
                 buttons = list('pageLength',
                                list(extend = 'csv',   filename =  paste("snp", sep = "-")),
                                list(extend = 'excel', filename =  paste("snp", sep = "-")),
                                'copy'),dom = 'Bfrtip',
-                pageLength = 15, columnDefs=list(list(targets="_all", class="dt-center")), 
-                bSort = FALSE, scrollX = TRUE, fixedColumns = list(leftColumns = 6),
+                pageLength = 15, columnDefs=list(list(targets="_all", class="dt-center")),#fixedHeader = TRUE,
+                bSort = FALSE, scrollX = TRUE, # fixedColumns = list(leftColumns = 6),
                 initComplete = DT::JS(
                   "function(settings, json) {",
                   "$(this.api().table().header()).css({'background-color': '#676464', 'color': '#fff'});",
@@ -3099,6 +3495,7 @@ shinyServer(function(input, output, session) {
               
               if (input$divSize ){
                 output$diversity <- shiny::renderPlot({
+                  par(family = "serif")
                   nuc.div.plot <<- nucDiv(chr = myPos$chr, nuc.start = myPos$start - div.up, nuc.end = myPos$end + div.down, 
                                           groups = div.group, step = div.step,
                                           numerator = div.numerator, denominator = div.denominator, 
@@ -3107,6 +3504,7 @@ shinyServer(function(input, output, session) {
                 }, height = div.height, width = div.width)
               } else {
                 output$diversity <- shiny::renderPlot({
+                  par(family = "serif")
                   nuc.div.plot <<- nucDiv(chr = myPos$chr, nuc.start = myPos$start - div.up, nuc.end = myPos$end + div.down, 
                                           groups = div.group, step = div.step,
                                           numerator = div.numerator, denominator = div.denominator, 
@@ -3410,7 +3808,12 @@ shinyServer(function(input, output, session) {
           indeleff <- unique(indeleff)
           gk <- merge(gffindel, indeleff, by.x = "Position", by.y = "V2")
           gffindel <- gk[, c(2,1,3,4,2903:2904,5:2902)]
-          names(gffindel) <- c("Chromosome", "Position", "Reference", "Alternative", "Effect", "Gene" , paste0("s", 1:2898))
+          names(gffindel) <- c("Chromosome", "Position", "Reference", "Alternative", "Effect", "Gene" , paste0("s", 1:2898, " (", soya.info$Names, ")"))
+          
+          # IDNAME <- soya.info$Names
+          # names(IDNAME) <- soya.info$ID
+          # IDNAMEsd <- IDNAME[colnames(serchSNP)[-c(1:7)]]
+          # colnames(serchSNP)[-c(1:7)] <- paste0(colnames(serchSNP)[-c(1:7)], " (", IDNAMEsd, ")")
           
           accession = input$mychooseri
           accession <- sapply(accession, function(x){
@@ -3427,27 +3830,25 @@ shinyServer(function(input, output, session) {
           colnames(indel)[1] <- "Chr"
           indels <- indel[,c(1:6, order(as.numeric(gsub("s", "", choosei)), decreasing = F) + 6)]
         }
-        
         output$indeltable <- DT::renderDT({
           DT::datatable(
             indels
             ,selection = 'none', rownames = FALSE, escape = FALSE,
-            extensions = c("FixedColumns","Buttons"),
+            extensions = c("Buttons"),#"FixedColumns",
             options = list(
               buttons = list('pageLength', 'copy',
                              list(extend = 'csv',   filename =  paste("INDEL", sep = "-")),
                              list(extend = 'excel', filename =  paste("INDEL", sep = "-"))
               ),dom = 'Bfrtip',
               pageLength = 15, columnDefs=list(list(targets="_all", class="dt-center")), 
-              bSort = FALSE, scrollX = TRUE, fixedColumns = list(leftColumns = 2),
+              bSort = FALSE, scrollX = TRUE, #fixedColumns = list(leftColumns = 2),
               initComplete = DT::JS(
                 "function(settings, json) {",
                 "$(this.api().table().header()).css({'background-color': '#676464', 'color': '#fff'});",
                 "}")
             )
           )
-        }, server = FALSE)
-        
+        }, server = FALSE)        
         output$bulkdownloadindelInfo.txt <- downloadHandler(
           filename <- function() { paste('The_indelinfo.txt') },
           content <- function(file) {
@@ -3507,49 +3908,81 @@ shinyServer(function(input, output, session) {
         shinyWidgets::updateMultiInput(
           session = session,
           inputId = "mychooseri",
-          selected = c("Glycine soja")
+            selected = all.soya.cho
         )
       })
     } else {NULL}
   })
+
+  observeEvent(input$indelall1, {
+    shinyWidgets::updateMultiInput(
+      session = session,
+      inputId = "mychooseri",
+      selected = all.soya.cho
+    )
+  })
   
+  observeEvent(input$indelnone1, {
+    shinyWidgets::updateMultiInput(
+      session = session,
+      inputId = "mychooseri",
+      selected = character(0)
+    )
+  })
   
   #gene expression
   observeEvent(input$submit_GSgst, {
-    if (!exists("geneexpression")) {
+    if (!exists("geneexpression") & input$expression_genome == "Expression data of Zhonghuang 13") {
       geneexpression <- data.table::fread("./data/Gene_expression.txt", sep = "\t", data.table = F, check.names = F)
+      dknm <- c("Gene ID", "Samples", "Expression value (FPKM)")
+      exprnm <- "Expression value (FPKM)"
+    } else if (!exists("geneexpression") & input$expression_genome == "Expression data of A81-356022") {
+      geneexpression <- data.table::fread("./data/Gene_expression_williams82.txt", sep = "\t", data.table = F, check.names = F)
+      dknm <- c("Gene ID", "Samples", "Expression value (RPKM)")
+      exprnm <- "Expression value (RPKM)"
+    } else if (!exists("geneexpression") & input$expression_genome == "Expression data of W05") {
+      geneexpression <- data.table::fread("./data/Gene_expression_w05.txt", sep = "\t", data.table = F, check.names = F)
+      dknm <- c("Transcription ID", "Samples", "Expression value (FPKM)")
+      exprnm <- "Expression value (FPKM)"
+    } else if (!exists("geneexpression") & input$expression_genome == "Transcriptomes data of 102 soybean accessions"){
+      geneexpression <- data.table::fread("./data/Gene_expression_102soybean.txt", sep = "\t", data.table = F, check.names = F)
+      dknm <- c("Transcription ID", "Samples", "Expression value (FPKM)")
+      exprnm <- "Expression value (FPKM)"
     } else {
       NULL
     }
-    
-    geneid <- input$gtsgeneid
+    geneid <- unlist(strsplit(input$gtsgenePaste, split="\\n"))
     geneid <- trimws(geneid, which = c("both"), whitespace = "[ \t\r\n]")
+    exforgene <- geneexpression[geneexpression$Gene_ID %in% geneid, ]
+    tgene <- geneid[geneid %in% geneexpression$Gene_ID]
+    tgene <- tgene[length(tgene):1]
+    exforgene$Gene_ID <- factor(exforgene$Gene_ID, levels = tgene)
     
-    exforgene <- geneexpression[geneexpression$Gene_ID == geneid, ]
-    
-    if( nrow(exforgene) == 1 & length(input$Gexp_mut_group) != 0 ){
-      dk <- data.frame(t(exforgene), stringsAsFactors = F)
-      dk$Samples <- rownames(dk)
-      colnames(dk) <- c("Expression", "Samples")
-      dk <- dk[-1, ]
-      dk$Expression <- as.numeric(dk$Expression)
-      dk <- dk[dk$Samples %in% input$Gexp_mut_group, ]
-      ds <- exforgene[, sort(colnames(exforgene))]
-      dd <- data.frame(cbind(exforgene[,1], ds[, colnames(ds) %in% input$Gexp_mut_group]), stringsAsFactors = F, check.names = F)
-      colnames(dd)[1] <- "Gene ID"
-      
-      if( length(input$Gexp_mut_group) == 1) {
-        colnames(dd)[2] <- input$Gexp_mut_group
-      } else {}
-      
+    if( nrow(exforgene) >= 1 & (length(input$Gexp_mut_groupA) != 0 | length(input$Gexp_mut_groupB) != 0 | length(input$Gexp_mut_groupD) != 0) ){
+      dk <- data.table::melt(exforgene)
+      colnames(dk) <- dknm
+      if ( input$expression_genome == "Expression data of Zhonghuang 13"){
+        dd <- dk[dk$Samples %in% input$Gexp_mut_groupA, ]
+        dmdnm <- c("Gene", "Samples", "Value")
+      } else if (input$expression_genome == "Expression data of A81-356022") {
+        dd <- dk[dk$Samples %in% input$Gexp_mut_groupB, ]
+        dmdnm <- c("Gene", "Samples", "Value")
+      } else if (input$expression_genome == "Expression data of W05") {
+        dd <- dk[dk$Samples %in% input$Gexp_mut_groupC, ]
+        dmdnm <- c("Gene", "Samples", "Value")
+      } else if (input$expression_genome == "Transcriptomes data of 102 soybean accessions") {
+        dd <- dk[dk$Samples %in% input$Gexp_mut_groupD, ]
+        dmdnm <- c("Gene", "Accessions", "Value")
+      }
+      colnames(dd) <- dmdnm
       output$gstoutresult <- DT::renderDT({
         DT::datatable(
-          dd, escape = FALSE, rownames= FALSE, selection="none", extensions = c("Buttons","FixedColumns"),
-          options = list(pageLength = 5, autoWidth = FALSE, bSort = FALSE, scrollX = TRUE, fixedColumns = list(leftColumns = 1),
+          dd, escape = FALSE, rownames= FALSE, selection="none", extensions = c("Buttons"),
+          options = list(pageLength = 15, autoWidth = FALSE, bSort = FALSE, scrollX = TRUE,
                          buttons = list('copy', 
                                         list(extend = 'csv',   filename =  paste("Gene_expression", geneid, sep = "-")),
                                         list(extend = 'excel', filename =  paste("Gene_expression", geneid, sep = "-")),
-                                        'print'), dom = 'Bfrtip',
+                                        'print'), dom = 'Bfrtip', columnDefs = list(list(className = 'dt-center', targets = "_all")),
                          initComplete = DT::JS(
                            "function(settings, json) {",
                            "$(this.api().table().header()).css({'background-color': '#676464', 'color': '#fff'});",
@@ -3559,40 +3992,62 @@ shinyServer(function(input, output, session) {
       }, server = FALSE)
       
       output$gstbarplot <- shiny::renderPlot({
-        p1 <- ggplot2::ggplot(dk, ggplot2::aes(x = Samples, y = Expression)) + 
-          ggplot2::geom_bar(stat="identity", width=0.9, fill='deepskyblue') + 
-          ggplot2::theme(axis.text.x = ggplot2::element_text(angle = 60, vjust = 1, hjust=1 , size = 15, face="bold"), 
-                         axis.text.y = ggplot2::element_text(size = 12, face="bold"),
-                         axis.title.y = ggplot2::element_text(size = 20), axis.title.x = ggplot2::element_text(size = 20),
-                         plot.title = ggplot2::element_text(color="red", size=15, face="bold", hjust = 0.5)) + 
-          ggplot2::theme(panel.grid.major = ggplot2::element_blank(), panel.grid.minor = ggplot2::element_blank(), 
-                         panel.background = ggplot2::element_blank(), axis.line = ggplot2::element_line(colour = "black"), 
-                         strip.text.x = ggplot2::element_text(size = 15, colour = "black", face = "bold")) + 
-          ggplot2::scale_y_continuous(expand = c(0, 0), limits = c(0, max(dk$Expression)*1.1) ) + 
-          ggplot2::xlab("") + ggplot2::ylab("Expression level (FPKM)") + ggplot2::ggtitle(geneid) + 
-          ggplot2::geom_text(ggplot2::aes(label=Expression), position = ggplot2::position_dodge(width=0.9),  size = 4, angle = 90, hjust = -0.1)
+        dmd <- dd
+        colnames(dmd) <- dmdnm
+        fontsize <- input$gstfontsize
+        labfontsize <- fontsize
+        #labfontsize <- input$gstlabsize
+        if (dmdnm[2] == "Samples"){
+          p1 <- ggplot2::ggplot(dmd, ggplot2::aes(Samples, Gene, fill= Value )) + ggplot2::geom_raster() +
+            ggplot2::scale_fill_gradientn(colours=c("#0000FFFF","#FFFFFFFF","#FF0000FF")) +
+            ggplot2::theme(axis.text.x = ggplot2::element_text(angle = 45, hjust = 1, vjust = .9, size = fontsize), axis.text.y = ggplot2::element_text(size = fontsize)) +
+            ggplot2::xlab("Samples") + ggplot2::ylab("Gene ID") +
+            ggplot2::theme(axis.text=ggplot2::element_text(size=fontsize), axis.title=ggplot2::element_text(size=labfontsize,face="bold")) + 
+            ggplot2::theme(legend.text = ggplot2::element_text(size=labfontsize), legend.title = ggplot2::element_text(size=labfontsize))+
+            ggplot2::labs(fill=exprnm)
+        }else{
+          p1 <- ggplot2::ggplot(dmd, ggplot2::aes(Accessions, Gene, fill= Value )) + ggplot2::geom_raster() +
+            ggplot2::scale_fill_gradientn(colours=c("#0000FFFF","#FFFFFFFF","#FF0000FF")) +
+            ggplot2::theme(axis.text.x = ggplot2::element_text(angle = 45, hjust = 1, vjust = .9, size = fontsize), axis.text.y = ggplot2::element_text(size = fontsize)) +
+            ggplot2::xlab("Accessions") + ggplot2::ylab("Gene ID") +
+            ggplot2::theme(axis.text=ggplot2::element_text(size=fontsize), axis.title=ggplot2::element_text(size=labfontsize,face="bold")) + 
+            ggplot2::theme(legend.text = ggplot2::element_text(size=labfontsize), legend.title = ggplot2::element_text(size=labfontsize))+
+            ggplot2::labs(fill=exprnm)
+        }
         p1
       })
       
       output$gstbarplotif <- renderUI({
         if ( is.na(input$gstwidth) | is.na(input$gstheight) | input$gstheight*input$gstwidth == 0 ){
           NULL
+        } else if ( nrow(exforgene) <= 50 & nrow(exforgene) >= 8){
+          hegihtexforgene <- nrow(exforgene) * 30
+          hegihtexforgene <- paste0(hegihtexforgene, "px")
+          widthexforgene <- "100%"
+        } else if ( nrow(exforgene) < 8){
+          hegihtexforgene <- paste0("200", "px")
+          widthexforgene <- "100%"
+        } else if( input$gstwidth == 1300 & input$gstheight == 1000 ){
+          hegihtexforgene <- 1000
+          widthexforgene <- "100%"
         } else {
-          plotOutput("gstbarplot", width = paste0(input$gstwidth, "px"), height = paste0(input$gstheight, "px"))
+          widthexforgene = paste0(input$gstwidth, "px")
+          hegihtexforgene = paste0(input$gstheight, "px")
         }
+        plotOutput("gstbarplot", width = widthexforgene, height = hegihtexforgene )
       })
       
       output$gstout_title <- renderText({
         HTML('<i class="fa fa-circle" aria-hidden="true"></i> <font size="5" color="red"><b>Expression level</b></font>')
       })
     } else {
-      if (length( input$Gexp_mut_group ) == 0){
+      if (length( input$Gexp_mut_groupA ) == 0 | length( input$Gexp_mut_groupB ) == 0 |length( input$Gexp_mut_groupC ) == 0 | length( input$Gexp_mut_groupD ) == 0){
         shinyWidgets::sendSweetAlert(
           session = session,
           title = "Error input!", type = "error",
-          text = "Please choose at least one tissue/stage!"
+          text = "Please choose at least one tissue/stage/accession!"
         )
-      } else {
+      } else{
         shinyWidgets::sendSweetAlert(
           session = session,
           title = "Error input!", type = "error",
@@ -3620,62 +4075,151 @@ shinyServer(function(input, output, session) {
     )
   }, server = FALSE)
   
+  output$expressionname2 <- DT::renderDT({
+    DT::datatable(
+      expression_name_description2
+      , escape = FALSE, rownames= FALSE, selection="single", 
+      options = list(pageLength = 10, autoWidth = FALSE, bSort = FALSE,
+                     buttons = list('pageLength', 'copy', 
+                                    list(extend = 'csv',   filename =  paste("searchlocation", sep = "-")),
+                                    list(extend = 'excel', filename =  paste("searchloaction", sep = "-")),
+                                    'print'), 
+                     initComplete = DT::JS(
+                       "function(settings, json) {",
+                       "$(this.api().table().header()).css({'background-color': '#676464', 'color': '#fff'});",
+                       "}")
+      )
+    )
+  }, server = FALSE)
+  
+  output$expressionname3 <- DT::renderDT({
+    DT::datatable(
+      expression_name_description3
+      , escape = FALSE, rownames= FALSE, selection="single", 
+      options = list(pageLength = 10, autoWidth = FALSE, bSort = FALSE,
+                     buttons = list('pageLength', 'copy', 
+                                    list(extend = 'csv',   filename =  paste("searchlocation", sep = "-")),
+                                    list(extend = 'excel', filename =  paste("searchloaction", sep = "-")),
+                                    'print'), 
+                     initComplete = DT::JS(
+                       "function(settings, json) {",
+                       "$(this.api().table().header()).css({'background-color': '#676464', 'color': '#fff'});",
+                       "}")
+      )
+    )
+  }, server = FALSE)
+  
+  
   #load example
   observe({
-    if (input$gstExamID >0) {
+    if (input$gstExamID >0 & input$expression_genome == "Expression data of Zhonghuang 13") {
       isolate({
-        updateTextInput(session, "gtsgeneid", value = "SoyZH13_05G201900")
-        shinyWidgets::updateMultiInput(
-          session = session,
-          inputId = "Gexp_mut_group",
-          selected = c("cotyledon-1", "root", "stem", "leafbud-1", "leafbud-2", "leaf-1", "cotyledon-2", "stem-2", "leafbud-3", "leaf-2", "flo-1", "shoot_meristem", "flo-2", "flo-3", "flo-4", "flo-5", "pod&seed-1", "pod&seed-2", "pod&seed-3", "pod-1", "pod-2", "pod-3", "seed-1", "seed-2", "seed-3", "seed-4", "seed-5")
-        )
+        updateTextAreaInput(session, "gtsgenePaste", value = "SoyZH13_06G264500\nSoyZH13_13G194400\nSoyZH13_13G210100\nSoyZH13_04G102300\nSoyZH13_19G209300\nSoyZH13_06G036700\nSoyZH13_10G274300\nSoyZH13_19G158800\nSoyZH13_07G167500\nSoyZH13_19G103600\nSoyZH13_15G137100\nSoyZH13_07G047000\nSoyZH13_08G078200\nSoyZH13_18G266500\nSoyZH13_18G011800\nSoyZH13_01G013900\nSoyZH13_13G100700\nSoyZH13_13G008800\nSoyZH13_08G309800\nSoyZH13_02G172500\nSoyZH13_16G103700\nSoyZH13_08G044300\nSoyZH13_20G054700\nSoyZH13_08G315800\nSoyZH13_04G031600\nSoyZH13_02G037300\nSoyZH13_02G230600\nSoyZH13_02G245000\nSoyZH13_07G195800\nSoyZH13_17G009700\nSoyZH13_19G213900\nSoyZH13_19G160100\nSoyZH13_16G017400\nSoyZH13_16G127300\nSoyZH13_20G009700\nSoyZH13_06G114600\nSoyZH13_07G225200\nSoyZH13_20G172900\nSoyZH13_14G028900\nSoyZH13_13G020601\nSoyZH13_02G243100\nSoyZH13_14G193601\nSoyZH13_03G083400\nSoyZH13_15G126800\nSoyZH13_14G193602\nSoyZH13_17G165700\nSoyZH13_13G141300\nSoyZH13_02G090600\nSoyZH13_04G048900\nSoyZH13_05G155700\nSoyZH13_12G035700\nSoyZH13_09G212400\nSoyZH13_10G044200\nSoyZH13_13G186400\nSoyZH13_02G061800\nSoyZH13_10G040800\nSoyZH13_13G316000\nSoyZH13_15G081900\nSoyZH13_11G064900\nSoyZH13_07G185103\nSoyZH13_11G159000\nSoyZH13_03G026900\nSoyZH13_09G033300\nSoyZH13_08G207100\nSoyZH13_02G143100")
+    })
+    } else if (input$gstExamID >0 & input$expression_genome == "Expression data of A81-356022") {
+      isolate({
+        updateTextAreaInput(session, "gtsgenePaste", value = "Glyma.13G035600\nGlyma.02G178400\nGlyma.14G164900\nGlyma.13G246900\nGlyma.05G160700\nGlyma.06G264900\nGlyma.03G119800\nGlyma.03G127000\nGlyma.04G103700\nGlyma.04G173900\nGlyma.16G021800\nGlyma.02G135000\nGlyma.08G316400\nGlyma.10G161900\nGlyma.17G139400\nGlyma.16G134400\nGlyma.13G142800\nGlyma.09G218900\nGlyma.13G109800\nGlyma.14G201200\nGlyma.19G041800\nGlyma.15G106300\nGlyma.10G090700\nGlyma.02G000800\nGlyma.10G045300\nGlyma.08G117700\nGlyma.03G112800\nGlyma.12G104800\nGlyma.13G323300\nGlyma.06G159600\nGlyma.18G063900\nGlyma.13G168800\nGlyma.20G204300\nGlyma.13G198300\nGlyma.01G141400\nGlyma.15G244100\nGlyma.02G046500\nGlyma.08G189000\nGlyma.02G166400\nGlyma.02G057500\nGlyma.08G281200\nGlyma.11G081700\nGlyma.12G100600\nGlyma.13G321200\nGlyma.15G184300\nGlyma.17G165300\nGlyma.08G009400\nGlyma.13G071400\nGlyma.12G171600\nGlyma.20G201500\nGlyma.07G200500\nGlyma.10G119900\nGlyma.02G270800\nGlyma.08G120800\nGlyma.13G202600\nGlyma.20G184600\nGlyma.20G118200\nGlyma.02G191900\nGlyma.01G079800\nGlyma.02G176200\nGlyma.03G142000\nGlyma.03G165900\nGlyma.03G225900\nGlyma.04G070600\nGlyma.04G118900\nGlyma.06G071000\nGlyma.06G119200\nGlyma.08G243400\nGlyma.10G142400\nGlyma.16G170600\nGlyma.u006400\nGlyma.18G034000\n")
+    })
+    }else if (input$gstExamID >0 & input$expression_genome == "Expression data of W05") {
+      isolate({
+        updateTextAreaInput(session, "gtsgenePaste", value = "Glysoja.12G033168\nGlysoja.11G032887\nGlysoja.11G029100\nGlysoja.19G052276\nGlysoja.10G028256\nGlysoja.09G023049\nGlysoja.14G039260\nGlysoja.11G031520\nGlysoja.15G040333\nGlysoja.11G030835\nGlysoja.07G017077\nGlysoja.07G017176\nGlysoja.11G030022\nGlysoja.14G037254\nGlysoja.16G042725\nGlysoja.16G043516\nGlysoja.19G052342\nGlysoja.20G054238\nGlysoja.08G021027\nGlysoja.02G003041\nGlysoja.06G015175\nGlysoja.02G004667\nGlysoja.15G040126\nGlysoja.17G045104\nGlysoja.09G025212\nGlysoja.18G047191\nGlysoja.07G018706")
       })
-    } else {NULL}
+    }else if (input$gstExamID >0 & input$expression_genome == "Transcriptomes data of 102 soybean accessions") {
+      isolate({
+        updateTextAreaInput(session, "gtsgenePaste", value = "Glyma.09G073800\nGlyma.14G134300\nGlyma.13G178400\nGlyma.14G165500\nGlyma.12G181100\nGlyma.03G065900\nGlyma.14G019000\nGlyma.06G249000\nGlyma.03G064700\nGlyma.14G121900\nGlyma.10G297200\nGlyma.12G124000\nGlyma.07G106500\nGlyma.02G131100\nGlyma.14G114900\nGlyma.14G100100\nGlyma.11G099600\nGlyma.11G153600\nGlyma.13G086800\nGlyma.05G220800\nGlyma.14G148300\nGlyma.14G196000\nGlyma.08G278400\nGlyma.02G252400\nGlyma.08G339700\nGlyma.14G103300\nGlyma.04G112400\nGlyma.13G208300\nGlyma.18G272500\nGlyma.11G214300\nGlyma.06G213200\nGlyma.06G038100\nGlyma.04G154800\nGlyma.01G145500\nGlyma.04G053400\nGlyma.09G052300\nGlyma.13G162700\nGlyma.07G218000\nGlyma.04G126500\nGlyma.10G277500\nGlyma.09G122400\nGlyma.11G007700\nGlyma.14G105300\nGlyma.15G146900\nGlyma.02G024600\nGlyma.05G063300\nGlyma.04G159400\nGlyma.10G229600\nGlyma.02G213000\nGlyma.04G199700")
+      })
+    }else {NULL}
   })
   
   #reset
   observe({
     if (input$cleargst >0) {
       isolate({
-        updateTextInput(session, "gtsgeneid", value = "")
-        shinyWidgets::updateMultiInput(
-          session = session,
-          inputId = "Gexp_mut_group",
-          selected = c("")
-        )
+        updateTextInput(session, "gtsgenePaste", value = "")
       })
     } else {NULL}
   })
   
   observeEvent(input$accessiongexall, {
-    shinyWidgets::updateMultiInput(
-      session = session,
-      inputId = "Gexp_mut_group",
-      selected = c("cotyledon-1", "root", "stem", "leafbud-1", "leafbud-2", "leaf-1", "cotyledon-2", "stem-2", "leafbud-3", "leaf-2", "flo-1", "shoot_meristem", "flo-2", "flo-3", "flo-4", "flo-5", "pod&seed-1", "pod&seed-2", "pod&seed-3", "pod-1", "pod-2", "pod-3", "seed-1", "seed-2", "seed-3", "seed-4", "seed-5")
-    )
+    if(input$expression_genome == "Expression data of Zhonghuang 13"){
+      shinyWidgets::updateMultiInput(
+        session = session,
+        inputId = "Gexp_mut_groupA",
+        selected = c("cotyledon-1", "root", "stem", "leafbud-1", "leafbud-2", "leaf-1", "cotyledon-2", "stem-2", "leafbud-3", "leaf-2", "flo-1", "shoot_meristem", "flo-2", "flo-3", "flo-4", "flo-5", "pod&seed-1", "pod&seed-2", "pod&seed-3", "pod-1", "pod-2", "pod-3", "seed-1", "seed-2", "seed-3", "seed-4", "seed-5")
+      )
+    }else if (input$expression_genome == "Expression data of A81-356022"){
+      shinyWidgets::updateMultiInput(
+        session = session,
+        inputId = "Gexp_mut_groupB",
+        selected = c("young_leaf", "flower", "one.cm.pod", "pod.shell.10DAF", "pod.shell.14DAF", "seed.10DAF", "seed.14DAF", "seed.21DAF", "seed.25DAF", "seed.28DAF", "seed.35DAF", "seed.42DAF", "root", "nodule")
+      )
+    }else if (input$expression_genome == "Expression data of W05"){
+      shinyWidgets::updateMultiInput(
+        session = session,
+        inputId = "Gexp_mut_groupC",
+        selected = c("Trifoliate", "Leaves", "Roots")
+      )
+    }else if (input$expression_genome == "Transcriptomes data of 102 soybean accessions"){
+      shinyWidgets::updateMultiInput(
+        session = session,
+        inputId = "Gexp_mut_groupD",
+        selected = c("Anderson", "Young", "Williams82", "Lawrence", "A.K.(Harrow)", "Capital", "Dunfield", "Illini", "Kanro", "Korean", "Lincoln", "Mandarin", "Mukden", "Richland", "Haberlandt", "Ogden", "Ralsoy", "Roanoke", "S-100", "Tokyo", "Amcor", "Beeson", "Century", "Blackhawk", "Bonus", "Pella", "Calland", "Chippewa", "Clark", "Corsoy", "Cumberland", "Oakland", "Merit", "Douglas", "Ford", "Harcor", "Harosoy", "Shelby", "Hawkeye", "Kent", "Perry", "Wayne", "Williams", "Woodworth", "Zane", "Hill", "Jackson", "Centennial", "Hood", "Tracy", "Brim", "Dare", "Pickett", "Ransom", "Davis", "Gasoy17", "Holladay", "NC-Roy", "5601T", "NC-Raleigh", "PI88.788", "TN05-3027", "4J105-3-4", "5M20-2-5-2", "CL0J095-4-6", "CL0J173-6-8", "HS6-3976", "Prohio", "LD00-3309", "LD01-5907", "LD02-4485", "LD02-9050", "Magellan", "Maverick", "S06-13640", "NE3001", "Skylla", "U03-100612", "LG03-2979", "LG03-3191", "LG04-4717", "LG05-4292", "LG05-4317", "LG05-4464", "LG05-4832", "LG90-2550", "LG92-1255", "LG94-1128", "LG94-1906", "LG97-7012", "LG98-1605", "LG00-3377", "LG04-6000", "PI398.881", "PI427.136", "PI437.169B", "PI507.681B", "PI518.751", "PI561.370", "PI404.188A", "PI574.486", "IA3023")
+      )
+    }
+    
+
+    
   })
   
   observeEvent(input$accessiongexnone, {
+    if(input$expression_genome == "Expression data of Zhonghuang 13"){
     shinyWidgets::updateMultiInput(
       session = session,
-      inputId = "Gexp_mut_group",
+      inputId = "Gexp_mut_groupA",
       selected = character(0)
     )
+    }else if (input$expression_genome == "Expression data of A81-356022"){
+      shinyWidgets::updateMultiInput(
+        session = session,
+        inputId = "Gexp_mut_groupB",
+        selected = character(0)
+      )
+    }else if (input$expression_genome == "Expression data of W05"){
+      shinyWidgets::updateMultiInput(
+        session = session,
+        inputId = "Gexp_mut_groupC",
+        selected = character(0)
+      )
+    }else if (input$expression_genome == "Transcriptomes data of 102 soybean accessions"){
+      shinyWidgets::updateMultiInput(
+        session = session,
+        inputId = "Gexp_mut_groupD",
+        selected = character(0)
+      )
+    }
+    
   })
   
   
   #Gene correlation
   observeEvent(input$submit_GSgcor, {
-    if (!exists("geneexpressioncor") ){
+    if (!exists("geneexpressioncor") & input$cor_expression_genome == "Expression data of Zhonghuang 13") {
       geneexpressioncor <- data.table::fread("./data/Gene_expression.txt", sep = "\t", data.table = F)
       geneexpressioncor <- geneexpressioncor[-55312,]
-    } else { NULL }
-    
+    } else if (!exists("geneexpressioncor") & input$cor_expression_genome == "Expression data of A81-356022") {
+      geneexpressioncor <- data.table::fread("./data/Gene_expression_williams82.txt", sep = "\t", data.table = F)
+    } else if (!exists("geneexpressioncor") & input$cor_expression_genome == "Expression data of W05") {
+      geneexpressioncor <- data.table::fread("./data/Gene_expression_w05.txt", sep = "\t", data.table = F)
+    } else if (!exists("geneexpressioncor") & input$cor_expression_genome == "Transcriptomes data of 102 soybean accessions") {
+      geneexpressioncor <- data.table::fread("./data/Gene_expression_102soybean.txt", sep = "\t", data.table = F)
+    } else {
+      NULL
+    }
     geneid <- unlist(strsplit(input$genecorPaste, split="\\n"))
     geneid <- trimws(geneid, which = c("both"), whitespace = "[ \t\r\n]")
+    head(geneid)
     exforgene <- geneexpressioncor[geneexpressioncor$Gene_ID %in% geneid, ]
-    if( nrow(exforgene) > 1){
+    if( nrow(exforgene) > 1 & nrow(exforgene) < 50){
       rownames(exforgene) <- exforgene$Gene_ID
       exforgene <- as.matrix(exforgene[,-1])
       exforgene <- exforgene[which(rowSums(exforgene) > 0), ]
@@ -3683,6 +4227,8 @@ shinyServer(function(input, output, session) {
       ds <- cor(dk)
       dm <- data.table::melt(ds)
       dm <- dm[, c(2,1,3)]
+      dm <- dm[order(abs(dm[,3]), decreasing = TRUE), ]
+      dm <- dm[abs(dm[,3]) >= 0.3, ]
       colnames(dm) <- c("Gene1", "Gene2", "Correlation Coefficient")
       dm$Gene1 <- as.character(dm$Gene1)
       dm$Gene2 <- as.character(dm$Gene2)
@@ -3725,7 +4271,14 @@ shinyServer(function(input, output, session) {
           text = "Input at least two Gene ID"
         )
         NULL
-      } else {
+      } else if(length(geneid) > 50){
+        shinyWidgets::sendSweetAlert(
+          session = session,
+          title = "Error input!", type = "error",
+          text = "Too many genes!"
+        )
+        NULL
+      }else {
         shinyWidgets::sendSweetAlert(
           session = session,
           title = "Error input!", type = "error",
@@ -3738,11 +4291,16 @@ shinyServer(function(input, output, session) {
   
   #load example
   observe({
-    if (input$gcorExamID >0) {
+    if (input$gcorExamID >0 & input$cor_expression_genome == "Expression data of Zhonghuang 13") {
       isolate({
         updateTextAreaInput(session, "genecorPaste", value = "SoyZH13_11G196000\nSoyZH13_08G253500\nSoyZH13_11G016200\nSoyZH13_05G230900\nSoyZH13_18G091401\nSoyZH13_18G133500\nSoyZH13_07G133800\nSoyZH13_07G215300\nSoyZH13_18G212600\nSoyZH13_06G190300\nSoyZH13_03G065800\nSoyZH13_04G034200\nSoyZH13_13G267500\nSoyZH13_10G274400\nSoyZH13_02G255800\nSoyZH13_16G057000\nSoyZH13_19G208300\nSoyZH13_12G018300\nSoyZH13_05G117701")
       })
-    } else {NULL}
+    } else if (input$gcorExamID >0 & input$cor_expression_genome == "Expression data of A81-356022") {
+      isolate({
+        updateTextAreaInput(session, "genecorPaste", value = "Glyma.13G035600\nGlyma.02G178400\nGlyma.14G164900\nGlyma.13G246900\nGlyma.05G160700\nGlyma.06G264900\nGlyma.03G119800\nGlyma.03G127000\nGlyma.04G103700\nGlyma.04G173900\nGlyma.16G021800\nGlyma.02G135000\nGlyma.08G316400\nGlyma.10G161900\nGlyma.17G139400\nGlyma.16G134400\nGlyma.13G142800\nGlyma.09G218900\nGlyma.13G109800\nGlyma.14G201200\nGlyma.19G041800\nGlyma.15G106300")
+      })
+    }else {NULL}
+    
   })
   
   #reset
@@ -3767,14 +4325,21 @@ shinyServer(function(input, output, session) {
       blast.in.seq <- readLines(input$BlastSeqUpload$datapath)
     }
     
-    if (blast.in.seq == "") {
+    if (input$In_blast == "paste" && blast.in.seq == "") {
       shinyWidgets::sendSweetAlert(
         session = session,
         title = "No input sequence received!", type = "error",
         text = NULL
       )
       NULL 
-    } else {
+     } else if(input$In_blast == "upload" && file.info(input$BlastSeqUpload$datapath) == 0){
+       shinyWidgets::sendSweetAlert(
+         session = session,
+         title = "The uploaded file is empty.", type = "error",
+         text = NULL
+       )
+       NULL
+      }else{
       blast.in.file <- gsub("\\s+", "-", Sys.time())
       blast.in.file <- gsub(":", "-", blast.in.file)
       blast.in.file <- paste0(blast.in.file, ".fasta")
@@ -3786,7 +4351,8 @@ shinyServer(function(input, output, session) {
       blast.db <- paste0("www/BLASTN/", blast.db)
       blast.db.fl <- paste0(blast.db, ".nhr")
       
-      if (!file.exists(blast.db.fl)) {
+      #if (!file.exists(blast.db.fl)) {
+      if (FALSE) {
         shinyWidgets::sendSweetAlert(
           session = session,
           title = "BLAST database not found!", type = "error",
@@ -3796,23 +4362,46 @@ shinyServer(function(input, output, session) {
       } else {
         if (input$program_database == "Genome Sequence"){
           blastmethod <- input$programdna
+          blastshort <- input$Filtershortsequence1
         } else if (input$program_database == "Protein Sequence"){
           blastmethod <- input$programpro
+          blastshort <- input$Filtershortsequence2
         } else if (input$program_database == "Gene Sequence"){
           blastmethod <- input$programgene
           blast.db <- input$BLASTdb
           blast.db <- gsub(" ", "_", blast.db)
           blast.db <- paste0("www/BLASTN/CDS/", blast.db, ".gene")
+          blastshort <- input$Filtershortsequence3
         } else {
           blastmethod <- input$programcds
           blast.db <- input$BLASTdb
           blast.db <- gsub(" ", "_", blast.db)
           blast.db <- paste0("www/BLASTN/CDS/", blast.db, ".cds")
+          blastshort <- input$Filtershortsequence4
         }
-        
+        #blastp/tblastn/tblastx/blastx : seg  blastn : dust
+        if (blastmethod == "blastn"){
+          chosefiltermethod <- "-dust no"
+        }else{
+          chosefiltermethod <- "-seg no"
+        }
         blast.out.file <- paste0(blast.in.file, ".blast.out")
-        blast.cmds <- paste0(blastmethod," -query ", blast.in.file," -db ", '"', paste(blast.db, sep=" ", collapse = " "), '"', " -evalue ",
-                             input$BLASTev, " -outfmt 5", " -out ", blast.out.file)
+        
+        if(input$Filtercomplexity){
+          blast.cmds <- paste0(blastmethod," -query ", blast.in.file," -db ", '"', paste(blast.db, sep=" ", collapse = " "), '"', " -evalue ",
+                               input$BLASTev, " -outfmt 5", " -out ", blast.out.file)
+        }else{
+          blast.cmds <- paste0(blastmethod," -query ", blast.in.file," -db ", '"', paste(blast.db, sep=" ", collapse = " "), '" ', chosefiltermethod,  " -evalue ",
+                               input$BLASTev, " -outfmt 5", " -out ", blast.out.file)
+        
+        }
+        if (blastshort & blastmethod == "blastp") {
+          blast.cmds <- paste0(blast.cmds, " -task blastp-short")
+        }else if (blastshort & blastmethod != "blastp"){
+          blast.cmds <- paste0(blast.cmds, " -task blastn-short")
+        }else{
+          NULL
+        }
         system(blast.cmds, ignore.stdout = TRUE, ignore.stderr = TRUE)
         
         if ( file.size(blast.out.file) > 0 ) {
@@ -3876,7 +4465,11 @@ shinyServer(function(input, output, session) {
         results <- results[, c("qseqid", "qlen", "sseqid", "sslen", "qstart", "qend", "sstart", 
                                "send", "bitscore", "evalue", "gaps", "pident", "length")]
         results$sseqid <- gsub("_chr", ", chr", results$sseqid)
+        if (input$program_database == "Genome Sequence"){
         results$sseqid <- gsub("_", " ", results$sseqid)
+        }else{
+          NULL
+        }
         
       }
       results
@@ -3915,6 +4508,15 @@ shinyServer(function(input, output, session) {
         }
       })
     } else {NULL}
+  })
+  
+  output$blastalignmentif <- renderUI({
+    if (is.null(input$BLASTresult_rows_selected) || is.null(blastedResults())){
+      NULL
+    }else{
+      shinycssloaders::withSpinner(verbatimTextOutput("alignment", placeholder = FALSE))
+    }
+    
   })
   
   output$alignment <- renderText({
@@ -3992,6 +4594,11 @@ shinyServer(function(input, output, session) {
         shinyWidgets::updateMultiInput(session, "BLASTdb", selected = "")
         updateSelectInput(session, "program_database", selected = "Genome Sequence")
         updateSelectInput(session, "programdna", selected = "blastn")
+        updateCheckboxInput(session, "Filtercomplexity", label = "Filter low complexity region", FALSE)
+        updateCheckboxInput(session, "Filtershortsequence1", "Short sequence", FALSE)
+        updateCheckboxInput(session, "Filtershortsequence2", "Short sequence", FALSE)
+        updateCheckboxInput(session, "Filtershortsequence3", "Short sequence", FALSE)
+        updateCheckboxInput(session, "Filtershortsequence4", "Short sequence", FALSE)
       })
     } else {NULL}
   })
@@ -4009,6 +4616,11 @@ shinyServer(function(input, output, session) {
         shinyWidgets::updateMultiInput(session, "BLASTdb", selected = c("Zhonghuang 13"))
         updateSelectInput(session, "program_database", selected = "Genome Sequence")
         updateSelectInput(session, "programdna", selected = "blastn")
+        updateCheckboxInput(session, "Filtercomplexity", "Filter low complexity region", FALSE)
+        updateCheckboxInput(session, "Filtershortsequence1", "Short sequence", FALSE)
+        updateCheckboxInput(session, "Filtershortsequence2", "Short sequence", FALSE)
+        updateCheckboxInput(session, "Filtershortsequence3", "Short sequence", FALSE)
+        updateCheckboxInput(session, "Filtershortsequence4", "Short sequence", FALSE)
       })
     } else {NULL}
   })
@@ -4152,7 +4764,7 @@ shinyServer(function(input, output, session) {
           
           output$primerview <- renderText({
             if( length(primertable > 0) ){
-              HTML('<i class="fa fa-circle" aria-hidden="true"></i> <font size="5" color="red"><b>Primer design view</b></font>')
+              HTML('<i class="fa fa-circle" aria-hidden="true"></i> <font size="5" color="red"><b>Primer design view for the best primer pair highlighted in lightblue in the table above</b></font>')
             } else {
             }
           })
@@ -4192,14 +4804,15 @@ shinyServer(function(input, output, session) {
   })
   
   
-  #JBrowseR
+  #JBrowse
   observe({
     HTML.tab <- read.table("./data/jbrowse.link", sep = "\n")
     HTML.tab <- data.frame(matrix(HTML.tab$V1, ncol = 3))
     colnames(HTML.tab) <- rep("",3 )
     
-    HTML.tab[10,3] <- ""
-    HTML.tab[11,3] <- ""
+    # HTML.tab[13,3] <- ""
+    # HTML.tab[14,3] <- ""
+    
     output$JBrowsetable <- DT::renderDataTable(HTML.tab,  
                                                options = list(pageLength = 15, lengthChange = FALSE, Search = FALSE, info = FALSE, dom = 't', 
                                                               searchHighlight = FALSE, autoWidth = FALSE, bSort = FALSE, sDom  = '<"top">lrt<"bottom">ip' ),
@@ -4220,7 +4833,6 @@ shinyServer(function(input, output, session) {
         return(x)
       }
     })
-    
     accession <- unique(unlist(accession))
     DT::datatable(
       soya.info[soya.info$ID %in% accession, ], extensions = "Buttons", escape = FALSE, rownames = F, selection = "none", 
@@ -4252,6 +4864,42 @@ shinyServer(function(input, output, session) {
     )
   })
   
+  output$mytable12 = DT::renderDT({
+    accessionB <- input$mychooserAB
+    accessionB <- gsub(",.+", "", accessionB)
+    accessionB <- unique(unlist(accessionB))
+    soya481 <- data.table::fread("./data/soybean481info.txt", sep = "\t", header = T, data.table = F)
+    rownames(soya481) <- soya481$`Sequence Identifier`
+    soya481_info <- soya481[accessionB, ]
+    DT::datatable(
+      soya481_info, extensions = "Buttons", escape = FALSE, rownames = F, selection = "none", 
+      options = list(bSort = FALSE, pageLength = 15,  dom = 'Bfrtip', 
+                     buttons = list('pageLength', 'copy', 
+                                    list(extend = 'csv',   filename =  paste("Accession", sep = "-")),
+                                    list(extend = 'excel', filename =  paste("Accession", sep = "-"))
+                     ),
+                     initComplete = DT::JS(
+                       "function(settings, json) {",
+                       "$(this.api().table().header()).css({'background-color': '#676464', 'color': '#fff'});",
+                       "}")
+      )
+    )}, server = FALSE)
+  
+  observeEvent(input$accessionall2, {
+    shinyWidgets::updateMultiInput(
+      session = session,
+      inputId = "mychooserAB",
+      selected = soynm
+    )
+  })
+  
+  observeEvent(input$accessionnone2, {
+    shinyWidgets::updateMultiInput(
+      session = session,
+      inputId = "mychooserAB",
+      selected = character(0)
+    )
+  })
   
   #Orthologous
   observeEvent(input$ORT_sbumit, {
@@ -4261,37 +4909,171 @@ shinyServer(function(input, output, session) {
     }
     
     geneid <- input$ORT_ID
+    geneid <- unlist(strsplit(geneid, "\n"))
     geneid <- trimws(geneid, which = c("both"), whitespace = "[ \t\r\n]")
-    geneidtrue <- gsub(".+\\.", "", gsub(".+_", "", geneid))
-    accession <- gsub("_.+", "", gsub("\\..+", "", geneid))
-    if ( geneid == "") {
-      ogid <- data.frame() 
-    } else {
-      ogid <- ort[grep(geneid, ort[ ,grep(accession, ort[1,])] ), ]}
     
-    if ( nchar(geneidtrue) == 9 & nrow(ogid) != 0){
-      ogid <- data.frame(names(ogid), t(ogid))
-      ogid <- ogid[ogid[ ,2] != "", ]
+    # geneidtrue <- gsub(".+\\.", "", gsub(".+_", "", geneid))
+    # accession <- gsub("_.+", "", gsub("\\..+", "", geneid))
+    # if ( geneid == "") {
+    #   ogid <- data.frame() 
+    # } else if ( paste0(strsplit(geneid, "")[[1]][1:3], collapse = "") %in% c("Gcy", "Gtt", "Gfa", "Gst", "Gsy", "Gto") ){
+    #   ids <- paste0(strsplit(geneid, "")[[1]][1:3], collapse = "")
+    #   ogid <- ort[grep(geneid, ort[ ,grepl(ids, ort[1,]) ] ), ]
+    # } else{
+    #   ogid <- ort[grep(geneid, ort[ ,which(accession == gsub("\\..+|_.+", "", ort[1,])) ] ), ]
+    # }
+    orthpplydata <- lapply(geneid, function(x){
+      # geneidtrue <- gsub(".+\\.", "", gsub(".+_", "", x))
+      accession <- gsub("_.+", "", gsub("\\..+", "", x))
+      loc <- which(x == geneid)
+      GCCID <- unlist(lapply(1:40, function(x){paste0(c("Gcy", "Gtt", "Gfa", "Gst", "Gsy", "Gto"), x, "g")}))
+      if ( x == "") {
+      } else if ( paste0(strsplit(x, "")[[1]][1:3], collapse = "") %in% c("Gcy", "Gtt", "Gfa", "Gst", "Gsy", "Gto") & nchar(unlist(strsplit(x, "g")[[1]][2])) == 6 ){
+        ids <- paste0(strsplit(x, "")[[1]][1:3], collapse = "")
+        ogid <- ort[grep(x, ort[ ,grepl(ids, ort[1,]) ] ), ]
+        ogid[2, ] <- paste0("Group", loc)
+        ogid <- t(ogid)
+        return(ogid)
+        
+        
+      } else if (paste0(strsplit(x, "")[[1]][1:8], collapse = "") == "GlymaLee" & nchar(x) == 18){
+        ogid <- ort[grep(x, ort[ ,which(accession == gsub("\\..+|_.+", "", ort[1,])) ] ), ]
+        ogid[2, ] <- paste0("Group", loc)
+        ogid <- t(ogid)
+        return(ogid)
+      } else if (paste0(strsplit(x, "")[[1]][1:13], collapse = "") == "GlysoPI483463" & nchar(x) == 23){
+        ogid <- ort[grep(x, ort[ ,which(accession == gsub("\\..+|_.+", "", ort[1,])) ] ), ]
+        ogid[2, ] <- paste0("Group", loc)
+        ogid <- t(ogid)
+        return(ogid)
+      } else if (paste0(strsplit(x, "")[[1]][1:3], collapse = "") == "Soy" & paste0(strsplit(x, "")[[1]][1:5], collapse = "") != "SoyZH" & nchar(x) == 16){
+        ogid <- ort[grep(x, ort[ ,which(accession == gsub("\\..+|_.+", "", ort[1,])) ] ), ]
+        ogid[2, ] <- paste0("Group", loc)
+        ogid <- t(ogid)
+        return(ogid)
+      } else if (paste0(strsplit(x, "")[[1]][1:5], collapse = "") == "Glyma" & nchar(x) == 15){
+        ogid <- ort[grep(x, ort[ ,which(accession == gsub("\\..+|_.+", "", ort[1,])) ] ), ]
+        ogid[2, ] <- paste0("Group", loc)
+        ogid <- t(ogid)
+        return(ogid)
+      } else if (paste0(strsplit(x, "")[[1]][1:5], collapse = "") == "SoyZH" & nchar(x) == 17) {
+        ogid <- ort[grep(x, ort[ ,which(accession == gsub("\\..+|_.+", "", ort[1,])) ] ), ]
+        ogid[2, ] <- paste0("Group", loc)
+        ogid <- t(ogid)
+        return(ogid)
+      }
+    })
+    
+    orthpplydatasum <- do.call(rbind, orthpplydata)
+    orthpplydatasum <- data.frame(rownames(orthpplydatasum), orthpplydatasum)
+    if(nrow(orthpplydatasum) == 0){
+      nrowsuppl <- 0
+    } else {
+      nrowsuppl <- nrow(orthpplydatasum[!is.na(orthpplydatasum[,2]), ])
+    }
+    
+    if (  nrow(orthpplydatasum) != 0 & nrowsuppl != 0  ){
       
-      colnames(ogid) <- c("Genome", "Orthologous genes")
-      ogid$Genome <- gsub("_", " ", ogid$Genome)
+      drawogid <- orthpplydatasum
+      
+      
+      colnames(orthpplydatasum) <- c("Genome", "Orthologous genes", "Ortholog groups")
+      orthpplydatasum <- orthpplydatasum[orthpplydatasum[ ,2] != "", ]
+      orthpplydatasum <- orthpplydatasum[!is.na(orthpplydatasum[ ,2]), ]
+      orthpplydatasum$Genome <- gsub("_", " ", orthpplydatasum$Genome)
+      ##热图
+      colnames(drawogid) <- c("Genome", "Genes", "Groups")
+      drawogid$Genes[is.na(drawogid$Genes)] <- ""
+      drawogid$Genes <- as.character(drawogid$Genes)
+      orthnum <- sapply(drawogid$Genes, function(x){
+        num <- length(unlist(strsplit(x, ",")))
+      })
+      drawogid$Orthologous <- orthnum
+      drawogidnm <- geneid
+      names(drawogidnm) <- paste0("Group", 1:length(drawogidnm))
+      drawogid[,3] <- as.character(drawogid[,3])
+      drawogid[,3] <- drawogidnm[drawogid[,3]]
+      drawogid <- drawogid[,c(1,3,4)]
+      rownames(drawogid) <- NULL
+      gogidorder <- c("Glycine tomentella D3", "Glycine syndetika", "Glycine stenophita", "Glycine falcata", "Glycine dolichocarpa", 
+                      "Glycine cyrtoloba", "Hwangkeum", "Zhonghuang 13", "Tianlong1", "Yu Dou No.22", "Xu Dou No.1", "Williams 82", 
+                      "Wan Dou No.28", "Tie Feng No.18", "Qi Huang No.34", "PI 548362", "Ju Xuan No.23", "Jin Dou No.23", "Ji Dou No.17",
+                      "Ke Shan No.1", "Hei He No.43", "Han Dou No.5", "Dong Nong No.50", "Amsoy", "Lee", "Zi Hua No.4", "Zhutwinning2", 
+                      "Zhang Chun Man Cang Jin", "Tong Shan Tian E Dan", "Tie Jia Si Li Huang", 
+                      "Shi Sheng Chang Ye", "PI 398296", "Feng Di Huang", "58-161", "W05", "PI 483463", "PI 578357", "PI 562565", "PI 549046")
+      drawogid$Genome <- gsub("_", " ", drawogid$Genome)
+      gogidorder <- gogidorder[gogidorder %in% unique(drawogid$Genome)]
+      drawogid$Genome <- factor(drawogid$Genome, levels = gogidorder)
       #delete character(0)
       output$ortID <- DT::renderDT({
         DT::datatable(
-          ogid, extensions = c("Buttons"), selection = "none",
-          options = list(pageLength = 40, lengthChange = FALSE, Search = FALSE, info = FALSE, dom = 'Bt', selection = "none",
-                         buttons = list('copy', 
-                                        list(extend = 'csv',   filename =  paste("Orthologous", geneid, sep = "-")),
-                                        list(extend = 'excel', filename =  paste("Orthologous", geneid, sep = "-")), 
-                                        'print'),
-                         searchHighlight = FALSE, autoWidth = FALSE, bSort = FALSE, 
-                         sDom  = '<"top">lrt<"bottom">ip',
+          orthpplydatasum, 
+          escape = FALSE, rownames= FALSE, selection="none", extensions  = c("Buttons"),
+          options = list(pageLength = 15, autoWidth = FALSE, bSort = FALSE, scrollX = TRUE, 
+                         buttons = list('pageLength', 'copy', 
+                                        list(extend = 'csv',   filename =  paste("Orthologous",  sep = "-")),
+                                        list(extend = 'excel', filename =  paste("Orthologous",  sep = "-")), 
+                                        'print'), dom = 'Bfrtip',
                          initComplete = DT::JS(
                            "function(settings, json) {",
                            "$(this.api().table().header()).css({'background-color': '#676464', 'color': '#fff'});",
                            "}")
-          ), escape = FALSE, rownames = FALSE
+          )
+          #extensions = c("Buttons"), selection = "none",
+          # options = list(pageLength = 40, lengthChange = FALSE, Search = FALSE, info = FALSE, dom = 'Bt', selection = "none",
+          #                buttons = list('copy', 
+          #                               list(extend = 'csv',   filename =  paste("Orthologous", geneid, sep = "-")),
+          #                               list(extend = 'excel', filename =  paste("Orthologous", geneid, sep = "-")), 
+          #                               'print'),
+          #                searchHighlight = FALSE, autoWidth = FALSE, bSort = FALSE, 
+          #                sDom  = '<"top">lrt<"bottom">ip',
+          #                initComplete = DT::JS(
+          #                  "function(settings, json) {",
+          #                  "$(this.api().table().header()).css({'background-color': '#676464', 'color': '#fff'});",
+          #                  "}")
+          # ), escape = FALSE, rownames = FALSE
         )}, server = FALSE)
+      drawogid$Orthologous <- as.numeric(drawogid$Orthologous)
+      if ( input$shownum ){
+        orthplot <- ggplot2::ggplot(drawogid, ggplot2::aes(Groups, Genome)) +
+          ggplot2::geom_tile(ggplot2::aes(fill = factor(Orthologous)),colour = "white") +
+          ggplot2::geom_text(ggplot2::aes(label =  Orthologous) )+
+          #ggplot2::geom_tile(ggplot2::aes(fill = Orthologous),colour = "white") +
+          #ggplot2::scale_fill_gradientn(colours=c("#CCCCFF","#9999FF","#6666FF","#3333FF","#FFCCCC","#FF9999","#FF6666","#FF3333"))+
+          #ggplot2::geom_raster() + 
+          ggplot2::theme(axis.text.x = ggplot2::element_text(size = 12, angle = 90, hjust = 1)) +
+          ggplot2::theme(axis.text.y = ggplot2::element_text(size = 12)) +
+          ggplot2::xlab("") + ggplot2::ylab("") +
+          ggplot2::labs(fill="# Orthologs")
+        
+      }else{
+        orthplot <- ggplot2::ggplot(drawogid, ggplot2::aes(Groups, Genome)) +
+          
+          ggplot2::geom_tile(ggplot2::aes(fill = factor(Orthologous)),colour = "white") +
+          #ggplot2::geom_text(ggplot2::aes(label =  Orthologous) )+
+          #ggplot2::geom_tile(ggplot2::aes(fill = Orthologous),colour = "white") +
+          #ggplot2::scale_fill_gradientn(colours=c("#CCCCFF","#9999FF","#6666FF","#3333FF","#FFCCCC","#FF9999","#FF6666","#FF3333"))+
+          #ggplot2::geom_raster() + 
+          ggplot2::theme(axis.text.x = ggplot2::element_text(size = 12, angle = 90, hjust = 1)) +
+          ggplot2::theme(axis.text.y = ggplot2::element_text(size = 12)) +
+          ggplot2::xlab("") + ggplot2::ylab("") +
+          ggplot2::labs(fill="Orthologous")
+        
+      }
+
+      output$orthplotif <- renderUI({
+        if (length(geneid) > 5){
+        plotOutput("orthplot", width = "100%", height = paste0("800px"))
+          }else{
+          orthwidth <- paste0((length(geneid)*100 + 200), "px")
+          plotOutput("orthplot", width = orthwidth, height = paste0("800px"))
+        }
+        
+        })
+      output$orthplot <- shiny::renderPlot({
+        orthplot
+      })
+      
     } else {
       shinyWidgets::sendSweetAlert(
         session = session,
@@ -4312,14 +5094,23 @@ shinyServer(function(input, output, session) {
   })
   
   #load example
+  # observe({
+  #   if (input$ortExam >0) {
+  #     isolate({
+  #       updateTextInput(session, "ORT_ID", value="SoyZH13_01G225600")
+  #     })
+  #   } else {NULL}
+  # })
+  #load example
   observe({
     if (input$ortExam >0) {
       isolate({
-        updateTextInput(session, "ORT_ID", value="SoyZH13_01G225600")
+        updateTextAreaInput(session, "ORT_ID", value = "SoyZH13_20G124201\nSoyZH13_14G131103\nSoyZH13_10G049500\nSoyZH13_01G054202\nSoyZH13_13G043301\nSoyZH13_10G214500\nSoyZH13_05G061800\nSoyZH13_11G118400\nSoyZH13_02G038800\nSoyZH13_16G155300\nSoyZH13_13G319400\nSoyZH13_19G153500\nSoyZH13_20G135100\nSoyZH13_18G142622\nSoyZH13_12G186900\nSoyZH13_11G123500\nSoyZH13_18G024500\nSoyZH13_20G078300\nSoyZH13_02G231900\nSoyZH13_03G179600" )
       })
     } else {NULL}
   })
   
+  # 
   #zhanwei4
   output$zhanwei4 <- renderUI({
     if (input$ORT_sbumit ){
@@ -4409,7 +5200,12 @@ shinyServer(function(input, output, session) {
         bargod$color <- "red"
         bargod$color[bargod$Levels == "Biological Process"] <- "skyblue"
         bargod$color[bargod$Levels == "Cellular Component"] <- "green"
-        drawdata <- bargod[1:input$GOnrow, ]
+        if(input$GOnrow >= nrow(bargod)){
+          drawdata <- bargod
+        }else{
+          drawdata <- bargod[1:input$GOnrow, ]
+        }
+
         p1 <- ggplot2::ggplot(drawdata, ggplot2::aes(x = Description, y = Freq, fill = Level)) + 
           ggplot2::geom_bar(stat="identity", width=0.9) + ggplot2::facet_grid(~Level, scale="free", space='free') + 
           ggplot2::theme(axis.text.x = ggplot2::element_text(angle = 90, vjust = 0.5, hjust=1 , size = 15, face="bold"), 
@@ -4421,7 +5217,7 @@ shinyServer(function(input, output, session) {
           ggplot2::scale_y_continuous(expand = c(0, 0), limits = c(0, max(drawdata$Freq)*1.1)) + 
           ggplot2::scale_x_discrete(labels=function(x) stringr::str_wrap(x, width=40)) + ggplot2::xlab("") + 
           ggplot2::ylab("Number of genes") + ggplot2::geom_text(ggplot2::aes(label=Freq), position = ggplot2::position_dodge(width=0.9), vjust=-0.25, size = 300/(as.numeric(input$GOnrow)+30)) +
-          ggplot2::guides(fill=FALSE)
+          ggplot2::guides(fill=FALSE) + ggplot2::theme(text =  ggplot2::element_text(family = "serif"))
         p1
       })
     } else {
@@ -4521,8 +5317,8 @@ shinyServer(function(input, output, session) {
       output$GOgeout1 <- DT::renderDT({
         DT::datatable(
           GOEmf@result[,1:8],
-          escape = FALSE, rownames= FALSE, selection="none", extensions = c("Buttons","FixedColumns"),
-          options = list(pageLength = 5, autoWidth = FALSE, bSort = FALSE, scrollX = TRUE, fixedColumns = list(leftColumns = 2),
+          escape = FALSE, rownames= FALSE, selection="none", extensions = c("Buttons"),
+          options = list(pageLength = 5, autoWidth = FALSE, bSort = FALSE, scrollX = TRUE, #fixedColumns = list(leftColumns = 2),
                          buttons = list('pageLength', 'copy', 
                                         list(extend = 'csv',   filename =  paste("GO_Molecular_Function",  sep = "-")),
                                         list(extend = 'excel', filename =  paste("GO_Molecular_Function",  sep = "-")), 
@@ -4538,8 +5334,8 @@ shinyServer(function(input, output, session) {
       output$GOgeout2 <- DT::renderDT({
         DT::datatable(
           GOEbp@result[,1:8],
-          escape = FALSE, rownames= FALSE, selection="none", extensions = c("Buttons","FixedColumns"),
-          options = list(pageLength = 5, autoWidth = FALSE, bSort = FALSE, scrollX = TRUE, fixedColumns = list(leftColumns = 2),
+          escape = FALSE, rownames= FALSE, selection="none", extensions = c("Buttons"),
+          options = list(pageLength = 5, autoWidth = FALSE, bSort = FALSE, scrollX = TRUE, #fixedColumns = list(leftColumns = 2),
                          buttons = list('pageLength', 'copy', 
                                         list(extend = 'csv',   filename =  paste("GO_Biological_Process",  sep = "-")),
                                         list(extend = 'excel', filename =  paste("GO_Biological_Process",  sep = "-")), 
@@ -4555,8 +5351,8 @@ shinyServer(function(input, output, session) {
       output$GOgeout3 <- DT::renderDT({
         DT::datatable(
           GOEcc@result[,1:8],
-          escape = FALSE, rownames= FALSE, selection="none", extensions  = c("Buttons","FixedColumns"),
-          options = list(pageLength = 5, autoWidth = FALSE, bSort = FALSE, scrollX = TRUE, fixedColumns = list(leftColumns = 2),
+          escape = FALSE, rownames= FALSE, selection="none", extensions  = c("Buttons"),
+          options = list(pageLength = 5, autoWidth = FALSE, bSort = FALSE, scrollX = TRUE, #fixedColumns = list(leftColumns = 2),
                          buttons = list('pageLength', 'copy', 
                                         list(extend = 'csv',   filename =  paste("GO_Cellular_Component", sep = "-")),
                                         list(extend = 'excel', filename =  paste("GO_Cellular_Component", sep = "-")), 
@@ -4624,7 +5420,7 @@ shinyServer(function(input, output, session) {
       
       if ( nrow(GOEmf@result[GOEmf@result$p.adjust <= input$GOp & GOEmf@result$qvalue <= input$GOq, ]) != 0){
         output$GOge1barplot <- shiny::renderPlot({
-          p1 <- barplot(GOEmf, showCategory = input$GOgenrow, order = T) + ggplot2::scale_x_discrete(labels=function(x) stringr::str_wrap(x, width=40)) + ggplot2::ylab("Number of genes")
+          p1 <- barplot(GOEmf, showCategory = input$GOgenrow, order = T) + ggplot2::scale_y_discrete(labels=function(x) stringr::str_wrap(x, width=40)) + ggplot2::ylab("Number of genes")
           p2 <- enrichplot::dotplot(GOEmf, showCategory=input$GOgenrow, order = "x") + ggplot2::scale_y_discrete(labels=function(x) stringr::str_wrap(x, width=40)) + ggplot2::xlab("Gene Ratio")
           cowplot::plot_grid(p1, p2, ncol=2)
         }) 
@@ -4632,7 +5428,7 @@ shinyServer(function(input, output, session) {
       
       if ( nrow(GOEbp@result[GOEbp@result$p.adjust <= input$GOp & GOEbp@result$qvalue <= input$GOq, ]) != 0 ){
         output$GOge2barplot <- shiny::renderPlot({
-          p1 <- barplot(GOEbp, showCategory = input$GOgenrow, order = T) + ggplot2::scale_x_discrete(labels=function(x) stringr::str_wrap(x, width=40)) + ggplot2::ylab("Number of genes")
+          p1 <- barplot(GOEbp, showCategory = input$GOgenrow, order = T) + ggplot2::scale_y_discrete(labels=function(x) stringr::str_wrap(x, width=40)) + ggplot2::ylab("Number of genes")
           p2 <- enrichplot::dotplot(GOEbp, showCategory=input$GOgenrow, order = "x") + ggplot2::scale_y_discrete(labels=function(x) stringr::str_wrap(x, width=40)) + ggplot2::xlab("Gene Ratio")
           cowplot::plot_grid(p1, p2, ncol=2)
         }) 
@@ -4640,7 +5436,7 @@ shinyServer(function(input, output, session) {
       
       if ( nrow(GOEcc@result[GOEcc@result$p.adjust <= input$GOp & GOEcc@result$qvalue <= input$GOq, ]) != 0 ){
         output$GOge3barplot <- shiny::renderPlot({
-          p1 <- barplot(GOEcc, showCategory = input$GOgenrow, order = T) + ggplot2::scale_x_discrete(labels=function(x) stringr::str_wrap(x, width=40)) + ggplot2::ylab("Number of genes")
+          p1 <- barplot(GOEcc, showCategory = input$GOgenrow, order = T) + ggplot2::scale_y_discrete(labels=function(x) stringr::str_wrap(x, width=40)) + ggplot2::ylab("Number of genes")
           p2 <- enrichplot::dotplot(GOEcc, showCategory=input$GOgenrow, order = "x") + ggplot2::scale_y_discrete(labels=function(x) stringr::str_wrap(x, width=40)) + ggplot2::xlab("Gene Ratio")
           cowplot::plot_grid(p1, p2, ncol=2)
         })
@@ -4805,7 +5601,8 @@ shinyServer(function(input, output, session) {
                          strip.text.x = ggplot2::element_text(size = 15, colour = "black", face = "bold")) + 
           ggplot2::scale_y_continuous(expand = c(0, 0), limits = c(0, max(drawdata$Freq)*1.1) ) + 
           ggplot2::xlab("KEGG Pathway") + ggplot2::ylab("Number of genes") + 
-          ggplot2::geom_text(ggplot2::aes(label=Freq), position = ggplot2::position_dodge(width=0.9), vjust=-0.25, size = 300/(as.numeric(input$KOnrow)+30))
+          ggplot2::geom_text(ggplot2::aes(label=Freq), position = ggplot2::position_dodge(width=0.9), vjust=-0.25, size = 300/(as.numeric(input$KOnrow)+30)) + 
+          ggplot2::theme(text =  ggplot2::element_text(family = "serif"))
         p1
       })
     } else {
@@ -4900,8 +5697,8 @@ shinyServer(function(input, output, session) {
       output$KEidout <- DT::renderDT({
         DT::datatable(
           KOE@result[,1:8], 
-          escape = FALSE, rownames= FALSE, selection="none", extensions = c("Buttons","FixedColumns"),
-          options = list(pageLength = 5, autoWidth = FALSE, bSort = FALSE, scrollX = TRUE, fixedColumns = list(leftColumns = 2),
+          escape = FALSE, rownames= FALSE, selection="none", extensions = c("Buttons"),
+          options = list(pageLength = 5, autoWidth = FALSE, bSort = FALSE, scrollX = TRUE, #fixedColumns = list(leftColumns = 2),
                          buttons = list('pageLength', 'copy', 
                                         list(extend = 'csv',   filename =  paste("KEGG_Enrichment", sep = "-")),
                                         list(extend = 'excel', filename =  paste("KEGG_Enrichment", sep = "-")),
@@ -4920,7 +5717,7 @@ shinyServer(function(input, output, session) {
       
       if ( nrow(KOE@result[KOE@result$p.adjust <= input$KEp & KOE@result$qvalue <= input$KEq, ]) != 0 ){
         output$KEidbarplot <- shiny::renderPlot({
-          p1 <- barplot(KOE, showCategory = input$KEnrow, order = T) + ggplot2::scale_x_discrete(labels=function(x) stringr::str_wrap(x, width=40))
+          p1 <- barplot(KOE, showCategory = input$KEnrow, order = T) + ggplot2::scale_y_discrete(labels=function(x) stringr::str_wrap(x, width=40))
           p2 <- enrichplot::dotplot(KOE, showCategory=input$KEnrow, order = "x") + ggplot2::scale_y_discrete(labels=function(x) stringr::str_wrap(x, width=40)) + ggplot2::xlab("")
           cowplot::plot_grid(p1, p2, ncol=2)
         })
@@ -5017,14 +5814,906 @@ shinyServer(function(input, output, session) {
     }
   })
   
+  #Download genome data
+  observe({
+    SoybeanGDB_download1 <- read.table("SoybeanGDB_download.txt", head=T, as.is=T, sep = "\t", check.names = F)
+    SoybeanGDB_download1 <- SoybeanGDB_download1[,-c(9:12)]
+    output$Download_table_out1 = DT::renderDataTable(
+      SoybeanGDB_download1,
+      options = list(lengthMenu = c(20, 30, 50), pageLength = 15,
+                     searching = TRUE, bSort=FALSE,autoWidth = FALSE,
+                     dom = 'Bfrtip',scrollX = TRUE,
+                     columnDefs=list(list(targets="_all"))
+      ), escape = FALSE, selection="none", rownames= FALSE, extensions = "Buttons"
+    )
+    
+  })
+  observe({
+    SoybeanGDB_download2 <- read.table("SoybeanGDB_download.txt", head=T, as.is=T, sep = "\t", check.names = F)
+    SoybeanGDB_download2 <- SoybeanGDB_download2[,-c(4:8,11:12)]
+    output$Download_table_out2 = DT::renderDataTable(
+      SoybeanGDB_download2,
+      options = list(lengthMenu = c(20, 30, 50), pageLength = 15,
+                     searching = TRUE, bSort=FALSE,autoWidth = FALSE,
+                     dom = 'Bfrtip',scrollX = TRUE,
+                     columnDefs=list(list(targets="_all"))
+      ), escape = FALSE, selection="none", rownames= FALSE, extensions = "Buttons"
+    )
+    
+  })
+  
+  observe({
+    SoybeanGDB_download3 <- read.table("SoybeanGDB_download.txt", head=T, as.is=T, sep = "\t", check.names = F)
+    SoybeanGDB_download3 <- SoybeanGDB_download3[,-c(4:10)]
+    output$Download_table_out3 = DT::renderDataTable(
+      SoybeanGDB_download3,
+      options = list(lengthMenu = c(20, 30, 50), pageLength = 15,
+                     searching = TRUE, bSort=FALSE,autoWidth = FALSE,
+                     dom = 'Bfrtip',scrollX = TRUE,
+                     columnDefs=list(list(targets="_all"))
+      ), escape = FALSE, selection="none", rownames= FALSE, extensions = "Buttons"
+    )
+    
+  })
+  
+  
+  #ID converter
+  
+  observeEvent(input$submit_GSidcov, {
+    #library(GenomicRanges)
+    #library(IRanges)
+    #library(Biostrings)
+    refgenomenames <- gsub(" ","_", input$variety_idcov)
+    genomenames <- gsub(" ","_", input$variety_idcov_1)
+    
+    if ( exists("ort") ) {
+    } else {
+      ort <- data.table::fread("./info/sort_ortgroups.tsv", sep = "\t", header = T, data.table = F)
+    }
+    
+    geneid_cv <- input$IDCOV_idcov
+    
+    orthpplydata <- lapply(geneid_cv, function(x){
+      accession <- gsub("_.+", "", gsub("\\..+", "", x))
+      loc <- which(x == geneid_cv)
+      GCCID <- unlist(lapply(1:40, function(x){paste0(c("Gcy", "Gtt", "Gfa", "Gst", "Gsy", "Gto"), x, "g")}))
+      if ( x == "") {
+      } else if ( paste0(strsplit(x, "")[[1]][1:3], collapse = "") %in% c("Gcy", "Gtt", "Gfa", "Gst", "Gsy", "Gto") & nchar(unlist(strsplit(x, "g")[[1]][2])) == 6 ){
+        ids <- paste0(strsplit(x, "")[[1]][1:3], collapse = "")
+        ogid <- ort[grep(x, ort[ ,grepl(ids, ort[1,]) ] ), ]
+        ogid[2, ] <- paste0("Group", loc)
+        ogid <- t(ogid)
+        return(ogid)
+      } else if (paste0(strsplit(x, "")[[1]][1:8], collapse = "") == "GlymaLee" & nchar(x) == 18){
+        ogid <- ort[grep(x, ort[ ,which(accession == gsub("\\..+|_.+", "", ort[1,])) ] ), ]
+        ogid[2, ] <- paste0("Group", loc)
+        ogid <- t(ogid)
+        return(ogid)
+      } else if (paste0(strsplit(x, "")[[1]][1:13], collapse = "") == "GlysoPI483463" & nchar(x) == 23){
+        ogid <- ort[grep(x, ort[ ,which(accession == gsub("\\..+|_.+", "", ort[1,])) ] ), ]
+        ogid[2, ] <- paste0("Group", loc)
+        ogid <- t(ogid)
+        return(ogid)
+      } else if (paste0(strsplit(x, "")[[1]][1:3], collapse = "") == "Soy" & paste0(strsplit(x, "")[[1]][1:5], collapse = "") != "SoyZH" & nchar(x) == 16){
+        ogid <- ort[grep(x, ort[ ,which(accession == gsub("\\..+|_.+", "", ort[1,])) ] ), ]
+        ogid[2, ] <- paste0("Group", loc)
+        ogid <- t(ogid)
+        return(ogid)
+      } else if (paste0(strsplit(x, "")[[1]][1:5], collapse = "") == "Glyma" & nchar(x) == 15){
+        ogid <- ort[grep(x, ort[ ,which(accession == gsub("\\..+|_.+", "", ort[1,])) ] ), ]
+        ogid[2, ] <- paste0("Group", loc)
+        ogid <- t(ogid)
+        return(ogid)
+      } else if (paste0(strsplit(x, "")[[1]][1:5], collapse = "") == "SoyZH" & nchar(x) == 17) {
+        ogid <- ort[grep(x, ort[ ,which(accession == gsub("\\..+|_.+", "", ort[1,])) ] ), ]
+        ogid[2, ] <- paste0("Group", loc)
+        ogid <- t(ogid)
+        return(ogid)
+      }
+    })
+    orthpplydatasum <- do.call(rbind, orthpplydata)
+    orthpplydatasum <- data.frame(rownames(orthpplydatasum), orthpplydatasum)
+    orthpplydatasum <- orthpplydatasum[genomenames, ]
+    drawogid <- orthpplydatasum
+    colnames(orthpplydatasum) <- c("Genome", "Orthologous genes", "Ortholog groups")
+    orthpplydatasum <- orthpplydatasum[orthpplydatasum[ ,2] != "", ]
+    orthpplydatasum <- orthpplydatasum[!is.na(orthpplydatasum[ ,2]), ]
+    load(paste0("./info/", genomenames, "/", genomenames, ".gene.info.RData"))
+    orthpplydatasum$Genome <- gsub("_", " ", orthpplydatasum$Genome)
+    gene_list <- unlist(strsplit(orthpplydatasum$`Orthologous genes`, split=","))
+    gene_list <- trimws(gene_list, which = c("both"), whitespace = "[ \t\r\n]")
+    geneinfo_id <- gene_info_s[gene_info_s$id %in% gene_list, ]
+    
+    if(nrow(orthpplydatasum) == 0){
+      nrowsuppl <- 0
+    } else {
+      nrowsuppl <- nrow(orthpplydatasum[!is.na(orthpplydatasum[,2]), ])
+    }
+    if (  nrow(orthpplydatasum) != 0 & nrowsuppl != 0 & refgenomenames != genomenames){
+      #cds protein cdna信息读取
+      load(paste0("./info/", genomenames, "/", genomenames, ".cds.fasta.RData"))
+      cds.infoid <- cds.info
+      load(paste0("./info/", genomenames, "/", genomenames, ".protein.RData"))
+      proteinid <- protein
+      load(paste0("./info/", genomenames, "/", genomenames, ".cdna.fasta.RData"))
+      cdna.infoid <- cdna.info
+      gene_list <- gene_list[gene_list %in% gene_info_s$id]
+
+      #geneinfo
+      output$geneinfoidCOV <- DT::renderDT({
+        if( length(geneinfo_id[, 1]) != 0 ){
+          colnames(geneinfo_id) <- c("ID", "Chromosome", "Start", "End", "Strand")
+          DT::datatable(
+            geneinfo_id, 
+            escape = FALSE, rownames= FALSE, selection="single", 
+            options = list(pageLength = 10, autoWidth = FALSE, bSort = FALSE,
+                           buttons = list('pageLength', 'copy', 
+                                          list(extend = 'csv',   filename =  paste("searchlocation", sep = "-")),
+                                          list(extend = 'excel', filename =  paste("searchloaction", sep = "-")),
+                                          'print'), 
+                           initComplete = DT::JS(
+                             "function(settings, json) {",
+                             "$(this.api().table().header()).css({'background-color': '#676464', 'color': '#fff'});",
+                             "}")
+            )
+          )
+        } else {
+          geneinfo_id <- data.frame("V1"="No data available in table")
+          colnames(geneinfo_id) <- ""
+          DT::datatable(
+            geneinfo_id,
+            escape = FALSE, rownames= FALSE, selection="none", 
+            options = list(pageLength = 10, autoWidth = FALSE, bSort = FALSE,
+                           buttons = list('pageLength', 'copy', 
+                                          list(extend = 'csv',   filename =  paste("searchlocation", sep = "-")),
+                                          list(extend = 'excel', filename =  paste("searchloaction", sep = "-")),
+                                          'print'), 
+                           initComplete = DT::JS(
+                             "function(settings, json) {",
+                             "$(this.api().table().header()).css({'background-color': '#676464', 'color': '#fff'});",
+                             "}")
+            )
+          )
+        }
+      }, server = FALSE)
+      
+      output$geneinfoidCOV_title <- renderText({
+        if( length(geneinfo_id[, 1]) != 0 ) {
+          HTML('<i class="fa fa-circle" aria-hidden="true"></i> <font size="5" color="red"><b>Genes in the list (Click on a row to check the details of the selected gene)</b></font>')
+        } else {}
+      })
+      
+      #click gene 
+      output$geneticIDstructureCOV <- shiny::renderPlot({
+        if ( is.null(input$geneinfoidCOV_rows_selected) ) {
+        } else {
+          clickedid <- input$geneinfoidCOV_rows_selected
+          start <- as.numeric(data.frame(geneinfo_id[clickedid,])[1,3])
+          end <- as.numeric(data.frame(geneinfo_id[clickedid,])[1,4])
+          geneid <- data.frame(geneinfo_id[clickedid,])[1,1]
+          chr <- data.frame(geneinfo_id[clickedid,])[1,2]
+          gff <- data.table::fread(paste0("./info/", genomenames, "/", genomenames, ".", chr, ".gene.structure.gff"), sep = "\t", data.table = FALSE)
+          gff.mrna <- gff[gff$type == "mRNA", ]
+          if ( nrow(gff.mrna[gff.mrna$chr==chr & gff.mrna$start>=start & gff.mrna$end<=end, ]) == 0 ){
+          } else {
+            gff.reg.mrna <- gff.mrna[grep(geneid, gff.mrna$id), ]
+            gff.reg <- gff[gff$id %in% gff.reg.mrna$id, ]
+            
+            gff.reg.mrna.ir <- IRanges::IRanges(gff.reg.mrna$start, gff.reg.mrna$end)
+            gff.reg.mrna.op <- GenomicRanges::findOverlaps(gff.reg.mrna.ir, GenomicRanges::reduce(gff.reg.mrna.ir))
+            gff.reg.mrna$grp <- S4Vectors::subjectHits(gff.reg.mrna.op)
+            gff.reg.mrna.1 <- gff.reg.mrna %>% dplyr::group_by(grp) %>% dplyr::mutate(y = dplyr::row_number())
+            gff.reg <- merge(gff.reg, gff.reg.mrna.1[, c("id", "y")], by="id")
+            gff.reg$y <- gff.reg$y * 0.2 + 1
+            plot.mrna.lst <- lapply(unique(gff.reg$id), function(i){
+              dat <- gff.reg[gff.reg$id == i, ]
+              i.strand <- dat$strand[1]
+              dat.mrna <- dat[dat$type=="mRNA", ]
+              return(dat.mrna)
+            })
+            plot.mrna <- do.call(rbind, plot.mrna.lst)
+            
+            if (nrow(plot.mrna) == 1) {
+              p1 <- ggplot2::ggplot(plot.mrna, ggplot2::aes(x = end, y = y, label = id)) + 
+                ggplot2::geom_rect(ggplot2::aes(xmin=start, xmax=end, ymin=y+0.118, ymax=y+0.122,
+                                                text=anno), color="grey30", fill="grey30") + 
+                ggplot2::geom_text(ggplot2::aes(label=id),hjust = -0.05, vjust = -3.0, size = 5) + ggplot2::xlim(start, end + abs(end - start)/4)
+            } else {
+              p1 <- ggplot2::ggplot(plot.mrna, ggplot2::aes(x = end, y = y, label = id)) + 
+                ggplot2::geom_rect(ggplot2::aes(xmin=start, xmax=end, ymin=y+0.118, ymax=y+0.122,
+                                                text=anno), color="grey30", fill="grey30") + 
+                ggplot2::geom_text(ggplot2::aes(label=id),hjust = -0.05, vjust = -4.25, size = 5) + ggplot2::xlim(start, end + abs(end - start)/4)
+            }
+            
+            plot.nm.lst <- lapply(unique(gff.reg$id), function(i){
+              dat <- gff.reg[gff.reg$id == i, ]
+              i.strand <- dat$strand[1]
+              dat.nm <- dat[dat$type!="mRNA", ]
+              dat.nm <- dat.nm[-nrow(dat.nm), ]
+              if (nrow(dat.nm)>0) {
+                dat.nm$ymin <- dat.nm$y+0.1
+                dat.nm$ymax <- dat.nm$y+0.14
+                dat.nm$ymin[dat.nm$type=="CDS"] <- dat.nm$ymin[dat.nm$type=="CDS"] - 0.02
+                dat.nm$ymax[dat.nm$type=="CDS"] <- dat.nm$ymax[dat.nm$type=="CDS"] + 0.02
+              }
+              return(dat.nm)
+            })
+            
+            plot.nm <- do.call(rbind, plot.nm.lst)
+            if (nrow(plot.nm)>0) {
+              p1 <- p1 + ggplot2::geom_rect(ggplot2::aes(xmin=start, xmax=end, ymin=ymin, ymax=ymax, text=anno), 
+                                            color="grey30", fill="grey30", data=plot.nm)
+            }
+            
+            plot.tail.lst <- lapply(unique(gff.reg$id), function(i){
+              dat <- gff.reg[gff.reg$id == i, ]
+              i.strand <- dat$strand[1]
+              dat.nm <- dat[dat$type!="mRNA", ]
+              i.anno <- dat$anno[1]
+              i.id <- i
+              tail.type <- dat.nm$type[nrow(dat.nm)]
+              dat.tail <- data.frame(xx=rep(c(dat$start[nrow(dat)], 
+                                              (dat$start[nrow(dat)] + dat$end[nrow(dat)])/2, dat$end[nrow(dat)]), each=2), 
+                                     stringsAsFactors = FALSE)
+              if (i.strand == "-") {
+                dat.tail$yy <- c(0.12, 0.12, 0.1, 0.14, 0.1, 0.14) + dat$y[1]
+                dat.tail <- dat.tail[c(1,3,5,6,4,2), ]
+                dat.tail$pare <- i.id
+                dat.tail$anno <- i.anno
+                if (tail.type=="CDS") {
+                  dat.tail$yy[2:3] <- dat.tail$yy[2:3] - 0.02
+                  dat.tail$yy[4:5] <- dat.tail$yy[4:5] + 0.02
+                }
+              } else {
+                dat.tail$yy <- c(0.1, 0.14, 0.1, 0.14, 0.12, 0.12) + dat$y[1]
+                dat.tail <- dat.tail[c(1,3,5,6,4,2), ]
+                dat.tail$pare <- i.id
+                dat.tail$anno <- i.anno
+                if (tail.type=="CDS") {
+                  dat.tail$yy[1:2] <- dat.tail$yy[1:2] - 0.02
+                  dat.tail$yy[5:6] <- dat.tail$yy[5:6] + 0.02
+                }
+              }
+              dat.tail$id <- i.id
+              
+              return(dat.tail)
+            })
+            plot.tail <- do.call(rbind, plot.tail.lst)
+            
+            p1 <- p1 + ggplot2::geom_polygon(ggplot2::aes(x=xx, y=yy, group=id), color="grey30", fill="grey30", 
+                                             data=plot.tail)
+            
+            #p1 <- p1 + ggplot2::ylim(1.18, 1.42)
+            p1 <- p1 + ggplot2::theme(panel.grid.major = ggplot2::element_blank(),panel.grid.minor = ggplot2::element_blank()) + 
+              ggplot2::theme(panel.background = ggplot2::element_rect(fill="white",colour="white")) + ggplot2::xlab("") + ggplot2::ylab("") + 
+              ggplot2::theme(axis.ticks.y = ggplot2::element_blank()) + ggplot2::theme(axis.text.y = ggplot2::element_blank()) + 
+              ggplot2::theme(axis.text = ggplot2::element_text(size=12), axis.title=ggplot2::element_text(size=14,face="bold"))
+            
+            nns <- nrow(plot.mrna)
+            
+            grid::grid.draw(ggplot2::ggplotGrob(p1)) 
+          }
+        }
+      })
+      
+      output$geneticIDstructureCOVif <- renderUI({
+        if (is.null(input$geneinfoidCOV_rows_selected)) {
+        } else {
+          clickedid <- input$geneinfoidCOV_rows_selected
+          start <- as.numeric(data.frame(geneinfo_id[clickedid,])[1,3])
+          end <- as.numeric(data.frame(geneinfo_id[clickedid,])[1,4])
+          geneid <- data.frame(geneinfo_id[clickedid,])[1,1]
+          chr <- data.frame(geneinfo_id[clickedid,])[1,2]
+          gff <- data.table::fread(paste0("./info/", genomenames, "/", genomenames, ".", chr, ".gene.structure.gff"), sep = "\t", data.table = FALSE)
+          
+          gff.mrna <- gff[gff$type == "mRNA", ]
+          gff.reg.mrna <- gff.mrna[grep(geneid, gff.mrna$id), ]
+          if ( nrow(gff.mrna[gff.mrna$chr==chr & gff.mrna$start>=start & gff.mrna$end<=end, ]) == 0 ){
+          } else {
+            nns <- nrow(gff.reg.mrna)
+            hh <- paste0(nns*100, "px")
+            plotOutput("geneticIDstructureCOV", width = "100%", height = hh)
+          }
+        }
+      })
+      
+      output$geneticIDstructureCOV_title <- renderText({
+        if (is.null(input$geneinfoidCOV_rows_selected ) ) {
+        } else {
+          
+          clickedid <- input$geneinfoidCOV_rows_selected
+          start <- as.numeric(data.frame(geneinfo_id[clickedid,])[1,3])
+          end <- as.numeric(data.frame(geneinfo_id[clickedid,])[1,4])
+          geneid <- data.frame(geneinfo_id[clickedid,])[1,1]
+          chr <- data.frame(geneinfo_id[clickedid,])[1,2]
+          gff <- data.table::fread(paste0("./info/", genomenames, "/", genomenames, ".", chr, ".gene.structure.gff"), sep = "\t", data.table = FALSE)
+          
+          gff.mrna <- gff[gff$type == "mRNA", ]
+          gff.reg.mrna <- gff.mrna[grep(geneid, gff.mrna$id), ]
+          if ( nrow(gff.mrna[gff.mrna$chr==chr & gff.mrna$start>=start & gff.mrna$end<=end, ]) == 0 ){
+            
+          } else {
+            HTML('<i class="fa fa-circle" aria-hidden="true"></i> <font size="5" color="red"><b>Gene structure</b></font>')
+          }
+        }
+      })
+      
+      
+      #gene sequence
+      if( length(geneinfo_id[, 1]) != 0 ) {
+        output$gene_idCOV <- renderText({
+          if (is.null(input$geneinfoidCOV_rows_selected)) {
+          } else {
+            clickedid <- input$geneinfoidCOV_rows_selected
+            info <- data.frame(geneinfo_id[clickedid,])
+            chr <- data.frame(geneinfo_id[clickedid,])[1,2]
+            fastafile <- paste0("./info/", genomenames, "/", genomenames,".", chr,  ".fasta.gz")
+            fasta <- Biostrings::readDNAStringSet(fastafile)
+            info$seq[info$strand == "+"] <- as.character(Biostrings::subseq(fasta[info[info$strand == "+",]$chr], info[info$strand == "+",]$start, info[info$strand == "+",]$end))
+            info$seq[info$strand == "-"] <- as.character(Biostrings::reverseComplement(Biostrings::subseq(fasta[info[info$strand == "-",]$chr], info[info$strand == "-",]$start, info[info$strand == "-",]$end)))
+            gene <- Biostrings::DNAStringSet(info$seq)
+            names(gene) <- paste0(info[1,1],  ":", as.numeric(info[1,3]), "-", as.numeric(info[1,4]), " length = ", as.numeric(info[4]) - as.numeric(info[1,3]) +1)
+            tmp.d4 <- file.path(tempdir(), "d4.fa")
+            Biostrings::writeXStringSet(gene, file = tmp.d4, width = 150)
+            readLines(tmp.d4) 
+          }
+        }, sep = "\n")
+        
+        output$gene_titleCOV_id <- renderText({
+          if (is.null(input$geneinfoidCOV_rows_selected)) {
+          } else {
+            HTML("<i class='fa fa-circle' aria-hidden='true'></i> <font size='5' color='red'><b>Gene sequence</b></font>")
+          }
+        })
+        
+        #cds sequence
+        output$cds_idCOV <- renderText({
+          if (is.null(input$geneinfoidCOV_rows_selected)) {
+          } else {
+            clickedid <- input$geneinfoidCOV_rows_selected
+            geneid <- data.frame(geneinfo_id[clickedid,])[1,1]
+            didcs <- cds.infoid[grep(geneid, names(cds.infoid))]
+            tmp.f6 <- file.path(tempdir(), "d6.fa")
+            Biostrings::writeXStringSet(didcs, file = tmp.f6, width = 150)
+            readLines(tmp.f6)
+          }
+        }, sep = "\n")
+        
+        output$cds_titleCOV_id <- renderText({
+          clickedid <- input$geneinfoidCOV_rows_selected
+          geneid <- data.frame(geneinfo_id[clickedid,])[1,1]
+          if(is.null(input$geneinfoidCOV_rows_selected)) {
+          } else if ( length(grep(geneid, names(cds.infoid))) != 0 ){
+            HTML("<i class='fa fa-circle' aria-hidden='true'></i> <font size='5' color='red'><b>CDS sequence</b></font>")
+          } else {}
+        })
+        
+        #cdna sequence
+        output$cdna_idCOV <- renderText({
+          if (is.null(input$geneinfoidCOV_rows_selected)) {
+          } else {
+            clickedid <- input$geneinfoidCOV_rows_selected
+            geneid <- data.frame(geneinfo_id[clickedid,])[1,1]
+            ditcd <- cdna.infoid[grep(geneid, names(cdna.infoid))]
+            tmp.f6 <- file.path(tempdir(), "d7.fa")
+            Biostrings::writeXStringSet(ditcd, file = tmp.f6, width = 150)
+            readLines(tmp.f6)
+          }
+        }, sep = "\n")
+        
+        output$cdna_titleCOV_id <- renderText({
+          clickedid <- input$geneinfoidCOV_rows_selected
+          geneid <- data.frame(geneinfo_id[clickedid,])[1,1]
+          if(is.null(input$geneinfoidCOV_rows_selected)){
+          } else if ( length(grep(geneid, names(cdna.infoid))) != 0 ){
+            HTML("<i class='fa fa-circle' aria-hidden='true'></i> <font size='5' color='red'><b>cDNA sequence</b></font>")
+          } else {}
+        })
+        
+        #protein
+        output$pro_idCOV <- shiny::renderText({
+          if (is.null(input$geneinfoidCOV_rows_selected)) {
+          } else {
+            clickedid <- input$geneinfoidCOV_rows_selected
+            geneid <- data.frame(geneinfo_id[clickedid,])[1,1]
+            ditp <- proteinid[grep(geneid, names(proteinid))]
+            tmp.f7 <- file.path(tempdir(), "t7.fa")
+            Biostrings::writeXStringSet(ditp, file = tmp.f7, width = 150)
+            readLines(tmp.f7)
+          }
+        }, sep = "\n")
+        
+        output$pro_titleCOV_id <- renderText({
+          clickedid <- input$geneinfoidCOV_rows_selected
+          geneid <- data.frame(geneinfo_id[clickedid,])[1,1]
+          if( is.null(input$geneinfoidCOV_rows_selected) ) {
+          } else if ( length(grep(geneid, names(proteinid))) != 0 ){
+            HTML("<i class='fa fa-circle' aria-hidden='true'></i> <font size='5' color='red'><b>protein sequence</b></font>")
+          } else {}
+        })
+        
+        
+        ##Functional annotation
+        output$Functional_idCOV <- DT::renderDT({
+          DT::datatable(
+            if (is.null(input$geneinfoidCOV_rows_selected)){
+            } else {
+              clickedid <- input$geneinfoidCOV_rows_selected
+              geneid <- data.frame(geneinfo_id[clickedid,])[1,1]
+              chr <- data.frame(geneinfo_id[clickedid,])[1,2]
+              Functionalfile <- paste0("./info/", genomenames, "/", genomenames, ".interproscan")
+              gf <- data.table::fread(Functionalfile, sep = "\t", data.table = FALSE, header = F)
+              gfinfo <- gf[grep(geneid, gf$V1), ]
+              if( nrow(gfinfo) == 0){
+                
+              }else{
+                
+                colnames(gfinfo)[1] <- "Gene"
+                colnames(gfinfo)[2] <- "Functional"
+                gfinfo}
+            }, extensions = "Buttons", 
+            rownames = F, selection = "none",
+            options = list( 
+              scrollX = TRUE, dom = 'Bfrtip', bSort = FALSE,  
+              buttons = list('pageLength', 'copy', 
+                             list(extend = 'csv',   filename =  paste("Functional", sep = "-")),
+                             list(extend = 'excel', filename =  paste("Functional", sep = "-")),
+                             'print'),
+              initComplete = DT::JS(
+                "function(settings, json) {",
+                "$(this.api().table().header()).css({'background-color': '#676464', 'color': '#fff'});",
+                "}")
+              
+            )
+            
+          )}, server = FALSE)
+        
+        output$Functionaltitle_idCOV <- renderText({
+          clickedid <- input$geneinfoidCOV_rows_selected
+          geneid <- data.frame(geneinfo_id[clickedid,])[1,1]
+          clickedid <- input$geneinfoidCOV_rows_selected
+          geneid <- data.frame(geneinfo_id[clickedid,])[1,1]
+          chr <- data.frame(geneinfo_id[clickedid,])[1,2]
+          Functionalfile <- paste0("./info/", genomenames, "/", genomenames, ".interproscan")
+          gf <- data.table::fread(Functionalfile, sep = "\t", data.table = FALSE, header = F)
+          gfinfo <- gf[grep(geneid, gf$V1), ]
+          
+          if(is.null(input$geneinfoidCOV_rows_selected) | nrow(gfinfo) == 0) {
+            
+          } else {
+            
+            HTML("<i class='fa fa-circle' aria-hidden='true'></i> <font size='5' color='red'><b>Functional annotation</b></font>")
+          }
+        })
+        
+        #click gff
+        output$gffinfo_idCOV <- DT::renderDT({
+          DT::datatable(
+            if (is.null(input$geneinfoidCOV_rows_selected)){
+            } else {
+              clickedid <- input$geneinfoidCOV_rows_selected
+              geneid <- data.frame(geneinfo_id[clickedid,])[1,1]
+              chr <- data.frame(geneinfo_id[clickedid,])[1,2]
+              gffile <- paste0("./info/", genomenames, "/", genomenames, ".",chr ,".gff.txt.gz")
+              gf <- data.table::fread(gffile, sep = "\t", data.table = FALSE)
+              gfinfo <- gf[grep(geneid, gf$Attributes), ]
+              gfinfo <- gfinfo[, c(1:5, 9)]
+              colnames(gfinfo)[1] <- "Chr"
+              gfinfo
+            }, extensions = "Buttons", 
+            rownames = F, selection = "none",
+            options = list(leftColumns = 8, 
+                           scrollX = TRUE, dom = 'Bfrtip', bSort = FALSE,  
+                           buttons = list('pageLength', 'copy', 
+                                          list(extend = 'csv',   filename =  paste("GFF", sep = "-")),
+                                          list(extend = 'excel', filename =  paste("GFF", sep = "-")),
+                                          'print'),
+                           columnDefs = list(list(className = 'dt-left', targets = 0:4)),
+                           initComplete = DT::JS(
+                             "function(settings, json) {",
+                             "$(this.api().table().header()).css({'background-color': '#676464', 'color': '#fff'});",
+                             "}")
+                           
+            )
+          )}, server = FALSE)
+        
+        output$gffinfotitle_idCOV <- renderText({
+          clickedid <- input$geneinfoidCOV_rows_selected
+          geneid <- data.frame(geneinfo_id[clickedid,])[1,1]
+          if(is.null(input$geneinfoidCOV_rows_selected)) {
+          } else {
+            HTML("<i class='fa fa-circle' aria-hidden='true'></i> <font size='5' color='red'><b>Gene structure annotation</b></font>")
+          }
+        })
+        
+        output$sequence_id.txt <- downloadHandler(
+          filename <- function() { paste('Region_sequence.txt') },
+          content <- function(file) {
+            ditd  <- Biostrings::subseq(fasta[names(fasta) == chr], as.numeric(start), as.numeric(end) )
+            names(ditd) <- paste0(chr, ":", start, "-", end, " length = ", end - start +1)
+            Biostrings::writeXStringSet(ditd, file, width = 150)
+          }, contentType = 'text/plain'
+        )
+        
+        #Gene sequence
+        output$genesequence_IDCOV.txt <- downloadHandler(
+          filename <- function() { paste('Gene_Sequcence.txt') },
+          content <- function(file) {
+            fastafile <- paste0("/data/SoybeanGDB/BLASTN/CDS/file/", genomenames, ".gene.fasta.gz")
+            fasta <- Biostrings::readDNAStringSet(fastafile)
+            geneid <- unlist(gene_list)
+            geneseq <- fasta[names(fasta) %in% geneid ]
+            Biostrings::writeXStringSet(geneseq, file, width = 150)
+          }, contentType = 'text/plain'
+        )
+        
+        output$downloadIDCOV01 <- renderUI({
+          req(input$submit_GSidcov)
+          column(12,
+                 downloadButton("genesequence_IDCOV.txt", "Gene Sequence", style = "width:100%;", class = "buttDown"),
+                 tags$style(".buttDown{background-color:black; color: white; font-size: 16px;}")
+          )
+        })
+        
+        #cds sequence Download
+        output$cdssequence_IDCOV.txt <- downloadHandler(
+          filename <- function() { paste('CDS_sequence.txt') },
+          content <- function(file) {
+            didcs <- cds.infoid[unlist(lapply(gene_list, function(x){ grep(x, names(cds.infoid))}))]
+            Biostrings::writeXStringSet(didcs, file, width = 150)
+          }, contentType = 'text/plain'
+        )
+        
+        output$downloadIDCOV02 <- renderUI({
+          req(input$submit_GSidcov)
+          
+          column(12,
+                 downloadButton("cdssequence_IDCOV.txt", "CDS Sequence", style = "width:100%;", class = "buttDown"),
+                 tags$style(".buttDown{background-color:black; color: white; font-size: 16px;}")
+          )
+        })
+        
+        #cdna sequence Download
+        output$cdnasequence_IDCOV.txt <- downloadHandler(
+          filename <- function() { paste('cDNA_sequence.txt') },
+          content <- function(file) {
+            ditcd <- cdna.infoid[unlist(lapply(gene_list, function(x){ grep(x, names(cdna.infoid))} ))]
+            Biostrings::writeXStringSet(ditcd, file, width = 150)
+          }, contentType = 'text/plain'
+        )
+        
+        output$downloadIDCOV03 <- renderUI({
+          req(input$submit_GSidcov)
+          column(12,
+                 downloadButton("cdnasequence_IDCOV.txt", "cDNA Sequence", style = "width:100%;", class = "buttDown"),
+                 tags$style(".buttDown{background-color:black; color: white; font-size: 16px;}")
+          )
+        })
+        
+        #proteion Download
+        output$prosequence_IDCOV.txt <- downloadHandler(
+          filename <- function() { paste('protein_sequence.txt') },
+          content <- function(file) {
+            ditp <- proteinid[unlist(lapply(gene_list, function(x){ grep(x, names(proteinid))} ))]
+            Biostrings::writeXStringSet(ditp, file, width = 150)
+          }, contentType = 'text/plain'
+        )
+        
+        output$downloadIDCOV04 <- renderUI({
+          req(input$submit_GSidcov)
+          
+          column(12,
+                 downloadButton("prosequence_IDCOV.txt", "protein Sequence", style = "width:100%;", class = "buttDown"),
+                 tags$style(".buttDown{background-color:black; color: white; font-size: 16px;}")
+          )
+        })
+        
+      } else {
+        output$downloadIDCOV01 <- renderUI({
+          NULL
+        })
+        output$downloadIDCOV02 <- renderUI({
+          NULL
+        })
+        output$downloadIDCOV03 <- renderUI({
+          NULL
+        })
+        output$downloadIDCOV04 <- renderUI({
+          NULL
+        })
+      }
+    } else if (nrow(geneinfo_id) == 0 & refgenomenames != genomenames){
+      shinyWidgets::sendSweetAlert(
+        session = session,
+        title = "Error input!", type = "error",
+        text = "No homologous genes found"
+      )
+      NULL
+    } else if (refgenomenames == genomenames){
+      shinyWidgets::sendSweetAlert(
+        session = session,
+        title = "Error input!", type = "error",
+        text = "Cannot select the same genome!"
+      )
+      
+    }else{
+      shinyWidgets::sendSweetAlert(
+        session = session,
+        title = "Error input!", type = "error",
+        text = "Please input correct Gene ID!"
+      )
+      
+    }
+  })
+  
+  
+  
+  ###SNP for 481
+  observeEvent(input$submiti481, {
+    if ( exists("anaReg") ){
+    } else {
+      source("anaReg.R")
+    }
+    myPos <- anaReg(input$regi481)
+    if (!is.null(myPos)) {
+      chr <- as.character(myPos$chr)
+      start <- as.numeric(myPos$start)
+      end <- as.numeric(myPos$end)
+      tmp.fg <- file.path(tempdir(), "tg.txt")
+      tabix <- paste0("tabix ./info/Williams82SNP/Wm82.", chr, ".snp.gz ", chr, ":", start, "-", end, " > ", tmp.fg)
+      system(tabix)
+      if ( file.info(tmp.fg)$size == 0){
+        snp <- data.frame("V1"="No SNPs found!")
+        colnames(snp) <- ""
+        gffSNP <- c("V1"="No SNPs found!")
+        SNPs <- snp
+      } else {
+        
+        gffSNP <- data.table::fread(tmp.fg, sep = "\t", data.table = F)
+        names(gffSNP) <- c("Chromosome", "Position", "Reference", "Alternative" , soynm)
+        gffSNP <- gffSNP[, -486]
+        accession = input$mychooseri481
+        
+        choosei <- c("Chromosome", "Position", "Reference", "Alternative", unique(gsub(",.+", "", unlist(accession))))
+        snp <- gffSNP[, c(choosei)]
+        
+        SNPs <- snp
+      }
+      output$snptable481 <- DT::renderDT({
+        DT::datatable(
+          SNPs
+          ,selection = 'none', rownames = FALSE, escape = FALSE,
+          extensions = c("Buttons"),#"FixedColumns",
+          options = list(
+            buttons = list('pageLength', 'copy',
+                           list(extend = 'csv',   filename =  paste("SNP", sep = "-")),
+                           list(extend = 'excel', filename =  paste("SNP", sep = "-"))
+            ),dom = 'Bfrtip',
+            pageLength = 15, columnDefs=list(list(targets="_all", class="dt-center")), 
+            bSort = FALSE, scrollX = TRUE, #fixedColumns = list(leftColumns = 2),
+            initComplete = DT::JS(
+              "function(settings, json) {",
+              "$(this.api().table().header()).css({'background-color': '#676464', 'color': '#fff'});",
+              "}")
+          )
+        )
+      }, server = FALSE)        
+      # output$bulkdownloadSNPInfo1.txt <- downloadHandler(
+      #   filename <- function() { paste('The_SNPinfo.txt') },
+      #   content <- function(file) {
+      #     write.table(SNPs[, c(1:6)], file, col.names = T, row.names = F, quote = F, sep = "\t")
+      #   }, contentType = 'text/plain'
+      # )
+      # 
+      # output$downloadSNP01 <- renderUI({
+      #   req(input$submiti481)
+      #   column(12,
+      #          downloadButton("bulkdownloadSNPInfo1.txt", style = "width:100%;", "SNPs information", class = "buttDown"),
+      #          tags$style(".buttDown{background-color:black; color: white; font-size: 16px;}")
+      #   )
+      # })
+      
+      output$bulkdownloadSNPALLInfo1.txt <- downloadHandler(
+        filename <- function() { paste('All_SNPinfo.txt') },
+        content <- function(file) {
+          write.table(SNPs, file, col.names = T, row.names = F, quote = F, sep = "\t")
+        }, contentType = 'text/plain'
+      )
+      
+      output$downloadSNP02 <- renderUI({
+        req(input$submiti481)
+        column(12,
+               downloadButton("bulkdownloadSNPALLInfo1.txt", style = "width:100%;", "Genotype data", class = "buttDown"),
+               tags$style(".buttDown{background-color:black; color: white; font-size: 16px;}")
+        )
+      })
+    } else { 
+      shinyWidgets::sendSweetAlert(
+        session = session,
+        title = "Error input!", type = "error",
+        text = "Please input genomic region or gene model in appropriate format!"
+      )
+    }
+    
+  })
+  
+  observe({
+    if (input$clearSNP481>0) {
+      isolate({
+        updateTextInput(session, "regi481", value="")
+        shinyWidgets::updateMultiInput(
+          session = session,
+          inputId = "mychooseri481",
+          selected = character(0)
+        )
+      })
+    } else {NULL}
+  })
+  
+  observe({
+    if (input$SNPExam481 >0) {
+      isolate({
+        updateTextInput(session, "regi481", value="chr1:29506705-29659223")
+        shinyWidgets::updateMultiInput(
+          session = session,
+          inputId = "mychooseri481",
+          selected = soynm
+        )
+      })
+    } else {NULL}
+  })
+  
+  observeEvent(input$snpall481, {
+    shinyWidgets::updateMultiInput(
+      session = session,
+      inputId = "mychooseri481",
+      selected = soynm
+    )
+  })
+  
+  observeEvent(input$snpnone481, {
+    shinyWidgets::updateMultiInput(
+      session = session,
+      inputId = "mychooseri481",
+      selected = character(0)
+    )
+  })
+  
+  observe({
+    if (input$clearSNP481>0) {
+      isolate({
+        updateTextInput(session, "regi481", value="")
+        shinyWidgets::updateMultiInput(
+          session = session,
+          inputId = "mychooseri481",
+          selected = character(0)
+        )
+      })
+    } else {NULL}
+  })
+  
+  observe({
+    if (input$SNPExam481 >0) {
+      isolate({
+        updateTextInput(session, "regi481", value="chr7:29560705-29573051")
+        shinyWidgets::updateMultiInput(
+          session = session,
+          inputId = "mychooseri481",
+          selected = soynm[grepl("HN", soynm)]
+        )
+      })
+    } else {NULL}
+  })
+  
+  
+  # #Download fasta
+  # observe({
+  #   SoybeanGDB_fasta <- read.table("SoybeanGDB_fasta.txt", head=T, as.is=T, sep = "\t")
+  #   output$fasta_table_out = DT::renderDataTable(
+  #     SoybeanGDB_fasta,
+  #     options = list(lengthMenu = c(20, 30, 50), pageLength = 10,
+  #                    searching = TRUE, autoWidth = TRUE, bSort=FALSE,
+  #                    dom = 'Bfrtip',scrollX = TRUE,
+  #                    columnDefs=list(list(targets="_all"))
+  #     ), escape = FALSE, selection="none", rownames= FALSE, extensions = "Buttons"
+  #   )
+  #   
+  # })
+  # #Download Transposable elements
+  # observe({
+  #   SoybeanGDB_TE <- read.table("SoybeanGDB_TE.txt", head=T, as.is=T, sep = "\t")
+  #   output$TE_table_out = DT::renderDataTable(
+  #     SoybeanGDB_TE,
+  #     options = list(lengthMenu = c(20, 30, 50), pageLength = 10,
+  #                    searching = TRUE, autoWidth = TRUE, bSort=FALSE,
+  #                    dom = 'Bfrtip', scrollX = TRUE,
+  #                    columnDefs=list(list(targets="_all"))
+  #     ), escape = FALSE, selection="none", rownames= FALSE, extensions = "Buttons"
+  #   )
+  #   
+  # })
+  # 
+  # #Download gff
+  # observe({
+  #   SoybeanGDB_gff <- read.table("SoybeanGDB_gff.txt", head=T, as.is=T, sep = "\t")
+  #   output$gff_table_out = DT::renderDataTable(
+  #     SoybeanGDB_gff,
+  #     options = list(lengthMenu = c(20, 30, 50), pageLength = 10,
+  #                    searching = TRUE, autoWidth = TRUE, bSort=FALSE,
+  #                    dom = 'Bfrtip', scrollX = TRUE,
+  #                    columnDefs=list(list(targets="_all"))
+  #     ), escape = FALSE, selection="none", rownames= FALSE, extensions = "Buttons"
+  #   )
+  #   
+  # })
+  # 
+  # 
+  # 
+  # observe({
+  #   SoybeanGDB_blastdb_Genome <- read.table("SoybeanGDB_blastdb_Genome.txt", head=T, as.is=T, sep = "\t")
+  #   output$genomeTable = DT::renderDataTable(
+  #     
+  #     SoybeanGDB_blastdb_Genome,
+  #     options = list(lengthMenu = c(20, 30, 50), pageLength = 10,
+  #                    searching = TRUE, autoWidth = TRUE, bSort=FALSE,
+  #                    dom = 'Bfrtip',
+  #                    columnDefs=list(list(targets="_all"))
+  #     ), escape = FALSE, selection="none", rownames= FALSE, extensions = "Buttons"
+  #   )
+  # 
+  # })
+  # 
+  # observe({
+  #   SoybeanGDB_blastdb_cds <- read.table("SoybeanGDB_blastdb_CDS.txt", head=T, as.is=T, sep = "\t")
+  #   output$cdsTable = DT::renderDataTable(
+  #     
+  #     SoybeanGDB_blastdb_cds,
+  #     options = list(lengthMenu = c(20, 30, 50), pageLength = 15,
+  #                    searching = TRUE, autoWidth = TRUE, bSort=FALSE,
+  #                    dom = 'Bfrtip',
+  #                    columnDefs=list(list(targets="_all"))
+  #     ), escape = FALSE, selection="none", rownames= FALSE, extensions = "Buttons"
+  #   )
+  #   
+  # })
+  # 
+  # observe({
+  #   SoybeanGDB_blastdb_Gene <- read.table("SoybeanGDB_blastdb_Gene.txt", head=T, as.is=T, sep = "\t")
+  #   output$GeneTable = DT::renderDataTable(
+  #     
+  #     SoybeanGDB_blastdb_Gene,
+  #     options = list(lengthMenu = c(20, 30, 50), pageLength = 15,
+  #                    searching = TRUE, autoWidth = TRUE, bSort=FALSE,
+  #                    dom = 'Bfrtip',
+  #                    columnDefs=list(list(targets="_all"))
+  #     ), escape = FALSE, selection="none", rownames= FALSE, extensions = "Buttons"
+  #   )
+  #   
+  # })
+  # 
+  # observe({
+  #   SoybeanGDB_blastdb_Protein <- read.table("SoybeanGDB_blastdb_Protein.txt", head=T, as.is=T, sep = "\t")
+  #   output$ProteinTable = DT::renderDataTable(
+  #     
+  #     SoybeanGDB_blastdb_Protein,
+  #     options = list(lengthMenu = c(20, 30, 50), pageLength = 15,
+  #                    searching = TRUE, autoWidth = TRUE, bSort=FALSE,
+  #                    dom = 'Bfrtip',
+  #                    columnDefs=list(list(targets="_all"))
+  #     ), escape = FALSE, selection="none", rownames= FALSE, extensions = "Buttons"
+  #   )
+  #   
+  # })
+  
+  
   #Download29Soybean
   observe({
     Download.tab <- read.table("./data/31download.link", sep = "\t", as.is = T, header = T)
     
     output$Downloadtable <- DT::renderDataTable(Download.tab,  
-                                                options = list(pageLength = 30, lengthChange = FALSE, Search = FALSE, info = FALSE, dom = 't', 
-                                                               searchHighlight = FALSE, autoWidth = FALSE, bSort = FALSE, sDom  = '<"top">lrt<"bottom">ip' ),
-                                                escape = FALSE, rownames = FALSE, selection = "none"
+                        options = list(pageLength = 40, lengthChange = FALSE, Search = FALSE, info = FALSE, dom = 't', 
+                                       searchHighlight = FALSE, autoWidth = FALSE, bSort = FALSE, sDom  = '<"top">lrt<"bottom">ip' ),
+                        escape = FALSE, rownames = FALSE, selection = "none"
     )
   })
   

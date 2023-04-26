@@ -9,8 +9,8 @@ Homepage <- shinydashboard::dashboardPage(
       offset = 1,
       textBox(
         width = 12,
-        p("A total of", strong("31 high-quality soybean genomes"), "were collected, including a Chinese soybean", strong(em("Glycine max")), strong("[L.] Merr. cv. Zhonghuang 13."),
-          "High-quality SNPs and INDELs were identified among 2898 soybean accessions based on the genome of Zhonghuang 13.")
+        p(strong("SoybeanGDB"), "is a comprehensive database providing informatics service to researchers focused on the genetic and genomic studies of soybean. A total of", strong("39 high-quality soybean genomes"), "were collected, including a Chinese soybean", strong(em("Glycine max")), strong("[L.] Merr. cv. Zhonghuang 13."),
+          "High-quality SNPs and INDELs among 2898 soybean accessions based on the genome of Zhonghuang 13 were deposited in SoybeanGDB.")
       )
     ),
     
@@ -20,7 +20,7 @@ Homepage <- shinydashboard::dashboardPage(
       sectionBox(
         title = "Statistics",
         # fluidRow(
-        #   valueBox("31", "High quality soybean genomes", width = 3),
+        #   valueBox("39", "High quality soybean genomes", width = 3),
         #   valueBox("2898", "Soybean accessions",  width = 3),
         #   valueBox("15,446,616", "High quality SNPs", width = 3),
         #   valueBox("4,136,231", "High quality INDELs", width = 3)
@@ -28,7 +28,7 @@ Homepage <- shinydashboard::dashboardPage(
         fluidRow(
           box(width = 3,
               tags$style("#Link_JBrowse_up {font-size:30px;;}"),
-              shinyWidgets::actionBttn("Link_JBrowse_up", "31", 
+              shinyWidgets::actionBttn("Link_JBrowse_up", "39", 
                                        block = TRUE, size = "lg", style="unite", color="default"),
               h4("High quality soybean genomes")
           ),
@@ -69,21 +69,21 @@ Homepage <- shinydashboard::dashboardPage(
               shinyWidgets::actionBttn("Link_GeneInfoID", "Genome -> Search by gene IDs", 
                                        icon = icon("id-card", class = NULL, lib = "font-awesome"),
                                        block = TRUE, size = "lg", style="unite", color="default"),
-              h4("Search 31 soybean genomes by gene ID")
+              h4("Search 39 soybean genomes by gene ID")
           ),
           
           box(width = 4,
               shinyWidgets::actionBttn("Link_GeneInfoIT", "Genome -> Search by location", 
                                        icon = icon("search-location", class = NULL, lib = "font-awesome"),
                                        block = TRUE, size = "lg", style="unite", color="default"),
-              h4("Search 31 soybean genomes by location")
+              h4("Search 39 soybean genomes by location")
           ),
           
           box(width = 4,
-              shinyWidgets::actionBttn("Link_Genetrf", "Genome -> Transcription factors", 
+              shinyWidgets::actionBttn("Link_Genetrf", "Genome -> Transcription factors/regulators", 
                                        icon = icon("house-user", class = NULL),
                                        block = TRUE, size = "lg", style="unite", color="default"),
-              h4("Search transcription factors")
+              h4("Transcription factors/regulators in 39 soybean genomes")
           )
         ),
         
@@ -105,7 +105,7 @@ Homepage <- shinydashboard::dashboardPage(
           box(width = 4,
               shinyWidgets::actionBttn("Link_JBrowse", "JBrowse", 
                                        block = TRUE, size = "lg", style="unite", color="default"),
-              h4("JBrowse of 31 soybean genomes")
+              h4("JBrowse of 39 soybean genomes")
           )
         ),
         
@@ -176,7 +176,7 @@ Homepage <- shinydashboard::dashboardPage(
               shinyWidgets::actionBttn("Link_blast", "BLAST", 
                                        icon = icon("rocket", class = NULL, lib = "font-awesome"),
                                        block = TRUE, size = "lg", style="unite", color="default"),
-              h4("Search 31 soybean genomes using BLAST")
+              h4("Search 39 soybean genomes using BLAST")
           )
     
         ),
@@ -194,7 +194,7 @@ Homepage <- shinydashboard::dashboardPage(
               shinyWidgets::actionBttn("Link_Orthologous", "Orthologous", 
                                        icon = icon("people-arrows", class = NULL, lib = "font-awesome"),
                                        block = TRUE, size = "lg", style="unite", color="default"),
-              h4("Orthologous Groups among 31 soybean genomes")
+              h4("Orthologous groups among 39 soybean genomes")
           ),
           
           box(width = 4,
