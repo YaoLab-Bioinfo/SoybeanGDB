@@ -878,7 +878,8 @@ shinyUI(
         # Genome browse
         tabPanel(
           title = HTML("<strong style='font-size:20px'>Browse</strong>"), icon = icon("folder-open"),
-          
+          tabsetPanel(id = "Browse_key",
+                      tabPanel(HTML("<strong style='font-size:18px'>Information of 2898 soybean accessions</strong>"),
           sidebarPanel(
             #text input
             tags$style("#regB {font-size:15px;font-family:sans-serif;}"),
@@ -968,6 +969,98 @@ shinyUI(
             plotly::plotlyOutput("gbrowser", height = '600px', width = '100%')
           )
         ),
+        
+        tabPanel(HTML("<strong style='font-size:18px'>Information of 481soybean accessions</strong>"),
+                 sidebarPanel(
+                   #text input
+                   tags$style("#regB82 {font-size:15px;font-family:sans-serif;}"),
+                   width = 3,
+                   tags$div(h4(HTML('<i class="fa fa-circle" aria-hidden="true"></i> <font size="4" color="red"><b>Browse SNPs</b></font>'),
+                               bsButton("qgbv82", label="", icon=icon("question"), style="info", size="small"))),
+                   bsPopover("qgbv82", "For a specified genomic region or gene model, all the SNPs among user-selected soybean accessions were extracted and subjected to genome browser visualization", trigger = "focus"),
+                   
+                   textInput("regB82", label = h4(HTML('<i class="fa fa-play" aria-hidden="true"></i> <font size="4" color="red"><b>Genomic region</b></font>'),
+                                                  bsButton("q682", label="", icon=icon("question"), style="info", size="small")),
+                             value = "chr15:1000000-1011111"),
+                   
+                   bsPopover("q682", "A genomic region can be determined by chromosome positions or gene locus. For example, chr15:1000000-1011111 or Glyma.01G000050.",
+                             trigger = "focus"),
+                   
+                   shinysky::actionButton("submit_browse82", strong("Submit!",
+                                                                    bsButton("q782", label="", icon=icon("question"), style="info", size="small")
+                   ), width = "90%", styleclass = "success"),
+                   bsPopover("q782", "Whenever the genomic region is updated, please click Submit!",
+                             trigger = "focus"),
+                   
+                   shinysky::actionButton("clearGB82", strong("Reset"), styleclass = "warning"),
+                   shinysky::actionButton("GBExam82", strong("Load example"), styleclass = "info"),
+                   
+                   conditionalPanel(condition="input.submit_browse82 != '0'", shinysky::busyIndicator(HTML("<div style='color:red;font-size:30px'>Calculation In progress...</div>"), wait = 0)),
+                   
+                   sliderInput(inputId = "GBUP82",  label = h4(HTML('<i class="fa fa-play" aria-hidden="true"></i> <font size="4" color="red"><b>Upstream (bp)</b></font>'),
+                                                               bsButton("qg282", label="", icon=icon("question"), style="info", size="small")
+                   ), min = 0, max = 50000, value = 0, ticks = FALSE),
+                   bsPopover("qg282", "Extend the input genomic region to its upstream.",
+                             trigger = "focus"),
+                   
+                   sliderInput("GBDOWN82", h4(HTML('<i class="fa fa-play" aria-hidden="true"></i> <font size="4" color="red"><b>Downstream (bp)</b></font>'),
+                                              bsButton("qg482", label="", icon=icon("question"), style="info", size="small")
+                   ), min = 0, max = 50000, value = 0, ticks = FALSE),
+                   bsPopover("qg482", "Extend the input genomic region to its downstream.", trigger = "focus"),
+                   
+                   shinyWidgets::multiInput("mychooserB82", h4(HTML('<i class="fa fa-play" aria-hidden="true"></i> <font size="4" color="red"><b>Select soybean accessions</b></font>'),
+                                                               bsButton("qg382", label="", icon=icon("question"), style="info", size="small")),
+                                            choices = all.soya.cho82,
+                                            selected = all.soya.cho82,
+                                            width = 800,
+                                            options = list(
+                                              enable_search = TRUE,
+                                              non_selected_header = "Choose from:",
+                                              selected_header = "You have selected:"
+                                            )
+                   ),
+                   
+                   bsPopover("qg382", "Only the chosen soybean accessions will be used.", trigger = "focus"),
+                   fluidRow(
+                     column(6, actionButton("browsenone182", strong("Deselect all"), width = "100%", style="color: #fff; background-color: #337ab7; border-color: #2e6da4")),
+                     column(6, actionButton("browseall182", strong("Select all"), width = "100%", style="color: #fff; background-color: #337ab7; border-color: #2e6da4"))
+                   ),
+                   
+                   shinyWidgets::multiInput("GB_mut_group82", h4(HTML('<i class="fa fa-play" aria-hidden="true"></i> <font size="4" color="red"><b>Mutation effect</b></font>'),
+                                                                 bsButton("qg182", label="", icon=icon("question"), style="info", size="small")),
+                                            choices = mutationtypes82,
+                                            selected = mutationtypes82,
+                                            width = 800,
+                                            options = list(
+                                              enable_search = TRUE,
+                                              non_selected_header = "Choose from:",
+                                              selected_header = "You have selected:"
+                                            )
+                   ),
+                   
+                   bsPopover("qg182", "Only SNPs with selected mutation effects will be used.", trigger = "focus"),
+                   fluidRow(
+                     column(6, actionButton("browsenone282", strong("Deselect all"), width = "100%", style="color: #fff; background-color: #337ab7; border-color: #2e6da4")),
+                     column(6, actionButton("browseall282", strong("Select all"), width = "100%", style="color: #fff; background-color: #337ab7; border-color: #2e6da4"))
+                   )
+                 ),
+                 
+                 mainPanel(
+                   width = 9,
+                   fluidRow(
+                     column(4, uiOutput("downloadBro0182")),
+                     column(4, uiOutput("downloadBro0282")),
+                     column(4, uiOutput("downloadBro0382"))
+                     #column(4, downloadButton("downloadsnp.txt", style = "width:100%;", "Download genotype data", class = "buttDown")),
+                     #column(4, downloadButton("downloadsnpInfo.txt", style = "width:100%;", "Download SNPs information", class = "buttDown")),
+                     #column(4, downloadButton("downloadGB.pdf",  style = "width:100%;", "Download pdf-file", class = "buttDown")),
+                     #tags$style(".buttDown{background-color:black; color: white; font-size: 16px;}")
+                   ),
+                   
+                   plotly::plotlyOutput("gbrowser82", height = '600px', width = '100%')
+                 )
+        )))
+        ,
 
         tabPanel(
           title = HTML("<strong style='font-size:20px'>Search</strong>"), icon = icon("search"), 
@@ -1134,7 +1227,10 @@ shinyUI(
         # LDheatmap
         tabPanel(
           title = HTML("<strong style='font-size:20px'>LDheatmap</strong>"), icon = icon("project-diagram"),
-          
+          tabsetPanel(id = "LDheatmap_key",
+                      tabPanel(HTML("<strong style='font-size:18px'>Information of 2898 soybean accessions</strong>"),
+                               
+                               
           sidebarPanel(
             tags$style("#regL {font-size:15px;font-family:sans-serif;}"),
             tags$style("#ldpos {font-size:15px;font-family:sans-serif;}"),
@@ -1264,11 +1360,146 @@ shinyUI(
           )
         ),
         
+        tabPanel(HTML("<strong style='font-size:18px'>Information of 481 soybean accessions</strong>"),
+                 
+                 
+                 sidebarPanel(
+                   tags$style("#regL82 {font-size:15px;font-family:sans-serif;}"),
+                   tags$style("#ldpos82 {font-size:15px;font-family:sans-serif;}"),
+                   width = 3,
+                   
+                   fixedRow(
+                     column(12,
+                            tags$div(h4(HTML('<i class="fa fa-circle" aria-hidden="true"></i> <font size="4" color="red"><b>Linkage disequilibrium analysis</b></font>'),
+                                        bsButton("qlda82", label="", icon=icon("question"), style="info", size="small"))),
+                            bsPopover("qlda82", " For a specified genomic region or gene model, a heat map can be created to display the pairwise linkage disequilibrium between different SNP sites", trigger = "focus")
+                     )
+                   ),
+                   
+                   textInput("regL82", label = h4(HTML('<i class="fa fa-play" aria-hidden="true"></i> <font size="4" color="red"><b>Genomic region</b></font>'),
+                                                   bsButton("q582", label="", icon=icon("question"), style="info", size="small")),
+                             value = "chr15:1000000-1011111"),
+                   
+                   bsPopover("q582", "A genomic region can be determined by chromosome positions or gene locus. For example, chr15:1000000-1011111 or Glyma.01G000050.",
+                             trigger = "focus"),
+                   
+                   shinysky::actionButton("submitLD82", strong("Submit!",
+                                                                bsButton("q882", label="", icon=icon("question"), style="info", size="small")
+                   ), styleclass = "success"),
+                   
+                   shinysky::actionButton("clearLD82", strong("Reset"), styleclass = "warning"),
+                   shinysky::actionButton("LDExam82", strong("Load example"), styleclass = "info"),
+                   
+                   conditionalPanel(condition="input.submit3 != '0'", shinysky::busyIndicator(HTML("<div style='color:red;font-size:30px'>Calculation In progress...</div>"), wait = 0)),
+                   bsPopover("q882", "Whenever the genomic region is updated, please click Submit!",
+                             trigger = "focus"),
+                   
+                   br(),
+                   
+                   h4(HTML('<i class="fa fa-cog"></i> <font size="5" color="red"><b>Plot options</b></font>')),
+                   radioButtons("flip82", h4(HTML('<i class="fa fa-play" aria-hidden="true"></i> <font size="4" color="red"><b>Flip the figure</b></font>')), list( "TRUE" = 1, "FALSE" = 0)),
+                   
+                   conditionalPanel(
+                     condition = "input.flip82==1",
+                     h4(checkboxInput("LDshowGene82", label = p("Show gene model",
+                                                                 bsButton("qldg82", label="", icon=icon("question"), style="info", size="small")), TRUE)),
+                     bsPopover("qldg82", "Y:gene model height; W:gene model width", trigger = "focus"),
+                     conditionalPanel(
+                       condition = "input.LDshowGene82",
+                       fluidRow(
+                         column(6, numericInput("ldY82", "Y:", value = 72)),
+                         column(6, numericInput("ldW82", "W:", value = 72))
+                       ))
+                   ),
+                   
+                   conditionalPanel(
+                     condition = "input.flip82==0",
+                     radioButtons("showText82", h4(HTML('<i class="fa fa-play" aria-hidden="true"></i> <font size="4" color="red"><b>Print LD measurements</b></font>')), list("FALSE" =  0, "TRUE" = 1)),
+                     textInput("ldpos82", label = h4(HTML('<i class="fa fa-play" aria-hidden="true"></i> <font size="4" color="red"><b>Label SNPs</b></font>')), value = "5, 8")
+                   ),
+                   
+                   radioButtons("ldcol82",
+                                label = h4(HTML('<i class="fa fa-play" aria-hidden="true"></i> <font size="4" color="red"><b>Color</b></font>')), list("grey.colors(20)" = 1, "heat.colors(20)" = 2)
+                   ),
+                   
+                   sliderInput("ldUp82", h4(HTML('<i class="fa fa-play" aria-hidden="true"></i> <font size="4" color="red"><b>Upstream (bp)</b></font>'),
+                                             bsButton("ql482", label="", icon=icon("question"), style="info", size="small")
+                   ), min = 0, max = 50000, value = 0, ticks = FALSE),
+                   bsPopover("ql482", "Extend the input genomic region to its upstream.", trigger = "focus"),
+                   
+                   sliderInput("ldDown82", h4(HTML('<i class="fa fa-play" aria-hidden="true"></i> <font size="4" color="red"><b>Downstream (bp)</b></font>'),
+                                               bsButton("ql582", label="", icon=icon("question"), style="info", size="small")
+                   ), min = 0, max = 50000, value = 0, ticks = FALSE),
+                   bsPopover("ql582", "Extend the input genomic region to its downstream.", trigger = "focus"),
+                   
+                   shinyWidgets::multiInput(
+                     "ld_mut_group82", h4(HTML('<i class="fa fa-play" aria-hidden="true"></i> <font size="4" color="red"><b>Mutation effect</b></font>'),
+                                           bsButton("ql182", label="", icon=icon("question"), style="info", size="small")),
+                     choices = mutationtypes82,
+                     selected = mutationtypes82,
+                     width = 800,
+                     options = list(
+                       enable_search = TRUE,
+                       non_selected_header = "Choose from:",
+                       selected_header = "You have selected:"
+                     )
+                   ),
+                   bsPopover("ql182", "Only SNPs with selected mutation effects will be used.", trigger = "focus"),
+                   
+                   fluidRow(
+                     column(6, actionButton("ldnone282", strong("Deselect all"), width = "100%", style="color: #fff; background-color: #337ab7; border-color: #2e6da4")),
+                     column(6, actionButton("ldall282", strong("Select all"), width = "100%", style="color: #fff; background-color: #337ab7; border-color: #2e6da4"))
+                   ),
+                   
+                   shinyWidgets::multiInput("mychooserLD82", p(h4(HTML('<i class="fa fa-play" aria-hidden="true"></i> <font size="4" color="red"><b>Select soybean accessions</b></font>'),
+                                                                   bsButton("ql382", label="", icon=icon("question"), style="info", size="small"))),
+                                            choices = all.soya.cho82,
+                                            selected = all.soya.cho82,
+                                            width = 800,
+                                            options = list(
+                                              enable_search = TRUE,
+                                              non_selected_header = "Choose from:",
+                                              selected_header = "You have selected:"
+                                            )
+                   ), 
+                   
+                   bsPopover("ql382", "Only the chosen soybean accessions will be used.", trigger = "focus"),
+                   
+                   fluidRow(
+                     column(6, actionButton("ldnone182", strong("Deselect all"), width = "100%", style="color: #fff; background-color: #337ab7; border-color: #2e6da4")),
+                     column(6, actionButton("ldall182", strong("Select all"), width = "100%", style="color: #fff; background-color: #337ab7; border-color: #2e6da4"))
+                   ),
+                   
+                   checkboxInput("ldSize82", "Adjust plot size", FALSE),
+                   conditionalPanel(
+                     condition = "input.ldSize82",
+                     numericInput("ldHeight82", h4(HTML('<i class="fa fa-play" aria-hidden="true"></i> <font size="4" color="red"><b>Plot height</b></font>')), value = 730),
+                     numericInput("ldWidth82", h4(HTML('<i class="fa fa-play" aria-hidden="true"></i> <font size="4" color="red"><b>Plot width</b></font>')), value = 1000)
+                   )
+                 ),
+                 
+                 mainPanel(
+                   width = 9,
+                   fluidRow(
+                     column(6, uiOutput("downloadLD0182")),
+                     column(6, uiOutput("downloadLD0282"))
+                     #column(6, downloadButton("downloadLD.pdf", style = "width:100%;", "Download pdf-file", class = "buttDown")),
+                     #column(6, downloadButton("downloadLD.svg", style = "width:100%;", "Download svg-file", class = "buttDown")),
+                     #tags$style(".buttDown{background-color:black; color: white; font-size: 16px;}")
+                   ),
+                   
+                   plotOutput("ldheatmap82", height = "800px", width = "100%")
+                 )
+        ))),
+        
+        
         
         # Nucleotide diversity
         tabPanel(
           title = HTML("<strong style='font-size:20px'>Diversity</strong>"), icon = icon("chart-area"),
-          
+          tabsetPanel(id = "Diversity_key",
+                      tabPanel(HTML("<strong style='font-size:18px'>Information of 2898 soybean accessions</strong>"),
+                               
           sidebarPanel(
             tags$style("#regD {font-size:15px;font-family:sans-serif;}"),
             tags$style("#snpnumD {font-size:15px;font-family:sans-serif;}"),
@@ -1375,12 +1606,123 @@ shinyUI(
             # downloadButton("downloadDiv.txt", "Download TXT-file"),
             column(12, plotOutput("diversity", height = '800px', width = '100%'))
           )
-        ),
-        
+        )
+      ,
+      tabPanel(HTML("<strong style='font-size:18px'>Information of 481 soybean accessions</strong>"),
+               
+               sidebarPanel(
+                 tags$style("#regD82 {font-size:15px;font-family:sans-serif;}"),
+                 tags$style("#snpnumD82 {font-size:15px;font-family:sans-serif;}"),
+                 width = 3,
+                 
+                 fixedRow(
+                   column(12,
+                          tags$div(h4(HTML('<i class="fa fa-circle" aria-hidden="true"></i> <font size="4" color="red"><b>Nucleotide diversity analysis</b></font>'),
+                                      bsButton("qnda82", label="", icon=icon("question"), style="info", size="small"))),
+                          bsPopover("qnda82", "Calculate and demonstrate nucleotide diversities among subgroups of soybean accessions in specified genomic regions.", trigger = "focus")
+                   )
+                 ),
+                 
+                 textInput("regD82", label = h4(HTML('<i class="fa fa-play" aria-hidden="true"></i> <font size="4" color="red"><b>Genomic region</b></font>'),
+                                                bsButton("q382", label="", icon=icon("question"), style="info", size="small")),
+                           value = "chr15:1000000-1011111"),
+                 
+                 bsPopover("q382", "A genomic region can be determined by chromosome positions or gene locus. For example, chr15:1000000-1011111 or Glyma.01G000050",
+                           trigger = "focus"),
+                 
+                 shinysky::actionButton("submit482", strong("Submit!",
+                                                            bsButton("q1082", label="", icon=icon("question"), style="info", size="small")
+                 ), styleclass = "success"),
+                 
+                 shinysky::actionButton("clearDIV82", strong("Reset"), styleclass = "warning"),
+                 shinysky::actionButton("DIVExam82", strong("Load example"), styleclass = "info"),
+                 
+                 conditionalPanel(condition="input.submit482 != '0'", shinysky::busyIndicator(HTML("<div style='color:red;font-size:30px'>Calculation In progress...</div>"), wait = 0)),
+                 bsPopover("q1082", "Whenever the genomic region or any plot option is updated, please click Submit!", trigger = "focus"),
+                 
+                 br(),
+                 h4(HTML('<i class="fa fa-cog" aria-hidden="true"></i> <font size="5" color="red"><b>Plot options</b></font>')),
+                 
+                 numericInput("snpnumD82", h4(HTML('<i class="fa fa-play" aria-hidden="true"></i> <font size="4" color="red"><b>Number of SNPs in each window</b></font>'),
+                                              bsButton("qd682", label="", icon=icon("question"), style="info", size="small")
+                 ), value = 10, min = 5, max = 20),
+                 bsPopover("qd682", "A specified genomic region would be split into non-overlapping window so that each window contains specified number of SNPs. The nucleotide diversity of all soybean accessions belong to the specified ecotypes in each window would be calculated.",
+                           trigger = "focus"),
+                 
+                 shinyWidgets::pickerInput(
+                   inputId = "div_acc_group82",
+                   label = h4(HTML('<i class="fa fa-play" aria-hidden="true"></i> <font size="4" color="red"><b>Ecotypes to calculate diversity</b></font>')),
+                   choices = c("Glycine soja", "Landraces and elites"),
+                   selected = c("Glycine soja", "Landraces and elites"),
+                   multiple = TRUE,
+                   options = list(style = "btn-primary")
+                 ),
+                 
+                 selectInput("nuc_numerator82", h4(HTML('<i class="fa fa-play" aria-hidden="true"></i> <font size="4" color="red"><b>Numerator ecotype</b></font>'),
+                                                   bsButton("qd782", label="", icon=icon("question"), style="info", size="small")
+                 ), choices = c("Glycine soja", "Landraces and elites")),
+                 bsPopover("qd782", "The nucleotide diversity of soybean accessions belong to the Numerator ecotype would be divided by the nucleotide diversity of soybean accessions belong to the Denominator ecotype for comparison.",
+                           trigger = "focus"),
+                 selectInput("nuc_denominator82", h4(HTML('<i class="fa fa-play" aria-hidden="true"></i> <font size="4" color="red"><b>Denominator ecotype</b></font>')), choices = 
+                               c("Landraces and elites", "Glycine soja")),
+                 
+                 shinyWidgets::multiInput("div_mut_group82", h4(HTML('<i class="fa fa-play" aria-hidden="true"></i> <font size="4" color="red"><b>Mutation effect</b></font>'),
+                                                                bsButton("qd182", label="", icon=icon("question"), style="info", size="small")),
+                                          choices = mutationtypes82,
+                                          selected = mutationtypes82,
+                                          width = 800,
+                                          options = list(
+                                            enable_search = TRUE,
+                                            non_selected_header = "Choose from:",
+                                            selected_header = "You have selected:"
+                                          )
+                 ),
+                 bsPopover("qd182", "Only SNPs with selected mutation effects will be used.",
+                           trigger = "focus"),
+                 
+                 fluidRow(
+                   column(6, actionButton("diversitynone282", strong("Deselect all"), width = "100%", style="color: #fff; background-color: #337ab7; border-color: #2e6da4")),
+                   column(6, actionButton("diversityldall282", strong("Select all"), width = "100%", style="color: #fff; background-color: #337ab7; border-color: #2e6da4"))
+                 ),
+                 
+                 sliderInput("divUp82", h4(HTML('<i class="fa fa-play" aria-hidden="true"></i> <font size="4" color="red"><b>Upstream (bp)</b></font>'),
+                                           bsButton("qd482", label="", icon=icon("question"), style="info", size="small")
+                 ), min = 0, max = 50000, value = 10000, ticks = FALSE),
+                 bsPopover("qd482", "Extend the input genomic region to its upstream.", trigger = "focus"),
+                 
+                 sliderInput("divDown82", h4(HTML('<i class="fa fa-play" aria-hidden="true"></i> <font size="4" color="red"><b>Downstream (bp)</b></font>'),
+                                             bsButton("qd582", label="", icon=icon("question"), style="info", size="small")
+                 ), min = 0, max = 50000, value = 10000, ticks = FALSE),
+                 bsPopover("qd582", "Extend the input genomic region to its downstream", trigger = "focus"),
+                 
+                 checkboxInput("divSize82", "Adjust plot size", FALSE),
+                 conditionalPanel(
+                   condition = "input.divSize82",
+                   numericInput("divHeight82", h4(HTML('<i class="fa fa-play" aria-hidden="true"></i> <font size="4" color="red"><b>Plot height</b></font>')), value = 730),
+                   numericInput("divWidth82", h4(HTML('<i class="fa fa-play" aria-hidden="true"></i> <font size="4" color="red"><b>Plot width</b></font>')), value = 1000)
+                 )
+               ),
+               
+               mainPanel(
+                 width = 9,
+                 fluidRow(
+                   column(4, uiOutput("downloadDiv0182")),
+                   column(4, uiOutput("downloadDiv0282")),
+                   column(4, uiOutput("downloadDiv0382"))
+                 ),
+                 
+                 # downloadButton("downloadDiv.pdf", "Download pdf-file"),
+                 # downloadButton("downloadDiv.svg", "Download svg-file"),
+                 # downloadButton("downloadDiv.txt", "Download TXT-file"),
+                 column(12, plotOutput("diversity82", height = '800px', width = '100%'))
+               )
+      )
+    )),  
         #AlleleFreq
         tabPanel(
           title = HTML("<strong style='font-size:20px'>AlleleFreq</strong>"), icon = icon("chart-pie"),
-          
+          tabsetPanel(id = "AlleleFreq_key",
+                      tabPanel(HTML("<strong style='font-size:18px'>Information of 2898 soybean accessions</strong>"),
           sidebarPanel(
             width = 3,
             tags$style("#af_snp_site {font-size:15px;font-family:sans-serif;}"),
@@ -1442,6 +1784,69 @@ shinyUI(
             plotOutput("alleleFreq", height = "900px", width = "100%")
           )
         ),
+    
+        tabPanel(HTML("<strong style='font-size:18px'>Information of 481 soybean accessions</strong>"),
+                 sidebarPanel(
+                   width = 3,
+                   tags$style("#af_snp_site82 {font-size:15px;font-family:sans-serif;}"),
+                   fixedRow(
+                     column(12,
+                            tags$div(h4(HTML('<i class="fa fa-circle" aria-hidden="true"></i> <font size="4" color="red"><b>Allele frequency analysis</b></font>'),
+                                        bsButton("qaf1182", label="", icon=icon("question"), style="info", size="small"))),
+                            bsPopover("qaf1182", "Calculate and demonstrate allele frequency of input SNP sites.", trigger = "focus")
+                     )
+                   ),
+                   
+                   textAreaInput("af_snp_site82", label = h4(HTML('<i class="fa fa-play" aria-hidden="true"></i> <font size="4" color="red"><b>Input SNP sites</b></font>'),
+                                                             bsButton("qaf382", label="", icon=icon("question"), style="info", size="small")), 
+                                 width="100%", resize="vertical", height="150px", 
+                                 placeholder = "One SNP site in one row", 
+                                 value = "0300000762\n2015000614\n2015001173"
+                   ),
+                   bsPopover("qaf382", "Each SNP site should be a 10-digits integer. The first two digits represent the chromosome ID while the rest eight digits represent the genomic position of each SNP site. Each SNP site should take only one row!",
+                             trigger = "focus"),
+                   
+                   shinyWidgets::pickerInput(
+                     inputId = "af_acc_group82",
+                     label = h4(HTML('<i class="fa fa-play" aria-hidden="true"></i> <font size="4" color="red"><b>Ecotypes to calculate allele frequency</b></font>')), 
+                     choices = c("Glycine soja", "Landraces and elites"),
+                     selected = c("Glycine soja", "Landraces and elites"),
+                     multiple = TRUE
+                   ),
+                   selectInput("jscolora82", h4(HTML('<i class="fa fa fa-play" aria-hidden="true"></i> <font size="3" color="red"><b>Allele colors</b></font>'),
+                                                bsButton("qaf282", label="", icon=icon("question"), style="info", size="small")), 
+                               choices = c("steelblue, yellow2", "mediumspringgreen, mediumvioletred", "orchid, palegreen", "cornflowerblue, forestgreen"), selected = "steelblue, yellow2" ),
+                   bsPopover("qaf282", "Colors for the major and minor allele in the pie chart, respectively!", trigger = "focus"),
+                   
+                   numericInput("afHeight82", h4(HTML('<i class="fa fa-play" aria-hidden="true"></i> <font size="4" color="red"><b>Plot height</b></font>')), value = 650),
+                   numericInput("afWidth82", h4(HTML('<i class="fa fa-play" aria-hidden="true"></i> <font size="4" color="red"><b>Plot width</b></font>')), value = 800),
+                   
+                   shinysky::actionButton("submitaf182", strong("Submit!",
+                                                                bsButton("qaf182", label="", icon=icon("question"), style="info", size="small")
+                   ), styleclass = "success"),
+                   
+                   shinysky::actionButton("clearAf82", strong("Reset"), styleclass = "warning"),
+                   shinysky::actionButton("AfExam82", strong("Load example"), styleclass = "info"),
+                   
+                   conditionalPanel(condition="input.submitaf182 != '0'", shinysky::busyIndicator(HTML("<p style='color:red;font-size:30px;'>Calculation In progress...</p>"), wait = 0)),
+                   bsPopover("qaf182", "Whenever the input SNP sites or any option is updated, please click Submit!", trigger = "focus")
+                 ),
+                 
+                 mainPanel(
+                   width = 9,
+                   
+                   fluidRow(
+                     column(4, uiOutput("downloadAfq0182")),
+                     column(4, uiOutput("downloadAfq0282")),
+                     column(4, uiOutput("downloadAfq0382"))
+                   ),
+                   
+                   br(),
+                   br(),
+                   
+                   plotOutput("alleleFreq82", height = "900px", width = "100%")
+                 ))
+    ))
         # Phylogenetic tree
         
         # SNP
@@ -2476,7 +2881,7 @@ shinyUI(
             tags$style("#IDCOV_idcov {font-size:15px;font-family:sans-serif;}"),
             fixedRow(
               column(12,
-                     h4(HTML('<i class="fa fa-circle" aria-hidden="true"></i> <font size="4" color="red"><b>ID Converter(From one genome to another genome)</b></font>'),
+                     h4(HTML('<i class="fa fa-circle" aria-hidden="true"></i> <font size="4" color="red"><b>ID Converter</b></font>'),
                         bsButton("qsgsid", label="", icon=icon("question"), style="info", size="small")),
                      bsPopover("qsgsid", "Search any one of the 39 soybean genomes by gene IDs", trigger = "focus")
               )
@@ -2486,7 +2891,7 @@ shinyUI(
             fluidRow(
               column(
                 width = 1,
-                h4("from")
+                h4("From")
               ),
               column(5,selectInput("variety_idcov",label = NULL,
                                    list(`Wild soybean (Glycine soja)` = list("PI 483463", "PI 562565", "PI 549046", "PI 578357", "W05"),
@@ -2501,7 +2906,7 @@ shinyUI(
               )),
               column(
                 width = 1,
-                h4("to")
+                h4("To")
               ),
               column(5,selectInput("variety_idcov_1", label = NULL,
                                    list(`Wild soybean (Glycine soja)` = list("PI 483463", "PI 562565", "PI 549046", "PI 578357", "W05"),
@@ -2515,8 +2920,17 @@ shinyUI(
                                    selected = "Williams 82"
               ))
             ),
-            textInput("IDCOV_idcov", label = h4(HTML('<i class="fa fa-play" aria-hidden="true"></i> <font size="4" color="red"><b>Input Gene ID</b></font>'),
-                                                bsButton("qsgeneid1", label="", icon=icon("question"), style="info", size="small")), value = "SoyZH13_01G071100"),
+            
+            textAreaInput("IDCOV_idcov", label = h4(HTML('<i class="fa fa-play" aria-hidden="true"></i> <font size="4" color="red"><b>Input a list of gene model names</b></font>'), 
+            ),
+            value = "SoyZH13_01G071100\nSoyZH13_01G123300", resize = "vertical", height='200px', width = '200%',
+            placeholder = "One Gene ID in one row"),
+            
+            # 
+            # textAreaInput("IDCOV_idcov", label = h4(HTML('<i class="fa fa-play" aria-hidden="true"></i> <font size="4" color="red"><b>Input Gene ID</b></font>'),
+            #                                     bsButton("qsgeneid1", label="", icon=icon("question"), style="info", size="small")), value = "SoyZH13_01G071100"),
+            
+            
             
             
             shinysky::actionButton("submit_GSidcov", strong("Submit!", 
@@ -2659,7 +3073,6 @@ shinyUI(
             uiOutput("zhanwei3COV")
           )
         )
-        
         
         
         
@@ -2818,7 +3231,7 @@ shinyUI(
                  br(),
                  
                  h4(HTML('<i class="fa fa-circle" aria-hidden="true"></i> <font size="4" color="red"><b>Expression profile of protein-coding genes in the genome of A81-356022</b></font>')),
-                 h4(a("https://link.springer.com/article/10.1007/s11427-019-9822-2", href="https://link.springer.com/article/10.1007/s11427-019-9822-2", target="_blank")),
+                 h4(a("https://bmcplantbiol.biomedcentral.com/articles/10.1186/1471-2229-10-160", href="https://bmcplantbiol.biomedcentral.com/articles/10.1186/1471-2229-10-160", target="_blank")),
                  br(),
                  
                  h4(HTML('<i class="fa fa-circle" aria-hidden="true"></i> <font size="4" color="red"><b>Expression profile of protein-coding genes in the genome of W05</b></font>')),

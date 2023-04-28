@@ -137,7 +137,7 @@ shinyServer(function(input, output, session) {
     #library(Biostrings)
     if (input$variety_BDG == "All genomes"){
       load("./data/genewithaccession.RDate")
-      print(input$variety_BDG)
+
       
       genomenames <- genewithaccession$accession[genewithaccession$id == input$BDG_Paste1]
       gene_list <- unlist(strsplit(input$BDG_Paste1, split="\\n"))
@@ -147,7 +147,6 @@ shinyServer(function(input, output, session) {
       gene_list <- unlist(strsplit(input$BDG_Paste, split="\\n"))
       gene_list <- trimws(gene_list, which = c("both"), whitespace = "[ \t\r\n]")
     }
-    print(genomenames)
     load(paste0("./info/", genomenames, "/", genomenames, ".gene.info.RData"))
     
     #cds protein cdna信息读取
@@ -5857,6 +5856,7 @@ shinyServer(function(input, output, session) {
   })
   
   
+  
   #ID converter
   
   observeEvent(input$submit_GSidcov, {
@@ -5872,7 +5872,8 @@ shinyServer(function(input, output, session) {
     }
     
     geneid_cv <- input$IDCOV_idcov
-    
+    geneid_cv <- unlist(strsplit(geneid_cv, split="\\n"))
+    geneid_cv <- trimws(geneid_cv, which = c("both"), whitespace = "[ \t\r\n]")
     orthpplydata <- lapply(geneid_cv, function(x){
       accession <- gsub("_.+", "", gsub("\\..+", "", x))
       loc <- which(x == geneid_cv)
@@ -5911,18 +5912,30 @@ shinyServer(function(input, output, session) {
         return(ogid)
       }
     })
+    
     orthpplydatasum <- do.call(rbind, orthpplydata)
     orthpplydatasum <- data.frame(rownames(orthpplydatasum), orthpplydatasum)
-    orthpplydatasum <- orthpplydatasum[genomenames, ]
+    orthpplydatasum <- orthpplydatasum[orthpplydatasum[,1] == genomenames, ]
     drawogid <- orthpplydatasum
     colnames(orthpplydatasum) <- c("Genome", "Orthologous genes", "Ortholog groups")
     orthpplydatasum <- orthpplydatasum[orthpplydatasum[ ,2] != "", ]
     orthpplydatasum <- orthpplydatasum[!is.na(orthpplydatasum[ ,2]), ]
     load(paste0("./info/", genomenames, "/", genomenames, ".gene.info.RData"))
     orthpplydatasum$Genome <- gsub("_", " ", orthpplydatasum$Genome)
-    gene_list <- unlist(strsplit(orthpplydatasum$`Orthologous genes`, split=","))
-    gene_list <- trimws(gene_list, which = c("both"), whitespace = "[ \t\r\n]")
-    geneinfo_id <- gene_info_s[gene_info_s$id %in% gene_list, ]
+    print(orthpplydatasum)
+    names(geneid_cv) <- paste0("Group", 1:length(geneid_cv))
+    orthpplydatasum$refgene <- as.character(geneid_cv[orthpplydatasum$`Ortholog groups`])
+    gene_list <- apply(orthpplydatasum, 1, function(x){
+      gene_listnew <- unlist(strsplit(x[2], split=","))
+      gene_listnew <- trimws(gene_listnew, which = c("both"), whitespace = "[ \t\r\n]")
+      geneinfo_id <- gene_info_s[gene_info_s$id %in% gene_listnew, ]
+      geneinfo_id$FromGene <- x[4]
+      return(geneinfo_id)
+    })
+    
+    gene_list <- do.call(rbind, gene_list)
+    geneinfo_id <- gene_list
+    gene_list <- geneinfo_id$id
     
     if(nrow(orthpplydatasum) == 0){
       nrowsuppl <- 0
@@ -5938,11 +5951,11 @@ shinyServer(function(input, output, session) {
       load(paste0("./info/", genomenames, "/", genomenames, ".cdna.fasta.RData"))
       cdna.infoid <- cdna.info
       gene_list <- gene_list[gene_list %in% gene_info_s$id]
-
+      
       #geneinfo
       output$geneinfoidCOV <- DT::renderDT({
         if( length(geneinfo_id[, 1]) != 0 ){
-          colnames(geneinfo_id) <- c("ID", "Chromosome", "Start", "End", "Strand")
+          colnames(geneinfo_id) <- c("ID", "Chromosome", "Start", "End", "Strand", "FromGene")
           DT::datatable(
             geneinfo_id, 
             escape = FALSE, rownames= FALSE, selection="single", 
@@ -6446,7 +6459,30 @@ shinyServer(function(input, output, session) {
     }
   })
   
+  ##reset
+  observe({
+    if (input$clearSERIDcov >0) {
+      isolate({
+        updateTextAreaInput(session, "IDCOV_idcov", value="")
+        updateSelectInput(session, "variety_idcov", selected = "Zhonghuang 13")
+        updateSelectInput(session, "variety_idcov_1", selected = "Williams 82")
+      })
+    } else {NULL}
+  })
   
+  #load example
+  observe({
+    if (input$SERExamIDcov >0) {
+      isolate({
+        updateSelectInput(session, "variety_idcov", selected = "Zhonghuang 13")
+        updateSelectInput(session, "variety_idcov_1", selected = "Williams 82")
+        updateTextAreaInput(session, "IDCOV_idcov", value="SoyZH13_01G071100\nSoyZH13_01G123300")
+      })
+    } else {NULL}
+  })
+  
+  
+
   
   ###SNP for 481
   observeEvent(input$submiti481, {
@@ -6717,5 +6753,787 @@ shinyServer(function(input, output, session) {
     )
   })
   
+  
+  # LDheatmap
+  observe({
+    if (input$submitLD82>0) {
+      if ( exists("anaRegw") ){
+      } else {
+        source("anaRegw.R")
+      }
+      if ( exists("ld.heatmapw") ){
+      } else {
+        source("ld.heatmapw.R")
+      }
+      
+      if ( exists("fetchSnpw") ){
+      } else {
+        source("fetchSnpw.R")
+      }
+      
+      isolate({
+        ld.height <<- input$ldHeight82
+        ld.width <<- input$ldWidth82
+        myPos <- anaRegw(input$regL82)
+        
+        if ( exists("validRegw") ){
+        } else {
+          source("validRegw.R")
+        }
+        if (validRegw(myPos)) {
+          if (!is.null(myPos)) {
+            snp.reg <- fetchSnpw(chr=myPos$chr, start=myPos$start - input$ldUp82, 
+                                 end=myPos$end + input$ldDown82, accession = gsub(",.+", "", input$mychooserLD82),
+                                 mutType = input$ld_mut_group82, filter = TRUE)[[1]]
+          } else {
+            snp.reg <- NULL
+          }
+          
+          if (is.null(snp.reg) || nrow(snp.reg) < 5) {
+            shinyWidgets::sendSweetAlert(
+              session = session,
+              title = "Error input!", type = "error",
+              text = "Too few SNPs are detected in the specified genomic region or the specified genomic region is too large!"
+            )
+          } else {
+            snp.pos <- as.numeric(unlist(strsplit(input$ldpos82, split=",")))
+            
+            if ( input$ldSize82 ){
+              output$ldheatmap82 <- shiny::renderPlot({
+                if (input$flip82 == "0") {
+                  ld.heatmapw(chr=myPos$chr, start=myPos$start - input$ldUp82, end=myPos$end + input$ldDown82, text=c(FALSE, TRUE)[as.numeric(input$showText82)+1],
+                              snp.pos=snp.pos, gene=FALSE, flip=c(FALSE, TRUE)[as.numeric(input$flip82)+1],
+                              col=list(grey.colors(20), heat.colors(20))[[as.numeric(input$ldcol82)]],
+                              mutType = input$ld_mut_group82, accession = gsub(",.+", "", input$mychooserLD82))
+                } else if (input$flip82 == "1") {
+                  if (input$LDshowGene82) {
+                    ld.heatmapw(chr=myPos$chr, start=myPos$start - input$ldUp82, end=myPos$end + input$ldDown82, text=FALSE,
+                                snp.pos=snp.pos, ld.y=input$ldY82/100, ld.w=input$ldW82/100, gene=TRUE, 
+                                col=list(grey.colors(20), heat.colors(20))[[as.numeric(input$ldcol82)]],
+                                mutType = input$ld_mut_group82, accession = gsub(",.+", "", input$mychooserLD82))
+                  } else {
+                    ld.heatmapw(chr=myPos$chr, start=myPos$start - input$ldUp82, end=myPos$end + input$ldDown82, text=FALSE,
+                                gene=FALSE, flip=c(FALSE, TRUE)[as.numeric(input$flip82)+1],
+                                col=list(grey.colors(20), heat.colors(20))[[as.numeric(input$ldcol82)]],
+                                mutType = input$ld_mut_group82, accession = gsub(",.+", "", input$mychooserLD82))
+                  }
+                }
+              }, height = ld.height, width = ld.width)
+              
+            } else {
+              output$ldheatmap82 <- shiny::renderPlot({
+                if (input$flip82 == "0") {
+                  ld.heatmapw(chr=myPos$chr, start=myPos$start - input$ldUp82, end=myPos$end + input$ldDown82, text=c(FALSE, TRUE)[as.numeric(input$showText82)+1],
+                              snp.pos=snp.pos, gene=FALSE, flip=c(FALSE, TRUE)[as.numeric(input$flip82)+1],
+                              col=list(grey.colors(20), heat.colors(20))[[as.numeric(input$ldcol82)]],
+                              mutType = input$ld_mut_group82, accession = gsub(",.+", "", input$mychooserLD82))
+                } else if (input$flip82 == "1") {
+                  if (input$LDshowGene82) {
+                    ld.heatmapw(chr=myPos$chr, start=myPos$start - input$ldUp82, end=myPos$end + input$ldDown82, text=FALSE,
+                                snp.pos=snp.pos, ld.y=input$ldY82/100, ld.w=input$ldW82/100, gene=TRUE, 
+                                col=list(grey.colors(20), heat.colors(20))[[as.numeric(input$ldcol82)]],
+                                mutType = input$ld_mut_group82, accession = gsub(",.+", "", input$mychooserLD82))
+                  } else {
+                    ld.heatmapw(chr=myPos$chr, start=myPos$start - input$ldUp82, end=myPos$end + input$ldDown82, text=FALSE,
+                                gene=FALSE, flip=c(FALSE, TRUE)[as.numeric(input$flip82)+1],
+                                col=list(grey.colors(20), heat.colors(20))[[as.numeric(input$ldcol82)]],
+                                mutType = input$ld_mut_group82, accession = gsub(",.+", "", input$mychooserLD82))
+                  }
+                }
+              })
+            }
+          }
+        } else {
+          shinyWidgets::sendSweetAlert(
+            session = session,
+            title = "Error input!", type = "error",
+            text = "Please input genomic region or gene model in appropriate format!" 
+          )
+        }
+      })
+    } else {
+      NULL
+    }
+  })
+  
+  observeEvent(input$ldall182, {
+    shinyWidgets::updateMultiInput(
+      session = session,
+      inputId = "mychooserLD82",
+      selected = all.soya.cho82
+    )
+  })
+  
+  observeEvent(input$ldnone182, {
+    shinyWidgets::updateMultiInput(
+      session = session,
+      inputId = "mychooserLD82",
+      selected = character(0)
+    )
+  })
+  
+  observeEvent(input$ldall282, {
+    shinyWidgets::updateMultiInput(
+      session = session,
+      inputId = "ld_mut_group82",
+      selected = mutationtypes82
+    )
+  })
+  
+  observeEvent(input$ldnone282, {
+    shinyWidgets::updateMultiInput(
+      session = session,
+      inputId = "ld_mut_group82",
+      selected = character(0)
+    )
+  })
+  
+  observe({
+    if (input$clearLD82>0) {
+      isolate({
+        updateTextInput(session, "regL82", value="")
+      })
+    } else {NULL}
+  })
+  
+  observe({
+    if (input$LDExam82 >0) {
+      isolate({
+        updateTextInput(session, "regL82", value="chr15:1000000-1011111")
+      })
+    } else {NULL}
+  })
+  
+  
+  ## Download PDF file of LDheatmap
+  output$downloadLD82.pdf <- downloadHandler(
+    filename <- function() { paste('LDheatmap.pdf') },
+    content <- function(file) {
+      withProgress(message='Calculation in progress...',value = 0, detail = 'This may take a while...', {
+        myPos <- anaRegw(input$regL82)
+        
+        snp.reg <- fetchSnpw(chr=myPos$chr, start=myPos$start - input$ldUp82, 
+                             end=myPos$end + input$ldDown82, accession = gsub(",.+", "", input$mychooserLD82),
+                             mutType = input$ld_mut_group82, filter = TRUE)[[1]]
+        if (nrow(snp.reg) < 5) {
+          shinyWidgets::sendSweetAlert(
+            session = session,
+            title = "Error input!", type = "error",
+            text = "Too few SNPs in specified genomic region!"
+          )
+        } else {
+          pdf(file, width = input$ldWidth82/72, height = input$ldHeight82/72, onefile = FALSE)
+          
+          snp.pos <- as.numeric(unlist(strsplit(input$ldpos82, split=",")))
+          
+          if (input$flip82 == "0") {
+            ld.heatmapw(chr=myPos$chr, start=myPos$start - input$ldUp82, end=myPos$end + input$ldDown82, text=c(FALSE, TRUE)[as.numeric(input$showText82)+1],
+                        snp.pos=snp.pos, gene=FALSE, flip=c(FALSE, TRUE)[as.numeric(input$flip82)+1],
+                        col=list(grey.colors(20), heat.colors(20))[[as.numeric(input$ldcol82)]],
+                        mutType = input$ld_mut_group82, accession = gsub(",.+", "", input$mychooserLD82))
+          } else if (input$flip82 == "1") {
+            if (input$LDshowGene82) {
+              ld.heatmapw(chr=myPos$chr, start=myPos$start - input$ldUp82, end=myPos$end + input$ldDown82, text=FALSE,
+                          snp.pos=snp.pos, ld.y=input$ldY82/100, ld.w=input$ldW82/100, gene=TRUE, 
+                          col=list(grey.colors(20), heat.colors(20))[[as.numeric(input$ldcol82)]],
+                          mutType = input$ld_mut_group82, accession = gsub(",.+", "", input$mychooserLD82))
+            } else {
+              ld.heatmapw(chr=myPos$chr, start=myPos$start - input$ldUp82, end=myPos$end + input$ldDown82, text=FALSE,
+                          gene=FALSE, flip=c(FALSE, TRUE)[as.numeric(input$flip82)+1],
+                          col=list(grey.colors(20), heat.colors(20))[[as.numeric(input$ldcol82)]],
+                          mutType = input$ld_mut_group82, accession = gsub(",.+", "", input$mychooserLD82))
+            }
+          }
+          dev.off()
+        }
+      })
+    }, contentType = 'application/pdf')
+  
+  output$downloadLD0182<- renderUI({
+    req(input$submitLD82)
+    column(12,
+           downloadButton("downloadLD82.pdf", style = "width:100%;", "PDF-file", class = "buttDown"),
+           tags$style(".buttDown{background-color:black; color: white; font-size: 16px;}")
+    )
+  })
+  
+  ## Download SVG file of LDheatmap
+  output$downloadLD82.svg <- downloadHandler(
+    filename <- function() { paste('LDheatmap.svg') },
+    content <- function(file) {
+      withProgress(message='Calculation in progress...',value = 0, detail = 'This may take a while...', {
+        myPos <- anaRegw(input$regL82)
+        snp.reg <- fetchSnpw(chr=myPos$chr, start=myPos$start - input$ldUp82, 
+                             end=myPos$end + input$ldDown82, accession = gsub(",.+", "", input$mychooserLD82),
+                             mutType = input$ld_mut_group82, filter = TRUE)[[1]]
+        if (nrow(snp.reg) < 5) {
+          shinyWidgets::sendSweetAlert(
+            session = session,
+            title = "Error input!", type = "error",
+            text = "Too few SNPs in specified genomic region!"
+          )
+        } else {
+          svg(file, width = input$ldWidth82/72, height = input$ldHeight82/72)
+          
+          snp.pos <- as.numeric(unlist(strsplit(input$ldpos82, split=",")))
+          
+          if (input$flip82 == "0") {
+            ld.heatmapw(chr=myPos$chr, start=myPos$start - input$ldUp82, end=myPos$end + input$ldDown82, text=c(FALSE, TRUE)[as.numeric(input$showText82)+1],
+                        snp.pos=snp.pos, gene=FALSE, flip=c(FALSE, TRUE)[as.numeric(input$flip82)+1],
+                        col=list(grey.colors(20), heat.colors(20))[[as.numeric(input$ldcol82)]],
+                        mutType = input$ld_mut_group82, accession = gsub(",.+", "", input$mychooserLD82))
+          } else if (input$flip82 == "1") {
+            if (input$LDshowGene82) {
+              ld.heatmapw(chr=myPos$chr, start=myPos$start - input$ldUp82, end=myPos$end + input$ldDown82, text=FALSE,
+                          snp.pos=snp.pos, ld.y=input$ldY82/100, ld.w=input$ldW82/100, gene=TRUE, 
+                          col=list(grey.colors(20), heat.colors(20))[[as.numeric(input$ldcol82)]],
+                          mutType = input$ld_mut_group82, accession = gsub(",.+", "", input$mychooserLD8282))
+            } else {
+              ld.heatmapw(chr=myPos$chr, start=myPos$start - input$ldUp82, end=myPos$end + input$ldDown82, text=FALSE,
+                          gene=FALSE, flip=c(FALSE, TRUE)[as.numeric(input$flip82)+1],
+                          col=list(grey.colors(20), heat.colors(20))[[as.numeric(input$ldcol82)]],
+                          mutType = input$ld_mut_group82, accession = gsub(",.+", "", input$mychooserLD82))
+            }
+          }
+          dev.off()
+        }
+      })
+    }, contentType = 'image/svg')
+  
+  output$downloadLD0282 <- renderUI({
+    req(input$submitLD82)
+    column(12,
+           downloadButton("downloadLD82.svg", style = "width:100%;", "SVG-file", class = "buttDown"),
+           tags$style(".buttDown{background-color:black; color: white; font-size: 16px;}")
+    )
+  })
+  
+  
+  
+  
+  # GBrowser
+  observe({
+    if (input$submit_browse82>0) {
+      #library(ggplot2)
+      
+      if ( exists("GBrowserw") ){
+      } else {
+        source("GBrowserw.R")
+      }
+      
+      if ( exists("anaRegw") ){
+      } else {
+        source("anaRegw.R")
+      }
+      
+      isolate({
+        myPos <- anaRegw(input$regB82)
+        if ( exists("snpInfow") ){
+        } else {
+          source("snpInfow.R")
+        }
+        
+        if ( exists("validRegw") ){
+        } else {
+          source("validRegw.R")
+        }
+        
+        if (validRegw(myPos)) {
+          if (!is.null(myPos)) {
+            snpw.info <- snpInfow(chr=myPos$chr, start=myPos$start - input$GBUP82, end=myPos$end + input$GBDOWN82, 
+                                 accession = gsub(",.+", "", input$mychooserB82), mutType = input$GB_mut_group82)
+          } else {
+            snpw.info <- NULL
+          }
+          
+          if (is.null(snpw.info) || nrow(snpw.info[[1]][[1]]) < 1) {
+            shinyWidgets::sendSweetAlert(
+              session = session,
+              title = "Error input!", type = "error",
+              text = "No SNPs are detected in the specified genomic region or the specified genomic region is too large!"
+            )
+          } else {
+            GBplot <<- NULL
+            output$gbrowser82 <- plotly::renderPlotly({
+              GBplot <<- GBrowserw(chr=myPos$chr, start=myPos$start - input$GBUP82, 
+                                   end=myPos$end + input$GBDOWN82,
+                                   accession = gsub(",.+", "", input$mychooserB82),
+                                   mutType = input$GB_mut_group82)
+              GBplot[[2]]
+            })
+            
+            ## Download PDF file of GBrowser
+            output$downloadGB82.pdf <- downloadHandler(
+              filename <- function() { paste('GBrowser.pdf') },
+              content <- function(file) {
+                pdf(file, width = 900/72, height = 300/72)
+                grid::grid.draw(GBplot[[1]])
+                dev.off()
+              }, contentType = 'application/pdf')
+            
+            output$downloadBro0382 <- renderUI({
+              req(input$submit_browse82)
+              column(12,
+                     downloadButton("downloadGB82.pdf",  style = "width:100%;", "PDF-file", class = "buttDown"),
+                     tags$style(".buttDown{background-color:black; color: white; font-size: 16px;}")
+              )
+            })
+            
+            # Download genotypes of seleceted SNPs
+            output$downloadsnp82.txt <- downloadHandler(
+              filename = function() { "snp.geno.txt" },
+              content = function(file) {
+                accession <- gsub(",.+", "", input$mychooserB82)
+                accession <- sapply(accession, function(x){
+                  if (x %in% c("Landraces and elites", "Glycine soja")) {
+                    x.dat <- readLines(paste0("./data/w82Rdata/", x, ".soya_82.txt"))
+                    return(x.dat)
+                  } else {
+                    return(x)
+                  }
+                })
+                accession <- unique(unlist(accession))
+                write.table(snp.info[[1]][[1]][ ,colnames(snp.info[[1]][[1]]) %in% accession], file, sep="\t", quote=F)
+              })
+            
+            output$downloadBro0182 <- renderUI({
+              req(input$submit_browse82)
+              column(12,
+                     downloadButton("downloadsnp82.txt", style = "width:100%;", "Genotype data", class = "buttDown"),
+                     tags$style(".buttDown{background-color:black; color: white; font-size: 16px;}")
+              )
+            })
+            
+            # Download information of SNPs
+            output$downloadBro0282 <- renderUI({
+              req(input$submit_browse82)
+              column(12,
+                     downloadButton("downloadsnpInfo82.txt", style = "width:100%;", "SNPs information", class = "buttDown"),
+                     tags$style(".buttDown{background-color:black; color: white; font-size: 16px;}")
+              )
+            })
+            
+            output$downloadsnpInfo82.txt <- downloadHandler(
+              filename = function() { "snp.info.txt" },
+              content = function(file) {
+                mutType = input$GB_mut_group82
+                allmutType <- snp.info[[2]]$effect
+                allmutType <- gsub(".+-", "", allmutType)
+                write.table(snp.info[[2]][allmutType %in% mutType, ], file, sep="\t", quote=F, row.names=F)
+              })
+          }
+        } else {
+          shinyWidgets::sendSweetAlert(
+            session = session,
+            title = "Error input!", type = "error",
+            text = "Please input genomic region or gene model in appropriate format!"
+          )
+        }
+      })
+    } else {
+      NULL
+    }
+  })
+  
+  observeEvent(input$browseall182, {
+    shinyWidgets::updateMultiInput(
+      session = session,
+      inputId = "mychooserB82",
+      selected = all.soya.cho82
+    )
+  })
+  
+  observeEvent(input$browsenone182, {
+    shinyWidgets::updateMultiInput(
+      session = session,
+      inputId = "mychooserB82",
+      selected = character(0)
+    )
+  })
+  
+  observeEvent(input$browseall282, {
+    shinyWidgets::updateMultiInput(
+      session = session,
+      inputId = "GB_mut_group82",
+      selected = mutationtypes82
+    )
+  })
+  
+  observeEvent(input$browsenone282, {
+    shinyWidgets::updateMultiInput(
+      session = session,
+      inputId = "GB_mut_group82",
+      selected = character(0)
+    )
+  })
+  
+  observe({
+    if (input$clearGB82>0) {
+      isolate({
+        updateTextInput(session, "regB82", value="")
+      })
+    } else {NULL}
+  })
+  
+  observe({
+    if (input$GBExam82 >0) {
+      isolate({
+        updateTextInput(session, "regB82", value="chr15:1000000-1011111")
+      })
+    } else {NULL}
+  })
+  
+  
+  
+  # Diversity
+  observe({
+    if (input$submit482>0) {
+      if ( exists("anaRegw") ){
+      } else {
+        source("anaRegw.R")
+      }
+      
+      if ( exists("nucDivw") ){
+      } else {
+        source("nucDivw.R")
+      }
+      
+      if ( exists("fetchSnpw") ){
+      } else {
+        source("fetchSnpw.R")
+      }
+      
+      if ( exists("validRegw") ){
+      } else {
+        source("validRegw.R")
+      }
+      
+      isolate({
+        div.height <<- input$divHeight82
+        div.width <<- input$divWidth82
+        
+        myPos <- anaRegw(input$regD82)
+        if (!is.null(input$div_acc_group82)){
+          if (validRegw(myPos)) {
+            div.up <- input$divUp82
+            div.down <- input$divDown82
+            div.group <- input$div_acc_group82
+            div.step <- input$snpnumD82
+            div.numerator <- input$nuc_numerator82
+            div.denominator <- input$nuc_denominator82
+            div.mut.group <- input$div_mut_group82
+            
+            if (!is.null(myPos)) {
+              snp.reg <- fetchSnpw(chr=myPos$chr, start=myPos$start - div.up, end=myPos$end + div.down,
+                                   mutType=input$div_mut_group82, filter = TRUE)[[1]]
+            } else {
+              snp.reg <- NULL
+            }
+            
+            if (is.null(snp.reg) || nrow(snp.reg) < 10) {
+              shinyWidgets::sendSweetAlert(
+                session = session,
+                title = "Error input!", type = "error",
+                text = "Too few SNPs are detected in the specified genomic region or the specified genomic region is too large!"
+              )
+            } else {
+              nuc.div.plot <<- NULL
+              
+              if (input$divSize82 ){
+                output$diversity82 <- shiny::renderPlot({
+                  par(family = "serif")
+                  nuc.div.plot <<- nucDivw(chr = myPos$chr, nuc.start = myPos$start - div.up, nuc.end = myPos$end + div.down, 
+                                          groups = div.group, step = div.step,
+                                          numerator = div.numerator, denominator = div.denominator, 
+                                          mutType = div.mut.group)
+                  grid::grid.draw(gridExtra::grid.arrange(nuc.div.plot[[1]], nuc.div.plot[[2]], ncol=1, heights=c(2.3, 1)))
+                }, height = div.height, width = div.width)
+              } else {
+                output$diversity82 <- shiny::renderPlot({
+                  par(family = "serif")
+                  nuc.div.plot <<- nucDivw(chr = myPos$chr, nuc.start = myPos$start - div.up, nuc.end = myPos$end + div.down, 
+                                          groups = div.group, step = div.step,
+                                          numerator = div.numerator, denominator = div.denominator, 
+                                          mutType = div.mut.group)
+                  grid::grid.draw(gridExtra::grid.arrange(nuc.div.plot[[1]], nuc.div.plot[[2]], ncol=1, heights=c(2.3, 1)))
+                })
+              }
+              
+              ## Download PDF file of Diversity
+              output$downloadDiv0182 <- renderUI({
+                req(input$submit482, nuc.div.plot)
+                column(12,
+                       downloadButton("downloadDiv82.pdf", "PDF-file", style = "width:100%;", class = "buttDown"),
+                       tags$style(".buttDown{background-color:black; color: white; font-size: 16px;}")
+                )
+              })
+              
+              output$downloadDiv82.pdf <- downloadHandler(
+                filename <- function() { paste('diversity.pdf') },
+                content <- function(file) {
+                  pdf(file, width = input$divWidth82/72, height = input$divHeight82/72)
+                  grid::grid.draw(gridExtra::grid.arrange(nuc.div.plot[[1]], nuc.div.plot[[2]], ncol=1, heights=c(2.3, 1)))
+                  
+                  dev.off()
+                }, contentType = 'application/pdf')
+              
+              ## Download SVG file of Diversity
+              output$downloadDiv0282 <- renderUI({
+                req(input$submit482, nuc.div.plot)
+                column(12,
+                       downloadButton("downloadDiv82.svg", "SVG-file", style = "width:100%;", class = "buttDown"),
+                       tags$style(".buttDown{background-color:black; color: white; font-size: 16px;}")
+                )
+              })
+              
+              output$downloadDiv82.svg <- downloadHandler(
+                filename <- function() { paste('diversity.svg') },
+                content <- function(file) {
+                  svg(file, width = input$divWidth82/72, height = input$divHeight82/72)
+                  grid::grid.draw(gridExtra::grid.arrange(nuc.div.plot[[1]], nuc.div.plot[[2]], ncol=1, heights=c(2.3, 1)))
+                  
+                  dev.off()
+                }, contentType = 'image/svg')
+              
+              ## Download TXT file of diversity
+              output$downloadDiv0382 <- renderUI({
+                req(input$submit482)
+                column(12,
+                       downloadButton("downloadDiv82.txt", "TXT-file", style = "width:100%;", class = "buttDown"),
+                       tags$style(".buttDown{background-color:black; color: white; font-size: 16px;}")
+                )
+              })
+              
+              output$downloadDiv82.txt <- downloadHandler(
+                filename <- function() { paste('diversity.txt') },
+                content <- function(file) {
+                  write.table(diVTxt82, file, sep="\t", quote=F, row.names = F)
+                }, contentType = 'text/plain')
+            }
+          } else {
+            shinyWidgets::sendSweetAlert(
+              session = session,
+              title = "Error input!", type = "error",
+              text = "Please input genomic region or gene model in appropriate format!"
+            )
+          }
+        } else {
+          shinyWidgets::sendSweetAlert(
+            session = session,
+            title = "Error input!", type = "error",
+            text = "Please choose at least one denominator ecotype!"
+          )
+        }
+      })
+    } else {
+      NULL
+    }
+  })
+  
+  observe({
+    if (input$clearDIV82>0) {
+      isolate({
+        updateTextInput(session, "regD82", value="")
+      })
+    } else {NULL}
+  })
+  
+  observe({
+    if (input$DIVExam82 >0) {
+      isolate({
+        updateTextInput(session, "regD82", value="chr15:1000000-1011111")
+      })
+    } else {NULL}
+  })
+  
+  observeEvent(input$diversityldall282, {
+    shinyWidgets::updateMultiInput(
+      session = session,
+      inputId = "div_mut_group82",
+      selected = mutationtypes82
+    )
+  })
+  
+  observeEvent(input$diversitynone282, {
+    shinyWidgets::updateMultiInput(
+      session = session,
+      inputId = "div_mut_group82",
+      selected = character(0)
+    )
+  })
+
+  
+  
+  # allele frequency
+  observe({
+    if (input$submitaf182>0) {
+      if ( exists("alleleFreqw") ){
+      } else {
+        source("alleleFreqw.R")
+      }
+      
+      isolate({
+        in.snpid <- unlist(strsplit(input$af_snp_site82, split="\\n"))
+        in.snpid <- trimws(in.snpid, which = c("both"), whitespace = "[ \t\r\n]")
+        in.snpid <- in.snpid[in.snpid!=""]
+        in.snpid <- in.snpid[nchar(in.snpid) == 10]
+        in.snpid <- in.snpid[grep("[0-9]", in.snpid)]
+        
+        af.group <- input$af_acc_group82
+        
+        in.af.col <- strsplit(input$jscolora82, ", ")[[1]]
+        
+        af.height <<- input$afHeight82
+        af.width <<- input$afWidth82
+        
+        myChr <- paste0("chr", as.numeric(substr(in.snpid, 1, 2)))
+        myPos <- as.numeric(substr(in.snpid, 3, 10))
+        if ( length(myPos) == 0 || is.na(myPos) ) {
+          shinyWidgets::sendSweetAlert(
+            session = session,
+            title = "Error input!", type = "error",
+            text = "Please input correct SNP site!"
+          )
+          NULL
+        } else if ( is.null(af.group) ){
+          shinyWidgets::sendSweetAlert(
+            session = session,
+            title = "Error input!", type = "error",
+            text = "Please select at least one Ecotype!"
+          )
+          NULL
+        } else {
+          output$alleleFreq82 <- shiny::renderPlot({
+            ll <- alleleFreqw(
+              snpSite = in.snpid,
+              accGroup = af.group,
+              pieCols = in.af.col
+            )
+            if (is.null(ll)){
+              shinyWidgets::sendSweetAlert(
+                session = session,
+                title = "Error input!", type = "error",
+                text = "SNP site you entered is missing or filtered!"
+              )
+              NULL
+            } else {
+              ll
+            }
+          }, height = af.height, width = af.width)
+        }
+      })
+    } else {
+      NULL
+    }
+  })
+  
+  observe({
+    if (input$clearAf82>0) {
+      isolate({
+        updateTextAreaInput(session, "af_snp_site82", value="")
+        updateSelectInput(session, "jscolora82", selected = "steelblue, yellow2")
+      })
+    } else {NULL}
+  })
+  
+  observe({
+    if (input$AfExam82 >0) {
+      isolate({
+        updateTextAreaInput(session, "af_snp_site82", value="0300000762\n2015000614\n2015001173")
+        updateSelectInput(session, "jscolora82", selected = "steelblue, yellow2")
+      })
+    } else {NULL}
+  })
+  
+  ## Download PDF file of allele frequency
+  output$downloadAfq0182 <- renderUI({
+    req(input$submitaf182)
+    column(12,
+           downloadButton("downloadAlleleFreq82.pdf", "PDF-file", style = "width:100%;", class = "buttDown"),
+           tags$style(".buttDown{background-color:black; color: white; font-size: 16px;}")
+    )
+  })
+  
+  output$downloadAlleleFreq82.pdf <- downloadHandler(
+    filename <- function() { paste('alleleFreq.pdf') },
+    content <- function(file) {
+      pdf(file, width = input$afWidth82/72, height = input$afHeight82/72)
+      
+      in.snpid <- unlist(strsplit(input$af_snp_site82, split="\\n"))
+      in.snpid <- gsub("^\\s+", "", in.snpid)
+      in.snpid <- gsub("\\s+$", "", in.snpid)
+      in.snpid <- in.snpid[in.snpid!=""]
+      
+      af.group <- input$af_acc_group82
+      in.af.col <- strsplit(input$jscolora82, ", ")[[1]]
+      alleleFreqw(
+        snpSite = in.snpid,
+        accGroup = af.group,
+        pieCols = in.af.col
+      )
+      
+      dev.off()
+    }, contentType = 'application/pdf')
+  
+  ## Download SVG file of allele frequency
+  output$downloadAfq0282 <- renderUI({
+    req(input$submitaf182)
+    column(12,
+           downloadButton("downloadAlleleFreq82.svg", "SVG-file", style = "width:100%;", class = "buttDown"),
+           tags$style(".buttDown{background-color:black; color: white; font-size: 16px;}")
+    )
+  })
+  
+  output$downloadAlleleFreq82.svg <- downloadHandler(
+    filename <- function() { paste('alleleFreq.svg') },
+    content <- function(file) {
+      svg(file, width = input$afWidth82/72, height = input$afHeight82/72)
+      
+      in.snpid <- unlist(strsplit(input$af_snp_site82, split="\\n"))
+      in.snpid <- gsub("^\\s+", "", in.snpid)
+      in.snpid <- gsub("\\s+$", "", in.snpid)
+      in.snpid <- in.snpid[in.snpid!=""]
+      
+      af.group <- input$af_acc_group82
+      in.af.col <- strsplit(input$jscolora82, ", ")[[1]]
+      alleleFreqw(
+        snpSite = in.snpid,
+        accGroup = af.group,
+        pieCols = in.af.col
+      )
+      
+      dev.off()
+    }, contentType = 'image/svg')
+  
+  output$downloadAfq0382 <- renderUI({
+    req(input$submitaf182)
+    column(12,
+           downloadButton("downloadAlleleFreq82.txt", "TXT-file", style = "width:100%;", class = "buttDown"),
+           tags$style(".buttDown{background-color:black; color: white; font-size: 16px;}")
+    )
+  })
+  
+  output$downloadAlleleFreq82.txt <- downloadHandler(
+    filename = function() { "Allele_frequency.txt" },
+    content = function(file) {
+      write.table(freqsallwrite82, file, sep="\t", quote=F, row.names = F, col.names = T)
+    })
+  
+  
+  
+  
+
+  
+  
+  
+  
+  
 })
+
+
+
+
+
+
+
 

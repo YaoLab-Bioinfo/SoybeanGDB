@@ -59,17 +59,17 @@ source("Homepage.R")
 #gff <- data.table::fread("./data/zh13.gff", sep = "\t", data.table = FALSE)
 #snp.lst <- read.table("./data/snp.RData.lst", head=T, as.is=T, sep="\t")
 load("./data/gene.info.RData")
-
+load("./data/w82Rdata/w82.gene.info.RData")
 soya.info <- read.table("./data/all.soya.txt", head=T, as.is=T, sep="\t", quote="")
 soynm <- read.table("./info/Williams82SNP/Wm82nm.txt", sep = "\t", as.is = T, header = F)
 soynm <- as.character(soynm)
-all.soya.cho <- paste(soya.info$ID, soya.info$Species, soya.info$Category, sep=", ")
+all.soya.cho <- paste(soya.info$ID, soya.info$Species, sep=", ")
 
 all.soya.cho <- paste0(gsub(",.+", "", all.soya.cho) , ", ", soya.info$Names, ", ", gsub(".+,", "", all.soya.cho))
 
 all.soya.cho <- c("Improved cultivar", "Landrace", "Glycine soja", all.soya.cho)
 
-#chrInfo <- read.table("./data/chrInfo.txt", head=T, as.is=T, sep="\t")
+chrInfo <- read.table("./data/chrInfo.txt", head=T, as.is=T, sep="\t")
 #soya.tree <- read.table("./data/soya.tree.txt", head=T, as.is=T, sep="\t", row.names = 1)
 
 mutationtypes <- c("3_prime_UTR_variant", "5_prime_UTR_premature_start_codon_gain_variant", "5_prime_UTR_variant", 
@@ -83,6 +83,45 @@ mutationtypes <- c("3_prime_UTR_variant", "5_prime_UTR_premature_start_codon_gai
                    "start_lost", "start_lost&splice_region_variant", "stop_gained", "stop_gained&splice_region_variant",                       
                    "stop_lost","stop_lost&splice_region_variant", "stop_retained_variant",  "synonymous_variant", "upstream_gene_variant"
 )
+
+
+
+mutationtypes82<- c("3_prime_UTR_variant",
+                    "5_prime_UTR_premature_start_codon_gain_variant",
+                    "5_prime_UTR_variant",
+                    "downstream_gene_variant",
+                    "initiator_codon_variant",
+                    "initiator_codon_variant&splice_region_variant",
+                    "intergenic_region",
+                    "intron_variant",
+                    "missense_variant",
+                    "missense_variant&splice_region_variant",
+                    "splice_acceptor_variant&intron_variant",
+                    "splice_acceptor_variant&splice_region_variant&intron_variant",
+                    "splice_donor_variant&intron_variant",
+                    "splice_donor_variant&splice_region_variant&intron_variant",
+                    "splice_region_variant",
+                    "splice_region_variant&intron_variant",
+                    "splice_region_variant&stop_retained_variant",
+                    "splice_region_variant&synonymous_variant",
+                    "start_lost",
+                    "start_lost&splice_region_variant",
+                    "stop_gained",
+                    "stop_gained&splice_region_variant",
+                    "stop_lost",
+                    "stop_lost&splice_region_variant",
+                    "stop_retained_variant",
+                    "synonymous_variant",
+                    "upstream_gene_variant")
+chrInfow <- read.table("./data/w82Rdata/chrInfo_82.txt", head=T, as.is=T, sep="\t")
+soyaw.info <- read.table("./data/w82Rdata/all.soya_82.txt", head=T, as.is=T, sep="\t", quote="")
+
+all.soya.cho82 <- paste(soyaw.info$ID, soyaw.info$Species, sep=", ")
+
+all.soya.cho82 <- paste0(gsub(",.+", "", all.soya.cho82) , ", ", soyaw.info$Names, ", ", gsub(".+,", "", all.soya.cho82))
+
+all.soya.cho82 <- c("Landraces and elites", "Glycine soja", all.soya.cho82)
+
 #exam1.fa <- readLines("exam1.fa")
 
 Blast_Info_Title <- paste("qseqid: Query sequence ID;",
