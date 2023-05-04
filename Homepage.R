@@ -10,7 +10,7 @@ Homepage <- shinydashboard::dashboardPage(
       textBox(
         width = 12,
         p(strong("SoybeanGDB"), "is a comprehensive database providing informatics service to researchers focused on the genetic and genomic studies of soybean. A total of", strong("39 high-quality soybean genomes"), "were collected, including a Chinese soybean", strong(em("Glycine max")), strong("[L.] Merr. cv. Zhonghuang 13."),
-          "High-quality SNPs and INDELs among 2898 soybean accessions based on the genome of Zhonghuang 13 were deposited in SoybeanGDB.")
+          "High-quality SNPs and INDELs among 2898 soybean accessions based on the genome of Zhonghuang 13. High-quality SNPs among 481 soybean accessions based on the genome of William82.")
       )
     ),
     
@@ -35,14 +35,14 @@ Homepage <- shinydashboard::dashboardPage(
           
           box(width = 3,
               tags$style("#Link_Accessions {font-size:30px;;}"),
-              shinyWidgets::actionBttn("Link_Accessions", "2898",
+              shinyWidgets::actionBttn("Link_Accessions", "2898 + 481",
                                        block = TRUE, size = "lg", style="unite", color="default"),
               h4("Soybean accessions")
           ),
           
           box(width = 3,
-              tags$style("#Browse_botton_up {font-size:30px;;}"),
-              shinyWidgets::actionBttn("Browse_botton_up", "15,446,616", 
+              tags$style("#Browse_botton_up {font-size:28px;;}"),
+              shinyWidgets::actionBttn("Browse_botton_up", "15,446,616 + 7,792,974", 
                                        block = TRUE, size = "lg", style="unite", color="default"),
               h4("High quality SNPs")
           ),
@@ -115,14 +115,14 @@ Homepage <- shinydashboard::dashboardPage(
               shinyWidgets::actionBttn("Browse_botton", "SNP -> Browse", 
                                        icon = icon("folder-open-o", class = NULL),
                                        block = TRUE, size = "lg", style="unite", color="default"),
-              h4("Browse SNPs among 2898 soybean accessions")
+              h4("Browse SNPs among 2898/481 soybean accessions")
           ),
           
           box(width = 4,
               shinyWidgets::actionBttn("Link_SnpInfo", "SNP -> Search", 
                                        icon = icon("search", class = NULL, lib = "font-awesome"),
                                        block = TRUE, size = "lg", style="unite", color="default"),
-              h4("Search SNPs among 2898 soybean accessions")
+              h4("Search SNPs among 2898/481 soybean accessions")
           ),
           
           box(width = 4,

@@ -3218,11 +3218,11 @@ shinyUI(
                  h4(HTML('<i class="fa fa-circle" aria-hidden="true"></i> <font size="4" color="red"><b>39 soybean genomes</b></font>')),
                  DT::dataTableOutput('Downloadtable', width = "100%"),
                  br(),
-                 h4(HTML('<i class="fa fa-circle" aria-hidden="true"></i> <font size="4" color="red"><b>SNPs & INDELs among 2898 soybean accessions</b></font>')),
+                 h4(HTML('<i class="fa fa-circle" aria-hidden="true"></i> <font size="4" color="red"><b>SNPs among 2898 soybean accessions</b></font>')),
                  h4(a("https://ngdc.cncb.ac.cn/gvm/getProjectDetail?project=GVM000063", href="https://ngdc.cncb.ac.cn/gvm/getProjectDetail?project=GVM000063", target="_blank")),
                  br(),
                  
-                 h4(HTML('<i class="fa fa-circle" aria-hidden="true"></i> <font size="4" color="red"><b>SNPs & INDELs among 481 soybean accessions</b></font>')),
+                 h4(HTML('<i class="fa fa-circle" aria-hidden="true"></i> <font size="4" color="red"><b>SNPs among 481 soybean accessions</b></font>')),
                  h4(a("https://doi.org/10.1038/s41597-021-00834-w", href="https://doi.org/10.1038/s41597-021-00834-w", target="_blank")),
                  br(),
                  
